@@ -1,12 +1,3 @@
-// export interface PetDTO {
-//     name: string;
-//     specie: string;
-//     breed: string;
-//     birth: string;
-//     weight: string;
-//     gender: string;
-// }
-
 export interface PetDTO {
     id: string;
     name: string;
