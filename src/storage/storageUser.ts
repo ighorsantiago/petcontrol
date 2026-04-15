@@ -30,9 +30,10 @@ import {
 	getDoc,
 } from "firebase/firestore";
 import { date } from "yup";
-import { app, auth, db } from "../../firebaseConfig";
-import type { PetDTO } from "@/dtos/PetDTO";
 
+import { auth, db } from "../config/firabase";
+
+import type { PetDTO } from "@/dtos/PetDTO";
 import type { UserDTO } from "@/dtos/UserDTO";
 
 import { ONBOARDING_STORAGE, USER_STORAGE } from "./storageConfig";
