@@ -1,5 +1,5 @@
 import { TouchableOpacity, type TouchableOpacityProps } from 'react-native';
-import styled from "styled-components/native";
+import styled from 'styled-components/native';
 // import { RectButton, RectButtonProps } from "react-native-gesture-handler";
 
 type Rect = TouchableOpacityProps;
@@ -9,7 +9,7 @@ export const Container = styled.View`
     align-items: center;
     justify-content: space-between;
 
-    background-color: #3E84A8;
+    background-color: #3e84a8;
 `;
 
 export const Background = styled.ImageBackground`
@@ -38,12 +38,12 @@ export const LogButton = styled(TouchableOpacity)`
 
     justify-content: center;
     align-items: center;
-    
+
     margin-bottom: 10px;
 
     border-radius: 6px;
 
-    background-color: #FFEF61;
+    background-color: #ffef61;
 `;
 
 export const LogText = styled.Text`
@@ -53,7 +53,7 @@ export const LogText = styled.Text`
 
     text-align: center;
 
-    color: #3E84A8;
+    color: #3e84a8;
 `;
 
 export const SignButton = styled(TouchableOpacity)`
@@ -62,9 +62,9 @@ export const SignButton = styled(TouchableOpacity)`
 
     justify-content: center;
     align-items: center;
-    
+
     border-radius: 6px;
-    border: 1px solid #FFEF61;
+    border: 1px solid #ffef61;
 `;
 
 export const SignText = styled.Text`
@@ -74,5 +74,5 @@ export const SignText = styled.Text`
 
     text-align: center;
 
-    color: #FFEF61;
+    color: #ffef61;
 `;

@@ -34,11 +34,7 @@ export async function signUp(user: User, password: string): Promise<void> {
 
 export async function signIn(email: string, password: string): Promise<void> {
     try {
-        const { user: firebaseUser } = await signInWithEmailAndPassword(
-            auth,
-            email,
-            password,
-        );
+        const { user: firebaseUser } = await signInWithEmailAndPassword(auth, email, password);
 
         if (!firebaseUser.email) return;
 

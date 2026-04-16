@@ -3,12 +3,7 @@ import { StyleSheet, TextInputProps } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import type { DropDownPickerProps, ValueType } from 'react-native-dropdown-picker';
 
-import {
-    Container,
-    IconBox,
-    Drop,
-    ErrorMessage
-} from './styles';
+import { Container, IconBox, Drop, ErrorMessage } from './styles';
 
 // type Props = {
 type Props = DropDownPickerProps<ValueType> & {
@@ -16,10 +11,9 @@ type Props = DropDownPickerProps<ValueType> & {
     isFilled?: boolean;
     errorMessage?: string;
     zIndex?: number;
-}
+};
 
 export function Dropdown({ valor, isFilled, errorMessage, zIndex = 5000, ...rest }: Props) {
-
     const [isFocused, setIsFocused] = useState(false);
     // const [isFilled, setIsFilled] = useState(false);
 
@@ -34,11 +28,7 @@ export function Dropdown({ valor, isFilled, errorMessage, zIndex = 5000, ...rest
 
     return (
         <>
-            {errorMessage &&
-                <ErrorMessage>
-                    {errorMessage}
-                </ErrorMessage>
-            }
+            {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
 
             <Container style={{ zIndex: zIndex }}>
                 <Drop
@@ -56,7 +46,6 @@ export function Dropdown({ valor, isFilled, errorMessage, zIndex = 5000, ...rest
 }
 
 const style = StyleSheet.create({
-
     dropdownContainer: {
         width: '100%',
         minHeight: 65,
@@ -70,5 +59,5 @@ const style = StyleSheet.create({
     dropdown: {
         borderRadius: 0,
         borderColor: '#BDBBBB',
-    }
+    },
 });

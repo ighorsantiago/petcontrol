@@ -15,16 +15,17 @@ export const Container = styled.View`
 export const InputText = styled(TextInput)<Props>`
     width: 100%;
     min-height: 65px;
-    
+
     flex-direction: row;
 
     margin-bottom: 10px;
     padding: 0 8px;
 
-    border: 1px solid #BDBBBB;
-    ${({ isFilled }) => !isFilled && {
-        borderColor: 'red'
-    }}
+    border: 1px solid #bdbbbb;
+    ${({ isFilled }) =>
+        !isFilled && {
+            borderColor: 'red',
+        }}
     border-radius: 6px;
 `;
 

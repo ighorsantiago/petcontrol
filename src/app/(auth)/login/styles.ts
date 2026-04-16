@@ -1,7 +1,7 @@
-import { Platform, TouchableOpacity } from "react-native";
-import { RectButton } from "react-native-gesture-handler";
-import { RFValue } from "react-native-responsive-fontsize";
-import styled from "styled-components/native";
+import { Platform, TouchableOpacity } from 'react-native';
+import { RectButton } from 'react-native-gesture-handler';
+import { RFValue } from 'react-native-responsive-fontsize';
+import styled from 'styled-components/native';
 
 export const Container = styled.View`
     width: 100%;
@@ -10,7 +10,7 @@ export const Container = styled.View`
 
     align-items: center;
 
-    background-color: #F8F8F8;
+    background-color: #f8f8f8;
 `;
 
 export const Header = styled.Image`
@@ -40,7 +40,7 @@ export const LogLabel = styled.Text`
 
     margin-bottom: 8px;
 
-    color: #4A4A4A;
+    color: #4a4a4a;
 `;
 
 export const ForgotButton = styled(TouchableOpacity)`
@@ -54,7 +54,7 @@ export const ForgotLabel = styled.Text`
 
     /* margin-bottom: 8px; */
 
-    color: #E9840E;
+    color: #e9840e;
 `;
 
 export const LogButton = styled(TouchableOpacity)`
@@ -63,13 +63,13 @@ export const LogButton = styled(TouchableOpacity)`
 
     justify-content: center;
     align-items: center;
-    
+
     /* margin-top: 80px;
     margin-bottom: 5px; */
 
     border-radius: 6px;
 
-    background-color: #3E84A8;
+    background-color: #3e84a8;
 `;
 
 export const LogText = styled.Text`
@@ -78,7 +78,7 @@ export const LogText = styled.Text`
 
     text-align: center;
 
-    color: #FFEF61;
+    color: #ffef61;
 `;
 
 export const SocialBox = styled.View`
@@ -93,7 +93,7 @@ export const SocialLabel = styled.Text`
 
     text-align: center;
 
-    color: #4A4A4A;
+    color: #4a4a4a;
 `;
 
 export const SocialButtonsBox = styled.View`
@@ -132,7 +132,7 @@ export const Footer = styled.View`
 export const SignUpText = styled.Text`
     font-size: 14px;
 
-    color: #4A4A4A;
+    color: #4a4a4a;
 `;
 
 export const SignUpButton = styled(TouchableOpacity)``;
@@ -140,5 +140,5 @@ export const SignUpButton = styled(TouchableOpacity)``;
 export const SignUpButtonText = styled.Text`
     font-size: 14px;
 
-    color: #E9840E;
+    color: #e9840e;
 `;

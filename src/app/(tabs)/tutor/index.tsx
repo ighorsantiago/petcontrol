@@ -1,239 +1,247 @@
-import { useEffect, useState } from "react";
-import {
-	Alert,
-	Keyboard,
-	StyleSheet,
-	TouchableWithoutFeedback,
-} from "react-native";
-import { router } from "expo-router";
+import { useEffect, useState } from 'react';
+import { Alert, Keyboard, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { router } from 'expo-router';
 
-import DropDownPicker from "react-native-dropdown-picker";
-import { useTranslation } from "react-i18next";
-import { MaterialIcons } from "@expo/vector-icons";
-import * as ImagePicker from "expo-image-picker";
-import * as FileSystem from "expo-file-system";
+import DropDownPicker from 'react-native-dropdown-picker';
+import { useTranslation } from 'react-i18next';
+import { MaterialIcons } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
 
-import { useAuth } from "@/hooks";
+import { useAuth } from '@/hooks';
 
 import {
-	Container,
-	UserAvatar,
-	Avatar,
-	ChangePhotoBtn,
-	Password,
-	Form,
-	Text,
-	LngBox,
-	LngIcon,
-	// LngBtn,
-	LngBtnLabel,
-	LogoutBtnLabel,
-	LogoutBtn,
-} from "./styles";
+    Container,
+    UserAvatar,
+    Avatar,
+    ChangePhotoBtn,
+    Password,
+    Form,
+    Text,
+    LngBox,
+    LngIcon,
+    // LngBtn,
+    LngBtnLabel,
+    LogoutBtnLabel,
+    LogoutBtn,
+} from './styles';
 
-import { AddHeader } from "@/components/AddHeader";
-import { InputForm } from "@/components/InputForm";
-import { PasswordInput } from "@/components/PasswordInput";
-import { useToast } from "@/components/Toast";
+import { AddHeader } from '@/components/AddHeader';
+import { InputForm } from '@/components/InputForm';
+import { PasswordInput } from '@/components/PasswordInput';
+import { useToast } from '@/components/Toast';
+
+import flagBR from '@/assets/flag-br.png';
+import flagUS from '@/assets/flag-us.png';
+import flagES from '@/assets/flag-es.png';
+import flagFR from '@/assets/flag-fr.png';
 
 export default function Tutor() {
+    const { user, updateUser, changePasswordFirebase, logOut } = useAuth();
 
-	const { user, updateUser, changePasswordFirebase, logOut } = useAuth();
+    const { toast } = useToast();
 
-	const { toast } = useToast();
+    // const { t, i18n } = useTranslation();
+    // const lng = i18n.language;
+    // const [selectedLanguage, setSelectedLanguage] = useState("Português");
 
-	// const { t, i18n } = useTranslation();
-	// const lng = i18n.language;
-	// const [selectedLanguage, setSelectedLanguage] = useState("Português");
+    // const [languageOpen, setLanguageOpen] = useState(false);
+    const [photoIsLoading, setPhotoIsLoading] = useState(false);
+    const [open, setOpen] = useState(false);
 
-	// const [languageOpen, setLanguageOpen] = useState(false);
-	const [photoIsLoading, setPhotoIsLoading] = useState(false);
-	const [open, setOpen] = useState(false);
+    const [name, setName] = useState('');
+    const [newPassword, setNewPassword] = useState('');
 
-	const [name, setName] = useState('');
-	const [newPassword, setNewPassword] = useState("");
+    const Brazil = flagBR;
+    const USA = flagUS;
+    const Spain = flagES;
+    const France = flagFR;
 
-	const Brazil = require("@/assets/flag-br.png");
-	const USA = require("@/assets/flag-us.png");
-	const Spain = require("@/assets/flag-es.png");
-	const France = require("@/assets/flag-fr.png");
+    const languages = [
+        {
+            label: 'Português',
+            value: 'pt',
+            icon: () => <LngIcon source={Brazil} />,
+        },
+        {
+            label: 'English',
+            value: 'en',
+            icon: () => <LngIcon source={USA} />,
+        },
+        {
+            label: 'Espanhol',
+            value: 'es',
+            icon: () => <LngIcon source={Spain} />,
+        },
+        {
+            label: 'Francês',
+            value: 'fr',
+            icon: () => <LngIcon source={France} />,
+        },
+    ];
 
-	const languages = [
-		{
-			label: "Português",
-			value: "pt",
-			icon: () => <LngIcon source={Brazil} />,
-		},
-		{
-			label: "English",
-			value: "en",
-			icon: () => <LngIcon source={USA} />,
-		},
-		{
-			label: "Espanhol",
-			value: "es",
-			icon: () => <LngIcon source={Spain} />,
-		},
-		{
-			label: "Francês",
-			value: "fr",
-			icon: () => <LngIcon source={France} />,
-		},
-	];
+    async function handleSave() {
+        try {
+            if (newPassword === '') {
+                const updatedUser = {
+                    ...user,
+                    email: user?.email ? user.email : '',
+                    name,
+                };
 
-	async function handleSave() {
-		try {
-			if (newPassword === "") {
-				const updatedUser = {
-					...user,
-					email: user?.email ? user.email : '',
-					name
-			  	};
-				
-				updateUser(updatedUser);
+                updateUser(updatedUser);
 
-				toast("Seu nome foi alterada com sucesso.", "success", 4000, "bottom", false);
-			} else {
-				await changePasswordFirebase(newPassword);
-				toast("Sua senha foi alterada com sucesso.", "success", 4000, "bottom", false);
-			}
-		} catch (error) {
-			toast("Ocorreu um problema, por favor tente novamente.", "destructive", 4000, "bottom", false);
-		}
-	}
+                toast('Seu nome foi alterada com sucesso.', 'success', 4000, 'bottom', false);
+            } else {
+                await changePasswordFirebase(newPassword);
+                toast('Sua senha foi alterada com sucesso.', 'success', 4000, 'bottom', false);
+            }
+        } catch (error) {
+            toast(
+                'Ocorreu um problema, por favor tente novamente.',
+                'destructive',
+                4000,
+                'bottom',
+                false,
+            );
+        }
+    }
 
-	async function handleUserPhotoSelect() {
-		setPhotoIsLoading(true);
-		setOpen(false);
+    async function handleUserPhotoSelect() {
+        setPhotoIsLoading(true);
+        setOpen(false);
 
-		try {
-			const photoSelected = await ImagePicker.launchImageLibraryAsync({
-				mediaTypes: ImagePicker.MediaTypeOptions.Images,
-				quality: 1,
-				aspect: [4, 4],
-				allowsEditing: true,
-			});
+        try {
+            const photoSelected = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                quality: 1,
+                aspect: [4, 4],
+                allowsEditing: true,
+            });
 
-			if (photoSelected.canceled) {
-				return;
-			}
+            if (photoSelected.canceled) {
+                return;
+            }
 
-			if (photoSelected.assets[0].uri) {
-				const photoInfo = await FileSystem.getInfoAsync(
-					photoSelected.assets[0].uri,
-				);
+            if (photoSelected.assets[0].uri) {
+                const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri);
 
-				if (photoInfo.exists && photoInfo.size / 1024 / 1024 > 5) {
+                if (photoInfo.exists && photoInfo.size / 1024 / 1024 > 5) {
+                    toast(
+                        'Ocorreu um problema, por favor tente novamente.',
+                        'destructive',
+                        4000,
+                        'bottom',
+                        false,
+                    );
 
-					toast("Ocorreu um problema, por favor tente novamente.", "destructive", 4000, "bottom", false);
+                    setOpen(!open);
+                }
 
-					setOpen(!open);
-				}
+                if (user) {
+                    const updatedUser = {
+                        ...user,
+                        avatar: photoSelected.assets[0].uri,
+                    };
 
-				if (user) {
-					const updatedUser = {
-						...user,
-						avatar: photoSelected.assets[0].uri,
-					};
+                    updateUser(updatedUser);
+                }
 
-					updateUser(updatedUser);
-				}
+                toast('Sua foto foi alterada com sucesso.', 'success', 4000, 'bottom', false);
+            }
+        } catch (error) {
+            toast(
+                'Ocorreu um problema, por favor tente novamente.',
+                'destructive',
+                4000,
+                'bottom',
+                false,
+            );
+        }
+    }
 
-				toast("Sua foto foi alterada com sucesso.", "success", 4000, "bottom", false);
+    function handleLanguage() {
+        // switch (selectedLanguage) {
+        //       case 'pt':
+        //             setSelectedLanguage("pt");
+        //             i18n.changeLanguage("pt")
+        //             break;
+        //       case 'en':
+        //             setSelectedLanguage("en");
+        //             i18n.changeLanguage("en")
+        //             break;
+        //       case 'es':
+        //             setSelectedLanguage("es");
+        //             i18n.changeLanguage("es")
+        //             break;
+        //       case 'fr':
+        //             setSelectedLanguage("fr");
+        //             i18n.changeLanguage("fr")
+        //             break;
+        //       default:
+        //             break;
+        // }
+    }
 
-			}
-		} catch (error) {
-			toast("Ocorreu um problema, por favor tente novamente.", "destructive", 4000, "bottom", false);
+    // useEffect(() => {
+    //       handleLanguage();
+    // }, [selectedLanguage]);
 
-		}
-	}
+    function handleSignOut() {
+        Alert.alert('Tem certeza?', `${user?.name} se você sair irá apagar todos os seus dados.`, [
+            {
+                text: 'Cancelar',
+                onPress: () => {},
+            },
+            {
+                text: 'Sair',
+                onPress: logOut,
+            },
+        ]);
+    }
 
-	function handleLanguage() {
-		// switch (selectedLanguage) {
-		//       case 'pt':
-		//             setSelectedLanguage("pt");
-		//             i18n.changeLanguage("pt")
-		//             break;
-		//       case 'en':
-		//             setSelectedLanguage("en");
-		//             i18n.changeLanguage("en")
-		//             break;
-		//       case 'es':
-		//             setSelectedLanguage("es");
-		//             i18n.changeLanguage("es")
-		//             break;
-		//       case 'fr':
-		//             setSelectedLanguage("fr");
-		//             i18n.changeLanguage("fr")
-		//             break;
-		//       default:
-		//             break;
-		// }
-	}
+    return (
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <Container>
+                <AddHeader
+                    style={{ height: 110 }}
+                    title="Profile"
+                    handleCancel={() => router.navigate('/home')}
+                    handleSave={handleSave}
+                />
 
-	// useEffect(() => {
-	//       handleLanguage();
-	// }, [selectedLanguage]);
+                <UserAvatar>
+                    {user?.avatar ? (
+                        <Avatar src={user.avatar} />
+                    ) : (
+                        <MaterialIcons name="person" size={100} color="#3E84A8" />
+                    )}
+                    <ChangePhotoBtn onPress={handleUserPhotoSelect}>
+                        <MaterialIcons name="add-a-photo" size={20} color="#FFEF61" />
+                    </ChangePhotoBtn>
+                </UserAvatar>
 
-	function handleSignOut() {
-		Alert.alert(
-			"Tem certeza?",
-			`${user?.name} se você sair irá apagar todos os seus dados.`,
-			[
-				{
-					text: "Cancelar",
-					onPress: () => {},
-				},
-				{
-					text: "Sair",
-					onPress: logOut,
-				},
-			],
-		);
-	}
-
-	return (
-		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-			<Container>
-				<AddHeader
-					style={{ height: 110 }}
-					title="Profile"
-					handleCancel={() => router.navigate("/home")}
-					handleSave={handleSave}
-				/>
-
-				<UserAvatar>
-					{user?.avatar ? (
-						<Avatar src={user.avatar} />
-					) : (
-						<MaterialIcons name="person" size={100} color="#3E84A8" />
-					)}
-					<ChangePhotoBtn onPress={handleUserPhotoSelect}>
-						<MaterialIcons name="add-a-photo" size={20} color="#FFEF61" />
-					</ChangePhotoBtn>
-				</UserAvatar>
-
-				<Form>
-					<InputForm
-						placeholder={user?.name}
-						placeholderTextColor="darkgray"
-						// value={user?.name}
-						onChangeText={setName}
-					/>
-					<InputForm
-						placeholder={user?.email ? user.email : ''}
-						placeholderTextColor="darkgray"
-					/>
-					<InputForm
-						icon={false}
-						value={newPassword}
-						onChangeText={setNewPassword}
-						placeholder="Nova senha"
-						placeholderTextColor="darkgray"
-						autoCapitalize="none"
-						secureTextEntry={true}
-					/>
-					{/* <DropDownPicker
+                <Form>
+                    <InputForm
+                        placeholder={user?.name}
+                        placeholderTextColor="darkgray"
+                        // value={user?.name}
+                        onChangeText={setName}
+                    />
+                    <InputForm
+                        placeholder={user?.email ? user.email : ''}
+                        placeholderTextColor="darkgray"
+                    />
+                    <InputForm
+                        icon={false}
+                        value={newPassword}
+                        onChangeText={setNewPassword}
+                        placeholder="Nova senha"
+                        placeholderTextColor="darkgray"
+                        autoCapitalize="none"
+                        secureTextEntry={true}
+                    />
+                    {/* <DropDownPicker
                                     style={style.dropdownContainer}
                                     dropDownContainerStyle={style.dropdown}
                                     placeholder={selectedLanguage}
@@ -245,31 +253,31 @@ export default function Tutor() {
                                     setValue={setSelectedLanguage}
                                     zIndex={2}
                               /> */}
-				</Form>
+                </Form>
 
-				<LogoutBtn onPress={handleSignOut}>
-					<LogoutBtnLabel>Sair</LogoutBtnLabel>
-				</LogoutBtn>
-			</Container>
-		</TouchableWithoutFeedback>
-	);
+                <LogoutBtn onPress={handleSignOut}>
+                    <LogoutBtnLabel>Sair</LogoutBtnLabel>
+                </LogoutBtn>
+            </Container>
+        </TouchableWithoutFeedback>
+    );
 }
 
 const style = StyleSheet.create({
-	dropdownContainer: {
-		width: "100%",
-		minHeight: 65,
-		flexDirection: "row",
-		marginBottom: 10,
-		borderWidth: 1,
-		borderColor: "#BDBBBB",
-		borderRadius: 6,
-		backgroundColor: "transparent",
-		zIndex: 10,
-	},
-	dropdown: {
-		borderRadius: 0,
-		borderColor: "#BDBBBB",
-		backgroundColor: "transparent",
-	},
+    dropdownContainer: {
+        width: '100%',
+        minHeight: 65,
+        flexDirection: 'row',
+        marginBottom: 10,
+        borderWidth: 1,
+        borderColor: '#BDBBBB',
+        borderRadius: 6,
+        backgroundColor: 'transparent',
+        zIndex: 10,
+    },
+    dropdown: {
+        borderRadius: 0,
+        borderColor: '#BDBBBB',
+        backgroundColor: 'transparent',
+    },
 });

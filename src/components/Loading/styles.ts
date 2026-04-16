@@ -1,4 +1,4 @@
-import styled from "styled-components/native";
+import styled from 'styled-components/native';
 
 export const Container = styled.View`
     flex: 1;
@@ -6,7 +6,7 @@ export const Container = styled.View`
     justify-content: center;
     align-items: center;
 
-    background-color: #3E84A8;
+    background-color: #3e84a8;
 `;
 
 export const Icon = styled.Image``;

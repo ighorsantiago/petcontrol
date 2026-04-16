@@ -3,72 +3,74 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
 import {
-      Container,
-      Content,
-      Box,
-      Title,
-      InfoBox,
-      BoxContent,
-      Label,
-      Text,
-      AddButton,
-      AddButtonText,
+    Container,
+    Content,
+    Box,
+    Title,
+    InfoBox,
+    BoxContent,
+    Label,
+    Text,
+    AddButton,
+    AddButtonText,
 } from './styles';
 
 import { useAuth } from '@/hooks';
 
 import { Header } from '../../Header';
 
-import type{ Pet } from '@/types';
+import type { Pet } from '@/types';
 
 interface RouteParams {
-      pet: Pet;
+    pet: Pet;
 }
 
 type Props = {
-      petId: string;
-}
+    petId: string;
+};
 
 export function DewormingDisplay({ petId }: Props) {
-      
-      const { user } = useAuth();
-      const { t } = useTranslation();
+    const { user } = useAuth();
+    const { t } = useTranslation();
 
-      const pet = user?.pets 
-            ? user.pets.filter(item => item.id === petId)
-            : [];
+    const pet = user?.pets ? user.pets.filter((item) => item.id === petId) : [];
 
-      return (
-            <Container>
-                  <AddButton onPress={() => router.navigate({pathname: '/deworming', params: { dropdown: 'yes', petId: pet[0].id }})}>
-                        <AddButtonText>Adiconar</AddButtonText>
-                  </AddButton>
-                  <Content>
-                        {
-                              !!pet[0].deworming &&
-                              <FlatList
-                                    data={pet[0].deworming}
-                                    keyExtractor={item => item.id}
-                                    showsVerticalScrollIndicator={false}
-                                    renderItem={({ item }) =>
-                                          <Box>
-                                                <Title>Vermífugo</Title>
-                                                <BoxContent>
-                                                      <InfoBox>
-                                                            <Label>Nome: </Label>
-                                                            <Text>{item.name}</Text>
-                                                      </InfoBox>
-                                                      <InfoBox>
-                                                            <Label>Data: </Label>
-                                                            <Text>{item.date}</Text>
-                                                      </InfoBox>
-                                                </BoxContent>
-                                          </Box>
-                                    }
-                              />
-
-                        }
-                  </Content>
-            </Container>
-      );
+    return (
+        <Container>
+            <AddButton
+                onPress={() =>
+                    router.navigate({
+                        pathname: '/deworming',
+                        params: { dropdown: 'yes', petId: pet[0].id },
+                    })
+                }
+            >
+                <AddButtonText>Adiconar</AddButtonText>
+            </AddButton>
+            <Content>
+                {!!pet[0].deworming && (
+                    <FlatList
+                        data={pet[0].deworming}
+                        keyExtractor={(item) => item.id}
+                        showsVerticalScrollIndicator={false}
+                        renderItem={({ item }) => (
+                            <Box>
+                                <Title>Vermífugo</Title>
+                                <BoxContent>
+                                    <InfoBox>
+                                        <Label>Nome: </Label>
+                                        <Text>{item.name}</Text>
+                                    </InfoBox>
+                                    <InfoBox>
+                                        <Label>Data: </Label>
+                                        <Text>{item.date}</Text>
+                                    </InfoBox>
+                                </BoxContent>
+                            </Box>
+                        )}
+                    />
+                )}
+            </Content>
+        </Container>
+    );
 }

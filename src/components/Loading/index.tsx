@@ -1,11 +1,11 @@
-import { Container, Icon } from "./styles";
+import { Container, Icon } from './styles';
+
+import logo from '@/assets/logo.png';
 
 export function Loading() {
-
     return (
-
         <Container>
-            <Icon source={ require('../../assets/logo.png') } />
+            <Icon source={logo} />
         </Container>
     );
 }

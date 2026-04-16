@@ -1,13 +1,13 @@
-import styled from "styled-components/native";
+import styled from 'styled-components/native';
 
 export const Container = styled.View`
-      width: 100%;
-      height: 100%;
+    width: 100%;
+    height: 100%;
 
-      background-color: #F8F8F8;
+    background-color: #f8f8f8;
 `;
 
-export const Form = styled.View`      
-      padding: 0 54px;
-      margin-top: 60px;
+export const Form = styled.View`
+    padding: 0 54px;
+    margin-top: 60px;
 `;

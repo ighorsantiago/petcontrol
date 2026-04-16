@@ -1,6 +1,6 @@
 import { TouchableOpacity } from 'react-native';
-import { RectButton } from "react-native-gesture-handler";
-import styled from "styled-components/native";
+import { RectButton } from 'react-native-gesture-handler';
+import styled from 'styled-components/native';
 
 interface Props {
     activeOpacity: boolean;
@@ -12,7 +12,7 @@ export const Container = styled.View`
 
     align-items: center;
 
-    background-color: #F8F8F8;
+    background-color: #f8f8f8;
 `;
 
 export const Header = styled.Image``;
@@ -40,7 +40,7 @@ export const RigisterLabel = styled.Text`
 
     margin-bottom: 8px;
 
-    color: #4A4A4A;
+    color: #4a4a4a;
 `;
 
 export const RegisterButton = styled(TouchableOpacity)`
@@ -49,13 +49,13 @@ export const RegisterButton = styled(TouchableOpacity)`
 
     justify-content: center;
     align-items: center;
-    
+
     margin-top: 30px;
     margin-bottom: 5px;
 
     border-radius: 6px;
 
-    background-color: #3E84A8;
+    background-color: #3e84a8;
 `;
 
 export const RegisterText = styled.Text`
@@ -65,7 +65,7 @@ export const RegisterText = styled.Text`
 
     text-align: center;
 
-    color: #FFEF61;
+    color: #ffef61;
 `;
 
 export const SocialBox = styled.View`
@@ -81,7 +81,7 @@ export const SocialLabel = styled.Text`
 
     text-align: center;
 
-    color: #4A4A4A;
+    color: #4a4a4a;
 `;
 
 export const SocialButtonsBox = styled.View`
@@ -89,7 +89,6 @@ export const SocialButtonsBox = styled.View`
     flex-direction: row;
 
     justify-content: center;
-
 `;
 
 export const SocialButton = styled(TouchableOpacity)`
@@ -115,7 +114,7 @@ export const SignUpText = styled.Text`
     font-weight: 400;
     font-size: 14px;
 
-    color: #4A4A4A;
+    color: #4a4a4a;
 `;
 
 export const SignUpButton = styled(TouchableOpacity)``;
@@ -124,5 +123,5 @@ export const SignUpButtonText = styled.Text`
     font-weight: 400;
     font-size: 14px;
 
-    color: #E9840E;
+    color: #e9840e;
 `;

@@ -20,15 +20,16 @@ import {
     SignUpText,
     SignUpButton,
     SignUpButtonText,
-} from "./styles";
+} from './styles';
 
 import { useAuth } from '@/hooks';
 
-import { Input } from "@/components/Input";
-import { PasswordInput } from "@/components/PasswordInput";
+import { Input } from '@/components/Input';
+import { PasswordInput } from '@/components/PasswordInput';
+
+import header from '@/assets/header.png';
 
 export default function SignUp() {
-
     // const { signIn } = useSession();
 
     const { signInFirebase } = useAuth();
@@ -46,7 +47,7 @@ export default function SignUp() {
 
             // router.replace("/(auth)/(tabs)/Home");
         } catch (error) {
-            console.log("Erro da tela SignUp:", error);
+            console.log('Erro da tela SignUp:', error);
             throw error;
         }
     }
@@ -62,77 +63,73 @@ export default function SignUp() {
 
     return (
         // <KeyboardAvoidingView behavior="position" enabled>
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <Container>
-                    <Header source={require("@/assets/header.png")} />
-                    
-                    <RegisterBox>
-                        <RigisterLabel>
-                            Cadastro
-                        </RigisterLabel>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <Container>
+                <Header source={header} />
 
-                        <Input
-                            iconName="user"
-                            value={name}
-                            onChangeText={setName}
-                            placeholder='Nome'
-                            //t('signup.name')
-                            placeholderTextColor="gray"
-                        />
-                        
-                        <Input
-                            iconName="mail"
-                            value="email"
-                            onChangeText={setEmail}
-                            placeholder="E-mail"
-                            placeholderTextColor="gray"
-                            keyboardType='email-address'
-                            autoCapitalize='none'
-                        />
-                        
-                        <PasswordInput
-                            iconName="lock"
-                            value="password"
-                            onChangeText={setPassword}
-                            placeholder='Senha'
-                            placeholderTextColor="gray"
-                        />
+                <RegisterBox>
+                    <RigisterLabel>Cadastro</RigisterLabel>
 
-                        <PasswordInput
-                            iconName="lock"
-                            value="confirm"
-                            onChangeText={setPasswordConfirm}
-                            placeholder='Confirme a senha'
-                            placeholderTextColor="gray"
-                        />
-                    </RegisterBox>
+                    <Input
+                        iconName="user"
+                        value={name}
+                        onChangeText={setName}
+                        placeholder="Nome"
+                        //t('signup.name')
+                        placeholderTextColor="gray"
+                    />
 
-                    <RegisterButton onPress={handleSignUp}>
-                        <RegisterText>Cadastrar</RegisterText>
-                    </RegisterButton>
+                    <Input
+                        iconName="mail"
+                        value="email"
+                        onChangeText={setEmail}
+                        placeholder="E-mail"
+                        placeholderTextColor="gray"
+                        keyboardType="email-address"
+                        autoCapitalize="none"
+                    />
 
-                    <SocialBox>
-                        <SocialLabel>ou registre-se com</SocialLabel>
-                        <SocialButtonsBox>
-                            <SocialButton onPress={() => {}}>
-                                <FontAwesome name="facebook-official" size={23} color="blue" />
-                            </SocialButton>
-                            <SocialButton onPress={() => {}}>
-                                <FontAwesome name="google" size={23} color="red" />
-                            </SocialButton>
-                            <SocialButton onPress={() => {}}>
-                                <FontAwesome name="apple" size={23} color="black" />
-                            </SocialButton>
-                        </SocialButtonsBox>
-                    </SocialBox>
+                    <PasswordInput
+                        iconName="lock"
+                        value="password"
+                        onChangeText={setPassword}
+                        placeholder="Senha"
+                        placeholderTextColor="gray"
+                    />
 
-                    <SignUpButton onPress={() => router.navigate('/login')}>
-                        <SignUpButtonText>
-                            Já tem uma conta?
-                        </SignUpButtonText>
-                    </SignUpButton>
-                </Container>
-            </TouchableWithoutFeedback>
+                    <PasswordInput
+                        iconName="lock"
+                        value="confirm"
+                        onChangeText={setPasswordConfirm}
+                        placeholder="Confirme a senha"
+                        placeholderTextColor="gray"
+                    />
+                </RegisterBox>
+
+                <RegisterButton onPress={handleSignUp}>
+                    <RegisterText>Cadastrar</RegisterText>
+                </RegisterButton>
+
+                <SocialBox>
+                    <SocialLabel>ou registre-se com</SocialLabel>
+                    <SocialButtonsBox>
+                        <SocialButton onPress={() => {}}>
+                            <FontAwesome name="facebook-official" size={23} color="blue" />
+                        </SocialButton>
+                        <SocialButton onPress={() => {}}>
+                            <FontAwesome name="google" size={23} color="red" />
+                        </SocialButton>
+                        <SocialButton onPress={() => {}}>
+                            <FontAwesome name="apple" size={23} color="black" />
+                        </SocialButton>
+                    </SocialButtonsBox>
+                </SocialBox>
+
+                <SignUpButton onPress={() => router.navigate('/login')}>
+                    <SignUpButtonText>Já tem uma conta?</SignUpButtonText>
+                </SignUpButton>
+            </Container>
+        </TouchableWithoutFeedback>
         // </KeyboardAvoidingView>
     );
 }

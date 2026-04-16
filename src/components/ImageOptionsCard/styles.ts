@@ -1,26 +1,26 @@
-import styled from "styled-components/native";
+import styled from 'styled-components/native';
 import { TouchableOpacity } from 'react-native';
-import { RectButton } from "react-native-gesture-handler";
+import { RectButton } from 'react-native-gesture-handler';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export const Container = styled(TouchableOpacity)`
-      flex: 1;
+    flex: 1;
 
-      align-items: center;
+    align-items: center;
 
-      margin: 10px 12px;
+    margin: 10px 12px;
 `;
 
 export const OptionView = styled.View`
-      width: 170px;
-      height: 170px;
+    width: 170px;
+    height: 170px;
 
-      border-radius: 15px;
-      border-width: 2px;
-      border-color: #3E84A8;
+    border-radius: 15px;
+    border-width: 2px;
+    border-color: #3e84a8;
 
-      background-color: #FFF;
+    background-color: #fff;
 `;
 
 // export const OptionView = styled.View`
@@ -33,18 +33,18 @@ export const OptionView = styled.View`
 // `;
 
 export const OptionIcon = styled(MaterialCommunityIcons)`
-      margin-top: 10px;
+    margin-top: 10px;
 `;
 
 export const Name = styled.Text`
-      font-weight: 700;
-      font-size: 18px;
-      line-height: 21px;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 21px;
 
-      margin-top: 25px;
-      margin-left: 16px;
+    margin-top: 25px;
+    margin-left: 16px;
 
-      color: #3E84A8;
+    color: #3e84a8;
 `;
 
 // export const Name = styled.Text`
@@ -59,15 +59,15 @@ export const Name = styled.Text`
 // `;
 
 export const ImageBox = styled.View`
-      flex: 1;
-      
-      justify-content: center;
-      align-items: center;
+    flex: 1;
 
-      margin: 0 20px;
+    justify-content: center;
+    align-items: center;
+
+    margin: 0 20px;
 `;
 
 export const Image = styled.Image`
-      /* width: 50px;
+    /* width: 50px;
       height: 70px; */
 `;

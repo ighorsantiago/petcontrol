@@ -1,3 +1,8 @@
+import vaccine from '@/assets/vaccine.png';
+import medicine from '@/assets/medicine.png';
+import deworming from '@/assets/deworming.png';
+import hygiene from '@/assets/hygiene.png';
+
 const options = [
     { key: 'info', name: 'Geral', icon: 'information-outline' },
     { key: 'vaccines', name: 'Vacinas', icon: 'needle' },
@@ -9,10 +14,26 @@ const options = [
 ];
 
 const optionsHome = [
-    { key: 'vaccines', name: 'Vacinas', icon: require('@/assets/vaccine.png') },
-    { key: 'medications', name: 'Medicações', icon: require('@/assets/medicine.png') },
-    { key: 'deworming', name: 'Vermífugo', icon: require('@/assets/deworming.png') },
-    { key: 'hygiene', name: 'Higiene', icon: require('@/assets/hygiene.png') },
+    {
+        key: 'vaccines',
+        name: 'Vacinas',
+        icon: vaccine,
+    },
+    {
+        key: 'medications',
+        name: 'Medicações',
+        icon: medicine,
+    },
+    {
+        key: 'deworming',
+        name: 'Vermífugo',
+        icon: deworming,
+    },
+    {
+        key: 'hygiene',
+        name: 'Higiene',
+        icon: hygiene,
+    },
 ];
 
 const optionsLinks = [

@@ -1,73 +1,73 @@
 import styled from 'styled-components/native';
 
 export const Container = styled.SafeAreaView`
-      flex: 1;
+    flex: 1;
 
-      justify-content: center;
-      align-items: center;
+    justify-content: center;
+    align-items: center;
 
-      /* background-color: black; */
+    /* background-color: black; */
 `;
 
 export const Content = styled.View`
-      width: 80%;
+    width: 80%;
 
-      align-self: center;
-      justify-content: center;
+    align-self: center;
+    justify-content: center;
 
-      /* background-color: red; */
+    /* background-color: red; */
 `;
 
 export const Box = styled.View`
-      border-width: 3px;
-      border-radius: 20px;
-      border-color: #3E84A8;
+    border-width: 3px;
+    border-radius: 20px;
+    border-color: #3e84a8;
 
-      padding: 20px;
+    padding: 20px;
 `;
 
 export const Title = styled.Text`
-      font-size: 18px;
-      font-weight: bold;
+    font-size: 18px;
+    font-weight: bold;
 
-      align-self: center;
+    align-self: center;
 
-      margin-bottom: 15px;
+    margin-bottom: 15px;
 
-      color: black;
+    color: black;
 `;
 
 export const BoxContent = styled.View`
-      flex-direction: row;
+    flex-direction: row;
 
-      align-items: center;
+    align-items: center;
 
-      margin: 15px 0;
+    margin: 15px 0;
 `;
 
 export const InfoBox = styled.View`
-      flex-direction: row;
+    flex-direction: row;
 
-      align-items: center;
+    align-items: center;
 
-      margin-bottom: 10px;
+    margin-bottom: 10px;
 
-      /* background-color: gray; */
+    /* background-color: gray; */
 `;
 
 export const Label = styled.Text`
-      font-size: 16px;
-      font-weight: bold;
-      align-self: flex-end;
+    font-size: 16px;
+    font-weight: bold;
+    align-self: flex-end;
 
-      color: black;
+    color: black;
 `;
 
 export const Text = styled.Text`
-      font-size: 16px;
-      align-self: flex-end;
+    font-size: 16px;
+    align-self: flex-end;
 
-      margin-right: 20px;
+    margin-right: 20px;
 
-      color: black;
+    color: black;
 `;

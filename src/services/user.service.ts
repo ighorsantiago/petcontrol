@@ -2,7 +2,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 import { db } from '@/config/firabase';
-import type { User, Pet, Weight, Food, Vaccine, Medication, Hygiene, Deworming, Appointment } from '@/types';
+import type {
+    User,
+    Pet,
+    Weight,
+    Food,
+    Vaccine,
+    Medication,
+    Hygiene,
+    Deworming,
+    Appointment,
+} from '@/types';
 import { USER_STORAGE, ONBOARDING_STORAGE } from '@/services/storageConfig';
 
 // ─── Helpers internos ────────────────────────────────────────────────────────
@@ -77,7 +87,10 @@ export async function getUserFromFirestore(email: string): Promise<User | null> 
 // ─── Atualização de Pet ───────────────────────────────────────────────────────
 
 export async function updatePetAvatar(user: User, petId: string, avatar: string): Promise<User> {
-    const pets = updatePetInList(user.pets ?? [], petId, (pet) => ({ ...pet, avatar }));
+    const pets = updatePetInList(user.pets ?? [], petId, (pet) => ({
+        ...pet,
+        avatar,
+    }));
     return { ...user, pets };
 }
 
@@ -105,7 +118,11 @@ export async function addPetVaccine(user: User, petId: string, entry: Vaccine): 
     return { ...user, pets };
 }
 
-export async function addPetMedication(user: User, petId: string, entry: Medication): Promise<User> {
+export async function addPetMedication(
+    user: User,
+    petId: string,
+    entry: Medication,
+): Promise<User> {
     const pets = updatePetInList(user.pets ?? [], petId, (pet) => ({
         ...pet,
         medications: [...(pet.medications ?? []), entry],
@@ -131,7 +148,11 @@ export async function addPetDeworming(user: User, petId: string, entry: Dewormin
     return { ...user, pets };
 }
 
-export async function addPetAppointment(user: User, petId: string, entry: Appointment): Promise<User> {
+export async function addPetAppointment(
+    user: User,
+    petId: string,
+    entry: Appointment,
+): Promise<User> {
     const pets = updatePetInList(user.pets ?? [], petId, (pet) => ({
         ...pet,
         appointments: [...(pet.appointments ?? []), entry],

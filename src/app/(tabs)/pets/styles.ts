@@ -1,63 +1,62 @@
-import { TouchableOpacity } from "react-native";
-import styled from "styled-components/native";
+import { TouchableOpacity } from 'react-native';
+import styled from 'styled-components/native';
 
 export const Container = styled.SafeAreaView`
     flex: 1;
 
     align-items: center;
 
-    background-color: #F9F9F9;
+    background-color: #f9f9f9;
 `;
 
-
 export const Header = styled.View`
-      width: 100%;
-      height: 20%;
-      /* height: 25%; */
+    width: 100%;
+    height: 20%;
+    /* height: 25%; */
 
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 
-      padding: 29px;
+    padding: 29px;
 
-      /* background-color: red; */
+    /* background-color: red; */
 `;
 
 export const MessageBox = styled.View`
-      flex-direction: column;
+    flex-direction: column;
 `;
 
 export const Title = styled.Text`
-      font-weight: 400;
-      font-size: 18px;
+    font-weight: 400;
+    font-size: 18px;
 
-      color: #000000;
+    color: #000000;
 `;
 
 export const UserIcon = styled.View`
-      width: 110px;
-      height: 110px;
+    width: 110px;
+    height: 110px;
 
-      justify-content: center;
-      align-items: center;
-      
-      border-radius: 55px;
-      border-width: 4px;
-      border-color: #3E84A8;
+    justify-content: center;
+    align-items: center;
 
-      /* margin-right: 20px; */
+    border-radius: 55px;
+    border-width: 4px;
+    border-color: #3e84a8;
+
+    /* margin-right: 20px; */
 `;
 
 export const Avatar = styled.Image`
-      width: 100px;
-      height: 100px;
+    width: 100px;
+    height: 100px;
 
-      border-radius: 50px;
+    border-radius: 50px;
 `;
 
 export const Search = styled.View`
-      padding: 20px 15%;
+    padding: 20px 15%;
 `;
 
 export const PetList = styled.View`
@@ -81,7 +80,7 @@ export const AddButton = styled(TouchableOpacity)`
     align-items: center;
 
     margin: 25px 0;
-    background-color: #3E84A8;
+    background-color: #3e84a8;
 `;
 
 export const Text = styled.Text`

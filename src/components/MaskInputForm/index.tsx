@@ -3,22 +3,16 @@ import { StyleSheet, TextInputProps } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import MaskInput, { MaskInputProps, UseMaskedInputProps } from 'react-native-mask-input';
 
-import {
-    Container,
-    IconBox,
-    Drop,
-    ErrorMessage
-} from './styles';
+import { Container, IconBox, Drop, ErrorMessage } from './styles';
 
 type Props = MaskInputProps & {
     value?: string;
     icon?: boolean;
     isFilled?: boolean;
     errorMessage?: string;
-}
+};
 
 export function MaskInputForm({ value, icon = false, isFilled, errorMessage, ...rest }: Props) {
-
     const [isFocused, setIsFocused] = useState(false);
     // const [isFilled, setIsFilled] = useState(false);
 
@@ -33,11 +27,7 @@ export function MaskInputForm({ value, icon = false, isFilled, errorMessage, ...
 
     return (
         <>
-            { errorMessage &&
-                <ErrorMessage>
-                    { errorMessage }
-                </ErrorMessage>
-            }
+            {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
 
             <Container>
                 <MaskInput
@@ -48,19 +38,17 @@ export function MaskInputForm({ value, icon = false, isFilled, errorMessage, ...
                     placeholderTextColor="#4A4A4A"
                     {...rest}
                 />
-                {
-                    icon &&
+                {icon && (
                     <IconBox>
                         <Ionicons name="search" size={24} color="#787878" />
                     </IconBox>
-                }
+                )}
             </Container>
         </>
     );
 }
 
 const styles = StyleSheet.create({
-
     dropdown: {
         width: '100%',
         minHeight: 65,
@@ -70,9 +58,9 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#BDBBBB',
         borderRadius: 6,
-    }
+    },
 });
 
-    // ${({ isFilled }) => !isFilled && {
-    //     borderColor: 'red'
-    // }}
+// ${({ isFilled }) => !isFilled && {
+//     borderColor: 'red'
+// }}

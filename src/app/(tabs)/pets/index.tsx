@@ -1,101 +1,100 @@
-import { useState } from "react";
-import { FlatList, Keyboard, TouchableWithoutFeedback } from "react-native";
-import { router } from "expo-router";
-import { MaterialIcons } from "@expo/vector-icons";
+import { useState } from 'react';
+import { FlatList, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { router } from 'expo-router';
+import { MaterialIcons } from '@expo/vector-icons';
 
-import { useAuth } from "@/hooks";
+import { useAuth } from '@/hooks';
 
 import {
-	Container,
-	Header,
-	MessageBox,
-	Title,
-	UserIcon,
-	Avatar,
-	Search,
-	PetList,
-	AddButton,
-	Text,
-} from "./styles";
+    Container,
+    Header,
+    MessageBox,
+    Title,
+    UserIcon,
+    Avatar,
+    Search,
+    PetList,
+    AddButton,
+    Text,
+} from './styles';
 
-import type { Pet } from "@/types";
+import type { Pet } from '@/types';
 
-import { PetCard } from "@/components/PetCard";
-import { InputForm } from "@/components/InputForm";
+import { PetCard } from '@/components/PetCard';
+import { InputForm } from '@/components/InputForm';
 
 export default function Pets() {
-	const { user } = useAuth();
+    const { user } = useAuth();
 
-	const [search, setSearch] = useState("");
+    const [search, setSearch] = useState('');
 
-	let pets = [];
+    let pets = [];
 
-	if (search === "") {
-		pets = user?.pets ? user?.pets : [];
-	} else {
-		pets = user?.pets
-			? user?.pets.filter((item) => item.name.includes(search))
-			: [];
-	}
+    if (search === '') {
+        pets = user?.pets ? user?.pets : [];
+    } else {
+        pets = user?.pets ? user?.pets.filter((item) => item.name.includes(search)) : [];
+    }
 
-	function handleNavigationToAddPet() {
-		router.navigate("/addPet");
-	}
+    function handleNavigationToAddPet() {
+        router.navigate('/addPet');
+    }
 
-	function handleNavigationToPetDetails(pet: Pet) {
-		router.push({
-			pathname: '/petInfo',
-			params: { petId: pet.id }});
-	}
+    function handleNavigationToPetDetails(pet: Pet) {
+        router.push({
+            pathname: '/petInfo',
+            params: { petId: pet.id },
+        });
+    }
 
-	return (
-		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-			<Container>
-				<Header>
-					<MessageBox>
-						<Title>{user?.name}, encontre seus pets aqui:</Title>
-					</MessageBox>
-					<UserIcon>
-						{user?.avatar ? (
-							<Avatar src={user?.avatar} />
-						) : (
-							<MaterialIcons name="person" size={60} color="#3E84A8" />
-						)}
-					</UserIcon>
-				</Header>
+    return (
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <Container>
+                <Header>
+                    <MessageBox>
+                        <Title>{user?.name}, encontre seus pets aqui:</Title>
+                    </MessageBox>
+                    <UserIcon>
+                        {user?.avatar ? (
+                            <Avatar src={user?.avatar} />
+                        ) : (
+                            <MaterialIcons name="person" size={60} color="#3E84A8" />
+                        )}
+                    </UserIcon>
+                </Header>
 
-				{user?.pets && (
-					<Search>
-						<InputForm
-							icon
-							placeholder="Buscar"
-							value={search}
-							onChangeText={setSearch}
-						/>
-					</Search>
-				)}
+                {user?.pets && (
+                    <Search>
+                        <InputForm
+                            icon
+                            placeholder="Buscar"
+                            value={search}
+                            onChangeText={setSearch}
+                        />
+                    </Search>
+                )}
 
-				<PetList>
-					<FlatList
-						data={pets}
-						keyExtractor={(item) => item.name}
-						numColumns={2}
-						showsVerticalScrollIndicator={false}
-						renderItem={({ item }) => (
-							<PetCard
-								type={item.icon}
-								name={item.name}
-								avatar={item.avatar && item.avatar}
-								onPress={() => handleNavigationToPetDetails(item)}
-							/>
-						)}
-					/>
+                <PetList>
+                    <FlatList
+                        data={pets}
+                        keyExtractor={(item) => item.name}
+                        numColumns={2}
+                        showsVerticalScrollIndicator={false}
+                        renderItem={({ item }) => (
+                            <PetCard
+                                type={item.icon}
+                                name={item.name}
+                                avatar={item.avatar && item.avatar}
+                                onPress={() => handleNavigationToPetDetails(item)}
+                            />
+                        )}
+                    />
 
-					<AddButton onPress={handleNavigationToAddPet}>
-						<Text>Adicionar pet +</Text>
-					</AddButton>
-				</PetList>
-			</Container>
-		</TouchableWithoutFeedback>
-	);
+                    <AddButton onPress={handleNavigationToAddPet}>
+                        <Text>Adicionar pet +</Text>
+                    </AddButton>
+                </PetList>
+            </Container>
+        </TouchableWithoutFeedback>
+    );
 }

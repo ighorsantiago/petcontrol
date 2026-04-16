@@ -1,5 +1,12 @@
 import { useState } from 'react';
-import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Alert, StyleSheet, Platform } from 'react-native';
+import {
+    KeyboardAvoidingView,
+    TouchableWithoutFeedback,
+    Keyboard,
+    Alert,
+    StyleSheet,
+    Platform,
+} from 'react-native';
 import { router } from 'expo-router';
 // import { useToast } from 'native-base';
 import { useTranslation } from 'react-i18next';
@@ -24,19 +31,20 @@ import {
     SignUpText,
     SignUpButton,
     SignUpButtonText,
-} from "./styles";
+} from './styles';
 
-import { Input } from "@/components/Input";
-import { PasswordInput } from "@/components/PasswordInput";
+import { Input } from '@/components/Input';
+import { PasswordInput } from '@/components/PasswordInput';
+
+import header from '@/assets/header.png';
 
 export default function Login() {
-
     const { logInFirebase } = useAuth();
     // const { t } = useTranslation();
     // const toast = useToast();
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     // function handleSocial() {
     //     Alert.alert("Clicou!");
@@ -45,11 +53,9 @@ export default function Login() {
     function handleNavigateToRegister() {
         // navigation.navigate('signUp');
         router.navigate('/signUp');
-
     }
 
     async function handleLogIn() {
-
         try {
             if (!email || !password) {
                 // return toast.show({
@@ -80,17 +86,15 @@ export default function Login() {
     }
 
     async function handleForgotPassword() {
-
         if (!email) {
-            return Alert.alert("Tutor", "Por favor, informe seu e-amil.");
+            return Alert.alert('Tutor', 'Por favor, informe seu e-amil.');
         }
 
         try {
-
             // await forgotPassword(email);
 
             // alert("Confira seu e-mail (inclusive a caixa de spam) para alterar a senha.");
-            alert("Que pena!");
+            alert('Que pena!');
         } catch (error) {
             // toast.show({
             //     placement: 'top',
@@ -108,12 +112,10 @@ export default function Login() {
         // >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <Container>
-                <Header source={require("@/assets/header.png")} />
+                <Header source={header} />
 
                 <LoginBox>
-                    <LogLabel>
-                        Login
-                    </LogLabel>
+                    <LogLabel>Login</LogLabel>
 
                     <Input
                         iconName="mail"
@@ -121,21 +123,19 @@ export default function Login() {
                         onChangeText={setEmail}
                         placeholder="E-mail"
                         placeholderTextColor="darkgray"
-                        keyboardType='email-address'
-                        autoCapitalize='none'
+                        keyboardType="email-address"
+                        autoCapitalize="none"
                     />
                     <PasswordInput
                         iconName="lock"
                         value={password}
                         onChangeText={setPassword}
-                        placeholder='Senha'
+                        placeholder="Senha"
                         placeholderTextColor="darkgray"
                     />
 
                     <ForgotButton onPress={handleForgotPassword}>
-                        <ForgotLabel>
-                            Esqueceu a senha?
-                        </ForgotLabel>
+                        <ForgotLabel>Esqueceu a senha?</ForgotLabel>
                     </ForgotButton>
                 </LoginBox>
 
@@ -161,9 +161,7 @@ export default function Login() {
                 <Footer>
                     <SignUpText>Não tem uma conta? </SignUpText>
                     <SignUpButton onPress={handleNavigateToRegister}>
-                        <SignUpButtonText>
-                            Registre-se aqui!
-                        </SignUpButtonText>
+                        <SignUpButtonText>Registre-se aqui!</SignUpButtonText>
                     </SignUpButton>
                 </Footer>
             </Container>

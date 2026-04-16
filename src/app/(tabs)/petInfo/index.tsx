@@ -50,7 +50,6 @@ interface OptionsProps {
 }
 
 export default function PetInfo() {
-
     const route = useLocalSearchParams();
     const { petId } = route as RouteParams;
 
@@ -59,7 +58,7 @@ export default function PetInfo() {
 
     const { toast } = useToast();
 
-    const userPet = user?.pets ? user.pets.filter(item => item.id === petId) : [];
+    const userPet = user?.pets ? user.pets.filter((item) => item.id === petId) : [];
     const pet = userPet[0];
     const { yearsOld, monthsOld } = getPetAge(pet.birth);
 
@@ -70,7 +69,6 @@ export default function PetInfo() {
     const [screenSelected, setScreenSelected] = useState('info');
 
     async function handlePetPhotoSelect() {
-
         setPhotoIsLoading(true);
         setOpen(false);
 
@@ -87,27 +85,47 @@ export default function PetInfo() {
             }
 
             if (photoSelected.assets[0].uri) {
-
                 const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri);
 
-                if (photoInfo.exists && (photoInfo.size / 1024 / 1024) > 5) {
+                if (photoInfo.exists && photoInfo.size / 1024 / 1024 > 5) {
                     setOpen(!open);
 
-                    toast("Essa imagem é muito grande, escolha uma de até 5MB.", "destructive", 4000, "bottom", false);
+                    toast(
+                        'Essa imagem é muito grande, escolha uma de até 5MB.',
+                        'destructive',
+                        4000,
+                        'bottom',
+                        false,
+                    );
                 }
 
-                if(user?.name) {
-                    const updatedUser = await updatePetAvatar(user, pet.id, photoSelected.assets[0].uri);
+                if (user?.name) {
+                    const updatedUser = await updatePetAvatar(
+                        user,
+                        pet.id,
+                        photoSelected.assets[0].uri,
+                    );
                     updateUser(updatedUser);
                 }
 
-                toast("A foto do seu pet foi alterada com sucesso.", "success", 4000, "bottom", false);
+                toast(
+                    'A foto do seu pet foi alterada com sucesso.',
+                    'success',
+                    4000,
+                    'bottom',
+                    false,
+                );
             }
-
         } catch (error) {
-            toast("Ocorreu um problema, por favor tente novamente.", "destructive", 4000, "bottom", false);
+            toast(
+                'Ocorreu um problema, por favor tente novamente.',
+                'destructive',
+                4000,
+                'bottom',
+                false,
+            );
         } finally {
-            setPhotoIsLoading(false)
+            setPhotoIsLoading(false);
         }
     }
 
@@ -124,20 +142,18 @@ export default function PetInfo() {
                 >
                     <MaterialIcons name="arrow-back-ios" size={23} color="#E27E08" />
                 </Button>
-                <Title>
-                    {pet.name}
-                </Title>
+                <Title>{pet.name}</Title>
             </Header>
 
             <PetInfoBox>
                 <PetIcon>
-                    {
-                        pet.avatar
-                            ? <Avatar src={pet.avatar} />
-                            : <MaterialCommunityIcons name={pet.icon} size={80} color="#3E84A8" />
-                    }
+                    {pet.avatar ? (
+                        <Avatar src={pet.avatar} />
+                    ) : (
+                        <MaterialCommunityIcons name={pet.icon} size={80} color="#3E84A8" />
+                    )}
                     <ChangePhotoBtn onPress={handlePetPhotoSelect}>
-                        <MaterialIcons name="add-a-photo" size={20} color='#FFEF61' />
+                        <MaterialIcons name="add-a-photo" size={20} color="#FFEF61" />
                     </ChangePhotoBtn>
                 </PetIcon>
                 <PetInfoText>

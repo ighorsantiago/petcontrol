@@ -2,70 +2,70 @@ import { TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 
 export const Container = styled.View`
-      flex: 1;
+    flex: 1;
 
-      justify-content: center;
+    justify-content: center;
 
-      /* background-color: red; */
+    /* background-color: red; */
 `;
 
 export const Content = styled.View`
-      flex: 1;
+    flex: 1;
 
-      padding: 30px;
+    padding: 30px;
 
-      margin-bottom: 70px;
+    margin-bottom: 70px;
 `;
 
 export const Box = styled.View`
-      border-width: 3px;
-      border-radius: 20px;
-      border-color: #3E84A8;
+    border-width: 3px;
+    border-radius: 20px;
+    border-color: #3e84a8;
 
-      padding: 10px;
+    padding: 10px;
 
-      margin-bottom: 30px;
+    margin-bottom: 30px;
 `;
 
 export const Title = styled.Text`
-      font-size: 18px;
-      font-weight: bold;
+    font-size: 18px;
+    font-weight: bold;
 
-      margin-bottom: 15px;
+    margin-bottom: 15px;
 
-      color: black;
+    color: black;
 `;
 
 export const BoxContent = styled.View`
-      flex-direction: row;
+    flex-direction: row;
 
-      align-items: center;
+    align-items: center;
 `;
 
 export const InfoBox = styled.View`
-      flex-direction: row;
+    flex-direction: row;
 
-      align-items: center;
+    align-items: center;
 
-      margin-bottom: 10px;
+    margin-bottom: 10px;
 
-      /* background-color: gray; */
+    /* background-color: gray; */
 `;
 
 export const Label = styled.Text`
-      font-size: 16px;
-      align-self: flex-end;
+    font-size: 16px;
+    align-self: flex-end;
 
-      color: black;
+    color: black;
 `;
 
 export const Text = styled.Text`
-      font-size: 14px;
-      align-self: flex-end;
+    font-size: 14px;
+    align-self: flex-end;
 
-      margin-right: 50px;
+    margin-right: 50px;
 
-      color: black;
+    color: black;
 `;
 
 export const AddButton = styled(TouchableOpacity)`
@@ -78,7 +78,7 @@ export const AddButton = styled(TouchableOpacity)`
 
     border-radius: 20px;
     border-width: 2px;
-    border-color: #3E84A8;
+    border-color: #3e84a8;
 
     margin: 25px 0;
 
@@ -93,5 +93,5 @@ export const AddButtonText = styled.Text`
     line-height: 21px;
     text-align: center;
 
-    color: #3E84A8;
+    color: #3e84a8;
 `;
