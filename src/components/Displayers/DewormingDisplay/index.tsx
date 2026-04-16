@@ -15,7 +15,7 @@ import {
       AddButtonText,
 } from './styles';
 
-import { useAuth } from '@/context/AuthProvider';
+import { useAuth } from '@/context/AuthContext';
 
 import { Header } from '../../Header';
 

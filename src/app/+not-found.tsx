@@ -1,4 +1,4 @@
-import { useAuth } from "@/context/AuthProvider";
+import { useAuth } from "@/context/AuthContext";
 import { Link, router, Stack } from "expo-router";
 import { View, Text, StyleSheet } from "react-native";
 

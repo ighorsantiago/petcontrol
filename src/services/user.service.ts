@@ -3,7 +3,7 @@ import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 import { db } from '@/config/firabase';
 import type { User, Pet, Weight, Food, Vaccine, Medication, Hygiene, Deworming, Appointment } from '@/types';
-import { USER_STORAGE, ONBOARDING_STORAGE } from '@/storage/storageConfig';
+import { USER_STORAGE, ONBOARDING_STORAGE } from '@/services/storageConfig';
 
 // ─── Helpers internos ────────────────────────────────────────────────────────
 

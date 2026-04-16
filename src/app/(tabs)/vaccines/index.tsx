@@ -10,7 +10,7 @@ import {
       Form,
 } from './styles';
 
-import { useAuth } from '@/context/AuthProvider';
+import { useAuth } from '@/context/AuthContext';
 
 import { AddHeader } from '@/components/AddHeader';
 import { InputForm } from '@/components/InputForm';
@@ -19,7 +19,7 @@ import { useToast } from '@/components/Toast';
 
 import { maskDate } from '@/utils/masks';
 
-import { storageUpdatePetVaccines } from '@/storage/storageUser';
+import { storageUpdatePetVaccines } from '@/services/storageUser';
 
 interface PetsProps {
       label: string;

@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 // import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { useAuth } from '@/context/AuthProvider';
+import { useAuth } from '@/context/AuthContext';
 
 // import { AddPet } from '@/app/AddPet';
 

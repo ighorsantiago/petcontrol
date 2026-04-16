@@ -13,7 +13,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 
-import { useAuth } from "@/context/AuthProvider";
+import { useAuth } from "@/context/AuthContext";
 
 import {
 	Container,

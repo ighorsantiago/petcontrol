@@ -5,7 +5,7 @@ import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { FontAwesome } from '@expo/vector-icons';
 
-import { useAuth } from '@/context/AuthProvider';
+import { useAuth } from '@/context/AuthContext';
 
 import {
     Container,

@@ -15,7 +15,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { Container, Form } from "./styles";
 
-import { useAuth } from "@/context/AuthProvider";
+import { useAuth } from "@/context/AuthContext";
 import type { PetDTO } from "@/dtos/PetDTO";
 import type { UserDTO } from "@/dtos/UserDTO";
 

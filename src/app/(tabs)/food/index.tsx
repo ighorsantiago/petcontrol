@@ -9,14 +9,14 @@ import {
       Form,
 } from './styles';
 
-import { useAuth } from '@/context/AuthProvider';
+import { useAuth } from '@/context/AuthContext';
 import { maskDate } from '@/utils/masks';
 import { AddHeader } from '@/components/AddHeader';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { InputForm } from '@/components/InputForm';
 import { useToast } from '@/components/Toast';
 
-import { storageUpdatePetFood } from '@/storage/storageUser';
+import { storageUpdatePetFood } from '@/services/storageUser';
 
 type RouteParams = {
       dropdown: string;

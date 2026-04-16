@@ -13,7 +13,7 @@ import {
       Text,
 } from './styles';
 
-import { useAuth } from '@/context/AuthProvider';
+import { useAuth } from '@/context/AuthContext';
 
 import type { PetDTO } from '@/dtos/PetDTO';
 

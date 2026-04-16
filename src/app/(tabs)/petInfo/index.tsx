@@ -7,7 +7,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 // import { useTranslation } from 'react-i18next';
 
-import { useAuth } from '@/context/AuthProvider';
+import { useAuth } from '@/context/AuthContext';
 
 import {
     Container,
@@ -39,7 +39,7 @@ import { getPetAge } from '@/utils/getPetAge';
 
 import { PetDTO } from '@/dtos/PetDTO';
 
-import { storageUpdatePetAvatar } from '@/storage/storageUser';
+import { storageUpdatePetAvatar } from '@/services/storageUser';
 
 type RouteParams = {
     petId: string;

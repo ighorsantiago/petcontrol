@@ -3,7 +3,7 @@ import "@/styles/global.css";
 import { useEffect, useState } from "react";
 import { Slot, SplashScreen } from "expo-router";
 
-import { AuthProvider, useAuth } from "@/context/AuthProvider";
+import { AuthProvider, useAuth } from "@/context/AuthContext";
 
 import { ToastProvider } from "@/components/Toast";
 

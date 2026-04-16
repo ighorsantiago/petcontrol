@@ -11,13 +11,13 @@ import {
       Form,
 } from './styles';
 
-import { useAuth } from '@/context/AuthProvider';
+import { useAuth } from '@/context/AuthContext';
 import { maskDate } from '@/utils/masks';
 import { AddHeader } from '@/components/AddHeader';
 import { InputForm } from '@/components/InputForm';
 import { useToast } from '@/components/Toast';
 
-import { storageUpdatePetMedications } from '@/storage/storageUser';
+import { storageUpdatePetMedications } from '@/services/storageUser';
 
 type RouteParams = {
       dropdown: string;
