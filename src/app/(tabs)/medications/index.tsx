@@ -11,13 +11,13 @@ import {
       Form,
 } from './styles';
 
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/hooks';
 import { maskDate } from '@/utils/masks';
 import { AddHeader } from '@/components/AddHeader';
 import { InputForm } from '@/components/InputForm';
 import { useToast } from '@/components/Toast';
 
-import { storageUpdatePetMedications } from '@/services/storageUser';
+import { addPetMedication } from '@/services/user.service';
 
 type RouteParams = {
       dropdown: string;
@@ -71,7 +71,7 @@ export default function Medications() {
                   const pet_id = dropdown ? petID : petId;
                   
                   if(user?.name) {
-                        const updatedUser = await storageUpdatePetMedications(user, pet_id, id, name, date, hour);
+                        const updatedUser = await addPetMedication(user, pet_id, { id, name, date, hour });
                         updateUser(updatedUser);
                   }
 

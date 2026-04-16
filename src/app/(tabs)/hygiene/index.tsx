@@ -11,13 +11,13 @@ import {
       Form,
 } from './styles';
 
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/hooks';
 import { maskDate } from '@/utils/masks';
 import { AddHeader } from '@/components/AddHeader';
 import { InputForm } from '@/components/InputForm';
 import { useToast } from '@/components/Toast';
 
-import { storageUpdatePetHygiene } from '@/services/storageUser';
+import { addPetHygiene } from '@/services/user.service';
 
 type RouteParams = {
       dropdown: string;
@@ -85,7 +85,7 @@ export default function Hygiene() {
                   const pet_id = dropdown ? petID : petId;
 
                   if(user?.name) {
-                        const updatedUser = await storageUpdatePetHygiene(user, pet_id, id, category, date);
+                        const updatedUser = await addPetHygiene(user, pet_id, { id, category, date });
                         updateUser(updatedUser);
                   }
 

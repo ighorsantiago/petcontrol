@@ -3,7 +3,8 @@ import "@/styles/global.css";
 import { useEffect, useState } from "react";
 import { Slot, SplashScreen } from "expo-router";
 
-import { AuthProvider, useAuth } from "@/context/AuthContext";
+import { AuthProvider } from "@/contexts";
+import { useAuth } from '@/hooks'
 
 import { ToastProvider } from "@/components/Toast";
 

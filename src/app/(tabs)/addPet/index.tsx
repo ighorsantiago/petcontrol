@@ -15,9 +15,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { Container, Form } from "./styles";
 
-import { useAuth } from "@/context/AuthContext";
-import type { PetDTO } from "@/dtos/PetDTO";
-import type { UserDTO } from "@/dtos/UserDTO";
+import { useAuth } from "@/hooks";
+import type { Pet } from "@/types";
+import type { User } from "@/types";
 
 import { useToast } from "@/components/Toast";
 import { InputForm } from "@/components/InputForm";
@@ -121,7 +121,7 @@ export default function AddPet() {
 			setIsAdding(true);
             // console.log("Entrou no handleAddPet")
 
-			const newPet: PetDTO = {
+			const newPet: Pet = {
 				id: String(new Date().getTime()),
 				name,
 				specie,
@@ -143,7 +143,7 @@ export default function AddPet() {
 
 				const updatedPets = [...pets, newPet];
 
-				const updatedUser: UserDTO = {
+				const updatedUser: User = {
 					...user,
 					pets: updatedPets,
 				};

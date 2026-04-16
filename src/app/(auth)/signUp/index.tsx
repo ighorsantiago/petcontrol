@@ -22,7 +22,7 @@ import {
     SignUpButtonText,
 } from "./styles";
 
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/hooks';
 
 import { Input } from "@/components/Input";
 import { PasswordInput } from "@/components/PasswordInput";

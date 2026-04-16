@@ -15,9 +15,9 @@ import {
       AddButtonText,
 } from './styles';
 
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/hooks';
 
-import type { PetDTO } from '@/dtos/PetDTO';
+import type { Pet } from '@/types';
 
 type Props = {
       petId: string;

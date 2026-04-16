@@ -9,14 +9,14 @@ import {
       Form,
 } from './styles';
 
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/hooks';
 import { maskDate } from '@/utils/masks';
 import { AddHeader } from '@/components/AddHeader';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { InputForm } from '@/components/InputForm';
 import { useToast } from '@/components/Toast';
 
-import { storageUpdatePetFood } from '@/services/storageUser';
+import { addPetFood } from '@/services/user.service';
 
 type RouteParams = {
       dropdown: string;
@@ -71,7 +71,7 @@ export default function Food() {
                   const pet_id = dropdown ? petID : petId;
 
                   if(user?.name) {
-                        const updatedUser = await storageUpdatePetFood(user, pet_id, id, name, amount, times, amountPerMeal);
+                        const updatedUser = await addPetFood(user, pet_id, { id, name, amount, times, amountPerMeal });
                         updateUser(updatedUser);
                   }
 

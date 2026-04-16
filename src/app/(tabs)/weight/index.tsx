@@ -9,13 +9,13 @@ import {
       Form,
 } from './styles';
 
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/hooks';
 import { AddHeader } from '@/components/AddHeader';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { InputForm } from '@/components/InputForm';
 import { useToast } from '@/components/Toast';
 
-import { storageUpdatePetWeight } from '@/services/storageUser';
+import { addPetWeight } from '@/services/user.service';
 
 type RouteParams = {
       dropdown: string;
@@ -66,8 +66,8 @@ export default function Weight() {
                   const id = String(new Date().getTime());
                   const pet_id = dropdown ? petID : petId;
 
-                  if(user?.name) {
-                        const updatedUser = await storageUpdatePetWeight(user, pet_id, id, amount, weighingDate);
+                  if (user?.name) {
+                        const updatedUser = await addPetWeight(user, pet_id, { id, amount, weighingDate });
                         updateUser(updatedUser);
                   }
 

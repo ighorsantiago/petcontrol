@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FlatList, Keyboard, StyleSheet, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import { FlatList } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -7,7 +7,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 // import { useTranslation } from 'react-i18next';
 
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/hooks';
 
 import {
     Container,
@@ -37,9 +37,7 @@ import { WeightDisplay } from '@/components/Displayers/WeightDisplay';
 import { options } from '@/utils/options';
 import { getPetAge } from '@/utils/getPetAge';
 
-import { PetDTO } from '@/dtos/PetDTO';
-
-import { storageUpdatePetAvatar } from '@/services/storageUser';
+import { updatePetAvatar } from '@/services/user.service';
 
 type RouteParams = {
     petId: string;
@@ -99,7 +97,7 @@ export default function PetInfo() {
                 }
 
                 if(user?.name) {
-                    const updatedUser = await storageUpdatePetAvatar(user, pet.id, photoSelected.assets[0].uri);
+                    const updatedUser = await updatePetAvatar(user, pet.id, photoSelected.assets[0].uri);
                     updateUser(updatedUser);
                 }
 

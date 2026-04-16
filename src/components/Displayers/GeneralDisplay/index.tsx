@@ -13,16 +13,16 @@ import {
       Text,
 } from './styles';
 
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/hooks';
 
-import type { PetDTO } from '@/dtos/PetDTO';
+import type { Pet } from '@/types';
 
 interface RouteParams {
-      pet: PetDTO;
+      pet: Pet;
 }
 
 type Props = {
-      pet: PetDTO;
+      pet: Pet;
 }
 
 export function GeneralDisplay({ pet }: Props) {

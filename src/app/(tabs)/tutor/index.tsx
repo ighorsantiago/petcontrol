@@ -13,7 +13,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks";
 
 import {
 	Container,
@@ -31,8 +31,6 @@ import {
 	LogoutBtn,
 } from "./styles";
 
-import type { UserDTO } from "@/dtos/UserDTO";
-
 import { AddHeader } from "@/components/AddHeader";
 import { InputForm } from "@/components/InputForm";
 import { PasswordInput } from "@/components/PasswordInput";
@@ -40,7 +38,7 @@ import { useToast } from "@/components/Toast";
 
 export default function Tutor() {
 
-	const { user, updateUser, changePassword, logOut } = useAuth();
+	const { user, updateUser, changePasswordFirebase, logOut } = useAuth();
 
 	const { toast } = useToast();
 
@@ -96,7 +94,7 @@ export default function Tutor() {
 
 				toast("Seu nome foi alterada com sucesso.", "success", 4000, "bottom", false);
 			} else {
-				await changePassword(newPassword);
+				await changePasswordFirebase(newPassword);
 				toast("Sua senha foi alterada com sucesso.", "success", 4000, "bottom", false);
 			}
 		} catch (error) {

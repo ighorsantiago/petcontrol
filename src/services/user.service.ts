@@ -26,6 +26,17 @@ export async function removeUserLocally(): Promise<void> {
     await AsyncStorage.multiRemove([USER_STORAGE, ONBOARDING_STORAGE]);
 }
 
+// ─── Onboarding ──────────────────────────────────────────────────────────────
+
+export async function saveOnboarding(): Promise<void> {
+    await AsyncStorage.setItem(ONBOARDING_STORAGE, 'true');
+}
+
+export async function getOnboarding(): Promise<boolean> {
+    const data = await AsyncStorage.getItem(ONBOARDING_STORAGE);
+    return !!data;
+}
+
 // ─── Firestore ────────────────────────────────────────────────────────────────
 
 export async function saveUserInFirestore(user: User): Promise<void> {

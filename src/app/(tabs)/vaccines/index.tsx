@@ -10,7 +10,7 @@ import {
       Form,
 } from './styles';
 
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/hooks';
 
 import { AddHeader } from '@/components/AddHeader';
 import { InputForm } from '@/components/InputForm';
@@ -19,7 +19,7 @@ import { useToast } from '@/components/Toast';
 
 import { maskDate } from '@/utils/masks';
 
-import { storageUpdatePetVaccines } from '@/services/storageUser';
+import { addPetVaccine } from '@/services/user.service';
 
 interface PetsProps {
       label: string;
@@ -72,7 +72,7 @@ export default function Vaccines() {
                   const pet_id = dropdown ? petID : petId;
 
                   if(user?.name) {
-                        const updatedUser = await storageUpdatePetVaccines(user, pet_id, id, name, date);
+                        const updatedUser = await addPetVaccine(user, pet_id, { id, name, date });
                         updateUser(updatedUser);
                   }
 

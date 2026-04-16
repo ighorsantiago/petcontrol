@@ -11,14 +11,14 @@ import {
       Form,
 } from './styles';
 
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/hooks';
 import { maskDate } from '@/utils/masks';
 import { AddHeader } from '@/components/AddHeader';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { InputForm } from '@/components/InputForm';
 import { useToast } from '@/components/Toast';
 
-import { storageUpdatePetDeworming } from '@/services/storageUser';
+import { addPetDeworming } from '@/services/user.service';
 
 type RouteParams = {
       dropdown: string;
@@ -72,7 +72,7 @@ export default function Deworming() {
                   const pet_id = dropdown ? petID : petId;
 
                   if(user?.name) {
-                        const updatedUser = await storageUpdatePetDeworming(user, pet_id, id, name, date);
+                        const updatedUser = await addPetDeworming(user, petId, { id, name, date })
                         updateUser(updatedUser);
                   }
 

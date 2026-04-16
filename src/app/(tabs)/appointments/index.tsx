@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { TouchableWithoutFeedback, Keyboard, StyleSheet, Text } from 'react-native';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -10,14 +11,13 @@ import {
       Form,
 } from './styles';
 
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/hooks';
 import { maskDate } from '@/utils/masks';
 import { AddHeader } from '@/components/AddHeader';
 import { InputForm } from '@/components/InputForm';
 import { useToast } from '@/components/Toast';
 
-import { storageUpdatePetAppointments } from '@/services/storageUser';
-import { router, useLocalSearchParams } from 'expo-router';
+import { addPetAppointment } from '@/services/user.service';
 
 type RouteParams = {
       dropdown: string;
@@ -72,8 +72,8 @@ export default function Appointments() {
                   const id = String(new Date().getTime());
                   const pet_id = dropdown ? petID : petId;
 
-                  if(user?.name) {
-                        const updatedUser = await storageUpdatePetAppointments(user, pet_id, id, name, date, hour);
+                  if (user?.name) {
+                        const updatedUser = await addPetAppointment(user, pet_id, { id, name, date, hour });
                         updateUser(updatedUser);
                   }
 

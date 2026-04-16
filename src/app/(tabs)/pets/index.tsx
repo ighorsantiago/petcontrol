@@ -3,7 +3,7 @@ import { FlatList, Keyboard, TouchableWithoutFeedback } from "react-native";
 import { router } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks";
 
 import {
 	Container,
@@ -18,7 +18,7 @@ import {
 	Text,
 } from "./styles";
 
-import type { PetDTO } from "@/dtos/PetDTO";
+import type { Pet } from "@/types";
 
 import { PetCard } from "@/components/PetCard";
 import { InputForm } from "@/components/InputForm";
@@ -42,7 +42,7 @@ export default function Pets() {
 		router.navigate("/addPet");
 	}
 
-	function handleNavigationToPetDetails(pet: PetDTO) {
+	function handleNavigationToPetDetails(pet: Pet) {
 		router.push({
 			pathname: '/petInfo',
 			params: { petId: pet.id }});
