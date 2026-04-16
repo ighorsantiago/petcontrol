@@ -25,7 +25,7 @@ import { AddHeader } from "@/components/AddHeader";
 import { Dropdown } from "@/components/Dropdown";
 
 import { maskDate } from "@/utils/masks";
-import { dogBreeds, catBreeds } from "@/utils/species";
+import { dogBreeds, catBreeds } from "@/constants/species";
 
 type FormDataProps = {
 	name: string;

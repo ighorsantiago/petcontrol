@@ -34,7 +34,7 @@ import { HygieneDisplay } from '@/components/Displayers/HygieneDisplay';
 import { AppointmentsDisplay } from '@/components/Displayers/AppointmentsDisplay';
 import { WeightDisplay } from '@/components/Displayers/WeightDisplay';
 
-import { options } from '@/utils/options';
+import { options } from '@/constants/options';
 import { getPetAge } from '@/utils/getPetAge';
 
 import { updatePetAvatar } from '@/services/user.service';

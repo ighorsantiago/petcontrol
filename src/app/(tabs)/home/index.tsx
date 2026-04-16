@@ -26,7 +26,7 @@ import {
 
 import { ImageOptionsCard } from '@/components/ImageOptionsCard';
 
-import { optionsHome as options } from '@/utils/options';
+import { optionsHome as options } from '@/constants/options';
 
 export default function Home() {
 
