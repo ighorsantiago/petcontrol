@@ -12,6 +12,7 @@ import { AddHeader } from '@/components/AddHeader';
 import { InputForm } from '@/components/InputForm';
 import { Dropdown } from '@/components/Dropdown';
 import { useToast } from '@/components/Toast';
+import { getFirebaseErrorMessage } from '@/utils/firebaseErrors';
 
 import { maskDate } from '@/utils/masks';
 
@@ -82,7 +83,7 @@ export default function Vaccines() {
             );
         } catch (error) {
             toast(
-                'Ocorreu um problema, por favor tente novamente.',
+                getFirebaseErrorMessage(error),
                 'destructive',
                 4000,
                 'bottom',

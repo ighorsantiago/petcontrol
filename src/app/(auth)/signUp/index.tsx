@@ -5,21 +5,21 @@ import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Alert } from 
 import { FontAwesome } from '@expo/vector-icons';
 
 import {
-    Container,
-    Header,
-    LogoImg,
-    RegisterBox,
-    RigisterLabel,
-    RegisterButton,
-    RegisterText,
-    SocialBox,
-    Footer,
-    SocialLabel,
-    SocialButtonsBox,
-    SocialButton,
-    SignUpText,
-    SignUpButton,
-    SignUpButtonText,
+  Container,
+  Header,
+  LogoImg,
+  RegisterBox,
+  RigisterLabel,
+  RegisterButton,
+  RegisterText,
+  SocialBox,
+  Footer,
+  SocialLabel,
+  SocialButtonsBox,
+  SocialButton,
+  SignUpText,
+  SignUpButton,
+  SignUpButtonText,
 } from './styles';
 
 import { useAuth } from '@/hooks';
@@ -27,109 +27,117 @@ import { useAuth } from '@/hooks';
 import { Input } from '@/components/Input';
 import { PasswordInput } from '@/components/PasswordInput';
 
+import { getFirebaseErrorMessage } from '@/utils/firebaseErrors';
+import { useToast } from '@/components/Toast';
+
 import header from '@/assets/header.png';
 
 export default function SignUp() {
-    // const { signIn } = useSession();
+  // const { signIn } = useSession();
 
-    const { signInFirebase } = useAuth();
-    // const { t } = useTranslation();
+  const { signInFirebase } = useAuth();
+  // const { t } = useTranslation();
+  const { toast } = useToast();
 
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
 
-    async function handleSignUp() {
-        try {
-            await signInFirebase(name, email, password);
-            // signIn(name, email, password);
-
-            // router.replace("/(auth)/(tabs)/Home");
-        } catch (error) {
-            console.log('Erro da tela SignUp:', error);
-            throw error;
-        }
+  async function handleSignUp() {
+    if (!name || !email || !password) {
+      return toast('Preencha todos os campos.', 'destructive', 4000, 'top', false);
     }
 
-    // async function handleSocial(social: string) {
-    //     // console.log("Clicou!");
-    //     try {
-    //         await signInGoogle();
-    //     } catch (error) {
-    //         console.log('Erro no login social:', error);
-    //     }
-    // }
+    if (password !== passwordConfirm) {
+      return toast('As senhas não coincidem.', 'destructive', 4000, 'top', false);
+    }
 
-    return (
-        // <KeyboardAvoidingView behavior="position" enabled>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <Container>
-                <Header source={header} />
+    try {
+      await signInFirebase(name, email, password);
+    } catch (error) {
+      toast(getFirebaseErrorMessage(error), 'destructive', 4000, 'top', false);
+    }
+  }
 
-                <RegisterBox>
-                    <RigisterLabel>Cadastro</RigisterLabel>
+  // async function handleSocial(social: string) {
+  //     // console.log("Clicou!");
+  //     try {
+  //         await signInGoogle();
+  //     } catch (error) {
+  //         console.log('Erro no login social:', error);
+  //     }
+  // }
 
-                    <Input
-                        iconName="user"
-                        value={name}
-                        onChangeText={setName}
-                        placeholder="Nome"
-                        //t('signup.name')
-                        placeholderTextColor="gray"
-                    />
+  return (
+    // <KeyboardAvoidingView behavior="position" enabled>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <Container>
+        <Header source={header} />
 
-                    <Input
-                        iconName="mail"
-                        value="email"
-                        onChangeText={setEmail}
-                        placeholder="E-mail"
-                        placeholderTextColor="gray"
-                        keyboardType="email-address"
-                        autoCapitalize="none"
-                    />
+        <RegisterBox>
+          <RigisterLabel>Cadastro</RigisterLabel>
 
-                    <PasswordInput
-                        iconName="lock"
-                        value="password"
-                        onChangeText={setPassword}
-                        placeholder="Senha"
-                        placeholderTextColor="gray"
-                    />
+          <Input
+            iconName="user"
+            value={name}
+            onChangeText={setName}
+            placeholder="Nome"
+            //t('signup.name')
+            placeholderTextColor="gray"
+          />
 
-                    <PasswordInput
-                        iconName="lock"
-                        value="confirm"
-                        onChangeText={setPasswordConfirm}
-                        placeholder="Confirme a senha"
-                        placeholderTextColor="gray"
-                    />
-                </RegisterBox>
+          <Input
+            iconName="mail"
+            value={email}
+            onChangeText={setEmail}
+            placeholder="E-mail"
+            placeholderTextColor="gray"
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
 
-                <RegisterButton onPress={handleSignUp}>
-                    <RegisterText>Cadastrar</RegisterText>
-                </RegisterButton>
+          <PasswordInput
+            iconName="lock"
+            value={password}
+            onChangeText={setPassword}
+            placeholder="Senha"
+            placeholderTextColor="gray"
+          />
 
-                <SocialBox>
-                    <SocialLabel>ou registre-se com</SocialLabel>
-                    <SocialButtonsBox>
-                        <SocialButton onPress={() => {}}>
-                            <FontAwesome name="facebook-official" size={23} color="blue" />
-                        </SocialButton>
-                        <SocialButton onPress={() => {}}>
-                            <FontAwesome name="google" size={23} color="red" />
-                        </SocialButton>
-                        <SocialButton onPress={() => {}}>
-                            <FontAwesome name="apple" size={23} color="black" />
-                        </SocialButton>
-                    </SocialButtonsBox>
-                </SocialBox>
+          <PasswordInput
+            iconName="lock"
+            value={passwordConfirm}
+            onChangeText={setPasswordConfirm}
+            placeholder="Confirme a senha"
+            placeholderTextColor="gray"
+          />
+        </RegisterBox>
 
-                <SignUpButton onPress={() => router.navigate('/login')}>
-                    <SignUpButtonText>Já tem uma conta?</SignUpButtonText>
-                </SignUpButton>
-            </Container>
-        </TouchableWithoutFeedback>
-        // </KeyboardAvoidingView>
-    );
+        <RegisterButton onPress={handleSignUp}>
+          <RegisterText>Cadastrar</RegisterText>
+        </RegisterButton>
+
+        <SocialBox>
+          <SocialLabel>ou registre-se com</SocialLabel>
+          <SocialButtonsBox>
+            <SocialButton onPress={() => { }}>
+              <FontAwesome name="facebook-official" size={23} color="blue" />
+            </SocialButton>
+            <SocialButton onPress={() => { }}>
+              <FontAwesome name="google" size={23} color="red" />
+            </SocialButton>
+            <SocialButton onPress={() => { }}>
+              <FontAwesome name="apple" size={23} color="black" />
+            </SocialButton>
+          </SocialButtonsBox>
+        </SocialBox>
+
+        <SignUpButton onPress={() => router.navigate('/login')}>
+          <SignUpButtonText>Já tem uma conta?</SignUpButtonText>
+        </SignUpButton>
+      </Container>
+    </TouchableWithoutFeedback>
+    // </KeyboardAvoidingView>
+  );
 }

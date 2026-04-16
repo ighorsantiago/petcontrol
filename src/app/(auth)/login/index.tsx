@@ -1,36 +1,39 @@
 import { useState } from 'react';
 import {
-    KeyboardAvoidingView,
-    TouchableWithoutFeedback,
-    Keyboard,
-    Alert,
-    StyleSheet,
-    Platform,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Alert,
+  StyleSheet,
+  Platform,
 } from 'react-native';
 import { router } from 'expo-router';
-// import { useToast } from 'native-base';
+
+import { getFirebaseErrorMessage } from '@/utils/firebaseErrors';
+import { useToast } from '@/components/Toast';
+
 import { useTranslation } from 'react-i18next';
 import { FontAwesome } from '@expo/vector-icons';
 
 import { useAuth } from '@/hooks';
 
 import {
-    Container,
-    Header,
-    LoginBox,
-    LogLabel,
-    ForgotButton,
-    ForgotLabel,
-    LogButton,
-    LogText,
-    SocialBox,
-    Footer,
-    SocialLabel,
-    SocialButtonsBox,
-    SocialButton,
-    SignUpText,
-    SignUpButton,
-    SignUpButtonText,
+  Container,
+  Header,
+  LoginBox,
+  LogLabel,
+  ForgotButton,
+  ForgotLabel,
+  LogButton,
+  LogText,
+  SocialBox,
+  Footer,
+  SocialLabel,
+  SocialButtonsBox,
+  SocialButton,
+  SignUpText,
+  SignUpButton,
+  SignUpButtonText,
 } from './styles';
 
 import { Input } from '@/components/Input';
@@ -39,111 +42,111 @@ import { PasswordInput } from '@/components/PasswordInput';
 import header from '@/assets/header.png';
 
 export default function Login() {
-    const { logInFirebase } = useAuth();
-    // const { t } = useTranslation();
-    // const toast = useToast();
+  const { logInFirebase, forgotPasswordFirebase } = useAuth();
+  // const { t } = useTranslation();
+  const { toast } = useToast();
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-    // function handleSocial() {
-    //     Alert.alert("Clicou!");
-    // }
+  // function handleSocial() {
+  //     Alert.alert("Clicou!");
+  // }
 
-    function handleNavigateToRegister() {
-        // navigation.navigate('signUp');
-        router.navigate('/signUp');
+  function handleNavigateToRegister() {
+    // navigation.navigate('signUp');
+    router.navigate('/signUp');
+  }
+
+  async function handleLogIn() {
+    try {
+      if (!email || !password) {
+        toast('Digite seu e-mail e sua senha.', 'destructive', 4000, 'top', false);
+        return
+        // Alert.alert('Digite seu e-mail e sua senha.');
+      }
+
+      await logInFirebase(email, password);
+    } catch (error) {
+      // Alert.alert('E-mail ou senha incorretos.');
+      // if (error.message.includes('wrong-password')) {
+      //     toast.show({
+      //         placement: 'top',
+      //         bgColor: 'red.500',
+      //         description: 'E-mail ou senha incorretos.'
+      //     });
+      // } else {
+      //     toast.show({
+      //         placement: 'top',
+      //         bgColor: 'red.500',
+      //         description: 'Ocorreu um erro, por favor tente novamente.'
+      //     });
+      // }
+      toast(getFirebaseErrorMessage(error), 'destructive', 4000, 'top', false);
+
+    }
+  }
+
+  async function handleForgotPassword() {
+    if (!email) {
+      // return Alert.alert('Tutor', 'Por favor, informe seu e-mail.');
+      return toast('Por favor, informe seu e-mail.', 'destructive', 4000, 'top', false);
     }
 
-    async function handleLogIn() {
-        try {
-            if (!email || !password) {
-                // return toast.show({
-                //     placement: 'top',
-                //     bgColor: 'red.500',
-                //     description: 'Digite seu e-mail e sua senha.'
-                // });
-                Alert.alert('Digite seu e-mail e sua senha.');
-            }
+    try {
+      await forgotPasswordFirebase(email);
+      toast('Confira seu e-mail para redefinir a senha.', 'success', 4000, 'top', false);
+    } catch (error) {
 
-            logInFirebase(email, password);
-        } catch (error) {
-            Alert.alert('E-mail ou senha incorretos.');
-            // if (error.message.includes('wrong-password')) {
-            //     toast.show({
-            //         placement: 'top',
-            //         bgColor: 'red.500',
-            //         description: 'E-mail ou senha incorretos.'
-            //     });
-            // } else {
-            //     toast.show({
-            //         placement: 'top',
-            //         bgColor: 'red.500',
-            //         description: 'Ocorreu um erro, por favor tente novamente.'
-            //     });
-            // }
-        }
+      toast(getFirebaseErrorMessage(error), 'destructive', 4000, 'top', false);
+      // toast.show({
+      //     placement: 'top',
+      //     bgColor: 'red.500',
+      //     description: 'Ocorreu um erro, por favor tente novamente.'
+      // });
     }
+  }
 
-    async function handleForgotPassword() {
-        if (!email) {
-            return Alert.alert('Tutor', 'Por favor, informe seu e-amil.');
-        }
+  return (
+    // <KeyboardAvoidingView
+    //     style={{ flex: 1 }}
+    //     behavior="position"
+    //     // behavior={Platform.OS === 'ios' ? 'position' : 'position'}
+    // >
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <Container>
+        <Header source={header} />
 
-        try {
-            // await forgotPassword(email);
+        <LoginBox>
+          <LogLabel>Login</LogLabel>
 
-            // alert("Confira seu e-mail (inclusive a caixa de spam) para alterar a senha.");
-            alert('Que pena!');
-        } catch (error) {
-            // toast.show({
-            //     placement: 'top',
-            //     bgColor: 'red.500',
-            //     description: 'Ocorreu um erro, por favor tente novamente.'
-            // });
-        }
-    }
+          <Input
+            iconName="mail"
+            value={email}
+            onChangeText={setEmail}
+            placeholder="E-mail"
+            placeholderTextColor="darkgray"
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+          <PasswordInput
+            iconName="lock"
+            value={password}
+            onChangeText={setPassword}
+            placeholder="Senha"
+            placeholderTextColor="darkgray"
+          />
 
-    return (
-        // <KeyboardAvoidingView
-        //     style={{ flex: 1 }}
-        //     behavior="position"
-        //     // behavior={Platform.OS === 'ios' ? 'position' : 'position'}
-        // >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <Container>
-                <Header source={header} />
+          <ForgotButton onPress={handleForgotPassword}>
+            <ForgotLabel>Esqueceu a senha?</ForgotLabel>
+          </ForgotButton>
+        </LoginBox>
 
-                <LoginBox>
-                    <LogLabel>Login</LogLabel>
+        <LogButton style={styles.logBtn} onPress={handleLogIn}>
+          <LogText>Login</LogText>
+        </LogButton>
 
-                    <Input
-                        iconName="mail"
-                        value={email}
-                        onChangeText={setEmail}
-                        placeholder="E-mail"
-                        placeholderTextColor="darkgray"
-                        keyboardType="email-address"
-                        autoCapitalize="none"
-                    />
-                    <PasswordInput
-                        iconName="lock"
-                        value={password}
-                        onChangeText={setPassword}
-                        placeholder="Senha"
-                        placeholderTextColor="darkgray"
-                    />
-
-                    <ForgotButton onPress={handleForgotPassword}>
-                        <ForgotLabel>Esqueceu a senha?</ForgotLabel>
-                    </ForgotButton>
-                </LoginBox>
-
-                <LogButton style={styles.logBtn} onPress={handleLogIn}>
-                    <LogText>Login</LogText>
-                </LogButton>
-
-                {/* <SocialBox>
+        {/* <SocialBox>
                         <SocialLabel>{t("login.socialLogin")}</SocialLabel>
                         <SocialButtonsBox>
                             <SocialButton onPress={handleSocial}>
@@ -158,31 +161,31 @@ export default function Login() {
                         </SocialButtonsBox>
                     </SocialBox> */}
 
-                <Footer>
-                    <SignUpText>Não tem uma conta? </SignUpText>
-                    <SignUpButton onPress={handleNavigateToRegister}>
-                        <SignUpButtonText>Registre-se aqui!</SignUpButtonText>
-                    </SignUpButton>
-                </Footer>
-            </Container>
-        </TouchableWithoutFeedback>
-        // </KeyboardAvoidingView>
-    );
+        <Footer>
+          <SignUpText>Não tem uma conta? </SignUpText>
+          <SignUpButton onPress={handleNavigateToRegister}>
+            <SignUpButtonText>Registre-se aqui!</SignUpButtonText>
+          </SignUpButton>
+        </Footer>
+      </Container>
+    </TouchableWithoutFeedback>
+    // </KeyboardAvoidingView>
+  );
 }
 
 const styles = StyleSheet.create({
-    logBtn: {
-        width: 330,
-        height: 53,
+  logBtn: {
+    width: 330,
+    height: 53,
 
-        justifyContent: 'center',
-        alignItems: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
 
-        marginTop: 80,
-        marginBottom: 5,
+    marginTop: 80,
+    marginBottom: 5,
 
-        borderRadius: 6,
+    borderRadius: 6,
 
-        backgroundColor: '#3E84A8',
-    },
+    backgroundColor: '#3E84A8',
+  },
 });

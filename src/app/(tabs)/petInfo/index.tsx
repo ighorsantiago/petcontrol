@@ -25,6 +25,7 @@ import {
 
 import { OptionsCard } from '@/components/OptionsCard';
 import { useToast } from '@/components/Toast';
+import { getFirebaseErrorMessage } from '@/utils/firebaseErrors';
 
 import { GeneralDisplay } from '@/components/Displayers/GeneralDisplay';
 import { VaccinesDisplay } from '@/components/Displayers/VaccinesDisplay';
@@ -118,7 +119,7 @@ export default function PetInfo() {
             }
         } catch (error) {
             toast(
-                'Ocorreu um problema, por favor tente novamente.',
+                getFirebaseErrorMessage(error),
                 'destructive',
                 4000,
                 'bottom',

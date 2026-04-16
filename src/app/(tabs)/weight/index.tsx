@@ -10,6 +10,7 @@ import { AddHeader } from '@/components/AddHeader';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { InputForm } from '@/components/InputForm';
 import { useToast } from '@/components/Toast';
+import { getFirebaseErrorMessage } from '@/utils/firebaseErrors';
 
 import { addPetWeight } from '@/services/user.service';
 
@@ -76,7 +77,7 @@ export default function Weight() {
             );
         } catch (error) {
             toast(
-                'Ocorreu um problema, por favor tente novamente.',
+                getFirebaseErrorMessage(error),
                 'destructive',
                 4000,
                 'bottom',

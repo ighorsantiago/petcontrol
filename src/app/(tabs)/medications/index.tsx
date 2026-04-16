@@ -12,6 +12,7 @@ import { maskDate } from '@/utils/masks';
 import { AddHeader } from '@/components/AddHeader';
 import { InputForm } from '@/components/InputForm';
 import { useToast } from '@/components/Toast';
+import { getFirebaseErrorMessage } from '@/utils/firebaseErrors';
 
 import { addPetMedication } from '@/services/user.service';
 
@@ -76,7 +77,7 @@ export default function Medications() {
             toast('Seu pet foi adicionado com sucesso.', 'success', 4000, 'bottom', false);
         } catch (error) {
             toast(
-                'Ocorreu um problema, por favor tente novamente.',
+                getFirebaseErrorMessage(error),
                 'destructive',
                 4000,
                 'bottom',
