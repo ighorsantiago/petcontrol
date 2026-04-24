@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { router } from 'expo-router';
-import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
+import { TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 // import { useTranslation } from 'react-i18next';
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -70,74 +71,74 @@ export default function SignUp() {
   // }
 
   return (
-    // <KeyboardAvoidingView behavior="position" enabled>
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <Container>
-        <Header source={header} />
+    <KeyboardAwareScrollView>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <Container>
+          <Header source={header} />
 
-        <RegisterBox>
-          <RigisterLabel>Cadastro</RigisterLabel>
+          <RegisterBox>
+            <RigisterLabel>Cadastro</RigisterLabel>
 
-          <Input
-            iconName="user"
-            value={name}
-            onChangeText={setName}
-            placeholder="Nome"
-            //t('signup.name')
-            placeholderTextColor="gray"
-          />
+            <Input
+              iconName="user"
+              value={name}
+              onChangeText={setName}
+              placeholder="Nome"
+              //t('signup.name')
+              placeholderTextColor="gray"
+            />
 
-          <Input
-            iconName="mail"
-            value={email}
-            onChangeText={setEmail}
-            placeholder="E-mail"
-            placeholderTextColor="gray"
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
+            <Input
+              iconName="mail"
+              value={email}
+              onChangeText={setEmail}
+              placeholder="E-mail"
+              placeholderTextColor="gray"
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
 
-          <PasswordInput
-            iconName="lock"
-            value={password}
-            onChangeText={setPassword}
-            placeholder="Senha"
-            placeholderTextColor="gray"
-          />
+            <PasswordInput
+              iconName="lock"
+              value={password}
+              onChangeText={setPassword}
+              placeholder="Senha"
+              placeholderTextColor="gray"
+            />
 
-          <PasswordInput
-            iconName="lock"
-            value={passwordConfirm}
-            onChangeText={setPasswordConfirm}
-            placeholder="Confirme a senha"
-            placeholderTextColor="gray"
-          />
-        </RegisterBox>
+            <PasswordInput
+              iconName="lock"
+              value={passwordConfirm}
+              onChangeText={setPasswordConfirm}
+              placeholder="Confirme a senha"
+              placeholderTextColor="gray"
+            />
+          </RegisterBox>
 
-        <RegisterButton onPress={handleSignUp}>
-          <RegisterText>Cadastrar</RegisterText>
-        </RegisterButton>
+          <RegisterButton onPress={handleSignUp}>
+            <RegisterText>Cadastrar</RegisterText>
+          </RegisterButton>
 
-        <SocialBox>
-          <SocialLabel>ou registre-se com</SocialLabel>
-          <SocialButtonsBox>
-            <SocialButton onPress={() => { }}>
-              <FontAwesome name="facebook-official" size={23} color="blue" />
-            </SocialButton>
-            <SocialButton onPress={() => { }}>
-              <FontAwesome name="google" size={23} color="red" />
-            </SocialButton>
-            <SocialButton onPress={() => { }}>
-              <FontAwesome name="apple" size={23} color="black" />
-            </SocialButton>
-          </SocialButtonsBox>
-        </SocialBox>
+          <SocialBox>
+            <SocialLabel>ou registre-se com</SocialLabel>
+            <SocialButtonsBox>
+              <SocialButton onPress={() => { }}>
+                <FontAwesome name="facebook-official" size={23} color="blue" />
+              </SocialButton>
+              <SocialButton onPress={() => { }}>
+                <FontAwesome name="google" size={23} color="red" />
+              </SocialButton>
+              <SocialButton onPress={() => { }}>
+                <FontAwesome name="apple" size={23} color="black" />
+              </SocialButton>
+            </SocialButtonsBox>
+          </SocialBox>
 
-        <SignUpButton onPress={() => router.navigate('/login')}>
-          <SignUpButtonText>Já tem uma conta?</SignUpButtonText>
-        </SignUpButton>
-      </Container>
-    </TouchableWithoutFeedback>
-    // </KeyboardAvoidingView>
+          <SignUpButton onPress={() => router.navigate('/login')}>
+            <SignUpButtonText>Já tem uma conta?</SignUpButtonText>
+          </SignUpButton>
+        </Container>
+      </TouchableWithoutFeedback>
+    </KeyboardAwareScrollView>
   );
 }

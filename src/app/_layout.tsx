@@ -1,3 +1,4 @@
+import '@/utils/i18n';
 import '@/styles/global.css';
 
 import { useEffect, useState } from 'react';

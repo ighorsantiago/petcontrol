@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import {
-  KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
-  Alert,
   StyleSheet,
-  Platform,
 } from 'react-native';
 import { router } from 'expo-router';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { getFirebaseErrorMessage } from '@/utils/firebaseErrors';
 import { useToast } from '@/components/Toast';
@@ -108,45 +106,45 @@ export default function Login() {
   }
 
   return (
-    // <KeyboardAvoidingView
-    //     style={{ flex: 1 }}
-    //     behavior="position"
-    //     // behavior={Platform.OS === 'ios' ? 'position' : 'position'}
-    // >
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <Container>
-        <Header source={header} />
+    <KeyboardAwareScrollView
+      enableOnAndroid={true}
+      extraScrollHeight={20}
+      keyboardShouldPersistTaps="handled"
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <Container>
+          <Header source={header} />
 
-        <LoginBox>
-          <LogLabel>Login</LogLabel>
+          <LoginBox>
+            <LogLabel>Login</LogLabel>
 
-          <Input
-            iconName="mail"
-            value={email}
-            onChangeText={setEmail}
-            placeholder="E-mail"
-            placeholderTextColor="darkgray"
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-          <PasswordInput
-            iconName="lock"
-            value={password}
-            onChangeText={setPassword}
-            placeholder="Senha"
-            placeholderTextColor="darkgray"
-          />
+            <Input
+              iconName="mail"
+              value={email}
+              onChangeText={setEmail}
+              placeholder="E-mail"
+              placeholderTextColor="darkgray"
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+            <PasswordInput
+              iconName="lock"
+              value={password}
+              onChangeText={setPassword}
+              placeholder="Senha"
+              placeholderTextColor="darkgray"
+            />
 
-          <ForgotButton onPress={handleForgotPassword}>
-            <ForgotLabel>Esqueceu a senha?</ForgotLabel>
-          </ForgotButton>
-        </LoginBox>
+            <ForgotButton onPress={handleForgotPassword}>
+              <ForgotLabel>Esqueceu a senha?</ForgotLabel>
+            </ForgotButton>
+          </LoginBox>
 
-        <LogButton style={styles.logBtn} onPress={handleLogIn}>
-          <LogText>Login</LogText>
-        </LogButton>
+          <LogButton style={styles.logBtn} onPress={handleLogIn}>
+            <LogText>Login</LogText>
+          </LogButton>
 
-        {/* <SocialBox>
+          {/* <SocialBox>
                         <SocialLabel>{t("login.socialLogin")}</SocialLabel>
                         <SocialButtonsBox>
                             <SocialButton onPress={handleSocial}>
@@ -161,15 +159,15 @@ export default function Login() {
                         </SocialButtonsBox>
                     </SocialBox> */}
 
-        <Footer>
-          <SignUpText>Não tem uma conta? </SignUpText>
-          <SignUpButton onPress={handleNavigateToRegister}>
-            <SignUpButtonText>Registre-se aqui!</SignUpButtonText>
-          </SignUpButton>
-        </Footer>
-      </Container>
-    </TouchableWithoutFeedback>
-    // </KeyboardAvoidingView>
+          <Footer>
+            <SignUpText>Não tem uma conta? </SignUpText>
+            <SignUpButton onPress={handleNavigateToRegister}>
+              <SignUpButtonText>Registre-se aqui!</SignUpButtonText>
+            </SignUpButton>
+          </Footer>
+        </Container>
+      </TouchableWithoutFeedback>
+    </KeyboardAwareScrollView>
   );
 }
 

@@ -1,6 +1,7 @@
 import { type SetStateAction, useCallback, useEffect, useState } from 'react';
-import { TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard, StyleSheet } from 'react-native';
+import { TouchableWithoutFeedback, Keyboard, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 import { format } from 'date-fns';
@@ -136,7 +137,7 @@ export default function AddPet() {
                     pets: updatedPets,
                 };
                 // console.log(updatedUser)
-                updateUser(updatedUser);
+                await updateUser(updatedUser);
             }
 
             toast('Seu pet foi adicionado com sucesso.', 'success', 4000, 'bottom', false);
@@ -166,7 +167,6 @@ export default function AddPet() {
     }, [isSubmitSuccessful, reset]);
 
     return (
-        // <KeyboardAvoidingView behavior="position" enabled>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <Container>
                 <AddHeader
@@ -208,7 +208,8 @@ export default function AddPet() {
                                 items={species}
                                 setOpen={setSpecieOpen}
                                 setValue={onChange}
-                                zIndex={5000}
+                                zIndex={3000}
+                                zIndexInverse={1000}
                                 errorMessage={errors.specie?.message}
                             />
                         )}
@@ -233,7 +234,8 @@ export default function AddPet() {
                                 // items={dogBreeds}
                                 setOpen={setBreedOpen}
                                 setValue={onChange}
-                                zIndex={5}
+                                zIndex={2000}
+                                zIndexInverse={2000}
                                 errorMessage={errors.breed?.message}
                             />
                         )}
@@ -287,7 +289,8 @@ export default function AddPet() {
                                 items={genders}
                                 setOpen={setGenderOpen}
                                 setValue={onChange}
-                                zIndex={-1000}
+                                zIndex={1000}
+                                zIndexInverse={3000}
                                 errorMessage={errors.gender?.message}
                             />
                         )}
@@ -295,7 +298,6 @@ export default function AddPet() {
                 </Form>
             </Container>
         </TouchableWithoutFeedback>
-        // </KeyboardAvoidingView>
     );
 }
 
