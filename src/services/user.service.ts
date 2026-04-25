@@ -24,7 +24,6 @@ function updatePetInList(pets: Pet[], petId: string, updater: (pet: Pet) => Pet)
 // ─── AsyncStorage ─────────────────────────────────────────────────────────────
 
 export async function saveUserLocally(user: User): Promise<void> {
-    console.log('saveUserLocally => salvando:', user.email);
     await AsyncStorage.setItem(USER_STORAGE, JSON.stringify(user));
 }
 
@@ -35,8 +34,6 @@ export async function getUserLocally(): Promise<User | null> {
 
 export async function removeUserLocally(): Promise<void> {
     await AsyncStorage.multiRemove([USER_STORAGE, ONBOARDING_STORAGE]);
-    console.log('removeUserLocally => chamado!');
-    console.trace();
 }
 
 // ─── Onboarding ──────────────────────────────────────────────────────────────

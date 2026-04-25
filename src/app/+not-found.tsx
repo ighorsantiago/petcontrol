@@ -3,14 +3,14 @@ import { Link, router, Stack } from 'expo-router';
 import { View, Text, StyleSheet } from 'react-native';
 
 export default function NotFoundScreen() {
-    const { logOut } = useAuth();
+
     return (
         <>
             <Stack.Screen options={{ title: 'Oops!' }} />
             <View style={styles.container}>
                 <Text style={styles.title}>Essa tela não existe.</Text>
 
-                <Link href={'/'} style={styles.link} onPress={logOut}>
+                <Link href={'/onboardingScreen'} style={styles.link}>
                     <Text style={styles.linkText}>Vá para a tela inicial!</Text>
                 </Link>
             </View>

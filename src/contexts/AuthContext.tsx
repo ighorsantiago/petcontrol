@@ -1,12 +1,15 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { router } from 'expo-router';
+import { router, useSegments, useRouter } from 'expo-router';
 
 import type { User } from '@/types';
 import { Loading } from '@/components/Loading';
 import { signUp, signIn, forgotPassword, changePassword } from '@/services/auth.service';
-import { saveUserLocally, getUserLocally, removeUserLocally, saveUserInFirestore } from '@/services/user.service';
-import { auth, db } from '@/config/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import {
+    saveUserLocally,
+    getUserLocally,
+    removeUserLocally,
+    saveUserInFirestore,
+} from '@/services/user.service';
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 
@@ -36,7 +39,6 @@ export function AuthProvider({ children }: { children: JSX.Element }): JSX.Eleme
             try {
                 setLoading(true);
                 const storedUser = await getUserLocally();
-                console.log('loadStoredUser =>', storedUser?.email);
                 if (storedUser) {
                     setUser(storedUser);
                 } else {
@@ -51,7 +53,6 @@ export function AuthProvider({ children }: { children: JSX.Element }): JSX.Eleme
 
         loadStoredUser();
     }, []);
-
 
     async function signInFirebase(name: string, email: string, password: string) {
         try {
@@ -71,10 +72,10 @@ export function AuthProvider({ children }: { children: JSX.Element }): JSX.Eleme
     async function logInFirebase(email: string, password: string) {
         try {
             setLoading(true);
-            await signIn(email, password);          // salva no AsyncStorage
-            const storedUser = await getUserLocally(); // lê do AsyncStorage
+            await signIn(email, password);
+            const storedUser = await getUserLocally();
             if (storedUser) {
-                setUser(storedUser);                // atualiza o estado
+                setUser(storedUser);
             }
         } catch (error) {
             console.error('AuthContext / logInFirebase =>', error);
@@ -104,9 +105,6 @@ export function AuthProvider({ children }: { children: JSX.Element }): JSX.Eleme
 
     async function updateUser(updatedUser: User) {
         try {
-            const currentUser = auth.currentUser;
-            console.log('auth.currentUser =>', currentUser?.email);  // ← adiciona isso
-
             setUser(updatedUser);
             await saveUserLocally(updatedUser);
             await saveUserInFirestore(updatedUser);
