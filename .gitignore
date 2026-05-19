@@ -32,5 +32,9 @@ yarn-error.*
 # local env files
 .env*.local
 
+# Firebase credentials (não commitar)
+google-services.json
+GoogleService-Info.plist
+
 # typescript
 *.tsbuildinfo

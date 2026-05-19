@@ -23,7 +23,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#3E84A8"
       },
-      "package": "com.ighorsantiago.petcontrol"
+      "package": "com.ighorsantiago.petcontrol",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
