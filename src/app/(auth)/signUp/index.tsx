@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { router } from 'expo-router';
 import { TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -9,6 +9,7 @@ import { Input } from '@/components/Input';
 import { PasswordInput } from '@/components/PasswordInput';
 import { getFirebaseErrorMessage } from '@/utils/firebaseErrors';
 import { useToast } from '@/components/Toast';
+import { isAppleSignInAvailable } from '@/services/auth.service';
 
 import {
   Container,
@@ -28,28 +29,53 @@ import {
 import header from '@/assets/header.png';
 
 export default function SignUp() {
-  const { signInFirebase } = useAuth();
+  const { signInFirebase, logInWithGoogle, logInWithApple } = useAuth();
   const { toast } = useToast();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [appleAvailable, setAppleAvailable] = useState(false);
+
+  useEffect(() => {
+    isAppleSignInAvailable().then(setAppleAvailable);
+  }, []);
 
   async function handleSignUp() {
     if (!name || !email || !password) {
       return toast('Preencha todos os campos.', 'destructive', 4000, 'top', false);
     }
-
     if (password !== passwordConfirm) {
       return toast('As senhas não coincidem.', 'destructive', 4000, 'top', false);
     }
-
     try {
       await signInFirebase(name, email, password);
       router.replace('/(tabs)/home');
     } catch (error) {
       toast(getFirebaseErrorMessage(error), 'destructive', 4000, 'top', false);
+    }
+  }
+
+  async function handleGoogleLogin() {
+    try {
+      await logInWithGoogle();
+      router.replace('/(tabs)/home');
+    } catch (error: any) {
+      if (!error?.message?.includes('cancelado')) {
+        toast(getFirebaseErrorMessage(error), 'destructive', 4000, 'top', false);
+      }
+    }
+  }
+
+  async function handleAppleLogin() {
+    try {
+      await logInWithApple();
+      router.replace('/(tabs)/home');
+    } catch (error: any) {
+      if (!error?.message?.includes('cancelado')) {
+        toast(getFirebaseErrorMessage(error), 'destructive', 4000, 'top', false);
+      }
     }
   }
 
@@ -69,7 +95,6 @@ export default function SignUp() {
               placeholder="Nome"
               placeholderTextColor="gray"
             />
-
             <Input
               iconName="mail"
               value={email}
@@ -79,7 +104,6 @@ export default function SignUp() {
               keyboardType="email-address"
               autoCapitalize="none"
             />
-
             <PasswordInput
               iconName="lock"
               value={password}
@@ -87,7 +111,6 @@ export default function SignUp() {
               placeholder="Senha"
               placeholderTextColor="gray"
             />
-
             <PasswordInput
               iconName="lock"
               value={passwordConfirm}
@@ -104,15 +127,14 @@ export default function SignUp() {
           <SocialBox>
             <SocialLabel>ou registre-se com</SocialLabel>
             <SocialButtonsBox>
-              <SocialButton onPress={() => {}}>
-                <FontAwesome name="facebook-official" size={23} color="blue" />
-              </SocialButton>
-              <SocialButton onPress={() => {}}>
+              <SocialButton onPress={handleGoogleLogin}>
                 <FontAwesome name="google" size={23} color="red" />
               </SocialButton>
-              <SocialButton onPress={() => {}}>
-                <FontAwesome name="apple" size={23} color="black" />
-              </SocialButton>
+              {appleAvailable && (
+                <SocialButton onPress={handleAppleLogin}>
+                  <FontAwesome name="apple" size={23} color="black" />
+                </SocialButton>
+              )}
             </SocialButtonsBox>
           </SocialBox>
 

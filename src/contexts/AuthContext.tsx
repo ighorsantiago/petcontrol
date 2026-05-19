@@ -3,7 +3,14 @@ import { router } from 'expo-router';
 
 import type { User } from '@/types';
 import { Loading } from '@/components/Loading';
-import { signUp, signIn, forgotPassword, changePassword } from '@/services/auth.service';
+import {
+    signUp,
+    signIn,
+    forgotPassword,
+    changePassword,
+    signInWithGoogle,
+    signInWithApple,
+} from '@/services/auth.service';
 import {
     getUserLocally,
     removeUserLocally,
@@ -18,6 +25,8 @@ type AuthContextType = {
     loading: boolean;
     signInFirebase: (name: string, email: string, password: string) => Promise<void>;
     logInFirebase: (email: string, password: string) => Promise<void>;
+    logInWithGoogle: () => Promise<void>;
+    logInWithApple: () => Promise<void>;
     forgotPasswordFirebase: (email: string) => Promise<void>;
     updateUser: (updatedUser: User) => Promise<void>;
     changePasswordFirebase: (newPassword: string) => Promise<void>;
@@ -54,8 +63,7 @@ export function AuthProvider({ children }: { children: JSX.Element }): JSX.Eleme
 
     async function signInFirebase(name: string, email: string, password: string) {
         try {
-            const newUser: User = { name, email };
-            const createdUser = await signUp(newUser, password);
+            const createdUser = await signUp({ name, email }, password);
             setUser(createdUser);
         } catch (error) {
             console.error('AuthContext / signInFirebase =>', error);
@@ -69,6 +77,26 @@ export function AuthProvider({ children }: { children: JSX.Element }): JSX.Eleme
             setUser(loggedUser);
         } catch (error) {
             console.error('AuthContext / logInFirebase =>', error);
+            throw error;
+        }
+    }
+
+    async function logInWithGoogle() {
+        try {
+            const googleUser = await signInWithGoogle();
+            setUser(googleUser);
+        } catch (error) {
+            console.error('AuthContext / logInWithGoogle =>', error);
+            throw error;
+        }
+    }
+
+    async function logInWithApple() {
+        try {
+            const appleUser = await signInWithApple();
+            setUser(appleUser);
+        } catch (error) {
+            console.error('AuthContext / logInWithApple =>', error);
             throw error;
         }
     }
@@ -120,6 +148,8 @@ export function AuthProvider({ children }: { children: JSX.Element }): JSX.Eleme
                 loading,
                 signInFirebase,
                 logInFirebase,
+                logInWithGoogle,
+                logInWithApple,
                 forgotPasswordFirebase,
                 updateUser,
                 changePasswordFirebase,

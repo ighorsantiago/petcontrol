@@ -1,13 +1,15 @@
-import { useState } from 'react';
-import { TouchableWithoutFeedback, Keyboard, StyleSheet } from 'react-native';
+import { useEffect, useState } from 'react';
+import { TouchableWithoutFeedback, Keyboard, StyleSheet, Platform } from 'react-native';
 import { router } from 'expo-router';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { FontAwesome } from '@expo/vector-icons';
 
 import { getFirebaseErrorMessage } from '@/utils/firebaseErrors';
 import { useToast } from '@/components/Toast';
 import { useAuth } from '@/hooks';
 import { Input } from '@/components/Input';
 import { PasswordInput } from '@/components/PasswordInput';
+import { isAppleSignInAvailable } from '@/services/auth.service';
 
 import {
   Container,
@@ -18,7 +20,11 @@ import {
   ForgotLabel,
   LogButton,
   LogText,
+  SocialBox,
   Footer,
+  SocialLabel,
+  SocialButtonsBox,
+  SocialButton,
   SignUpText,
   SignUpButton,
   SignUpButtonText,
@@ -27,11 +33,16 @@ import {
 import header from '@/assets/header.png';
 
 export default function Login() {
-  const { logInFirebase, forgotPasswordFirebase } = useAuth();
+  const { logInFirebase, logInWithGoogle, logInWithApple, forgotPasswordFirebase } = useAuth();
   const { toast } = useToast();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [appleAvailable, setAppleAvailable] = useState(false);
+
+  useEffect(() => {
+    isAppleSignInAvailable().then(setAppleAvailable);
+  }, []);
 
   async function handleLogIn() {
     try {
@@ -39,7 +50,6 @@ export default function Login() {
         toast('Digite seu e-mail e sua senha.', 'destructive', 4000, 'top', false);
         return;
       }
-
       await logInFirebase(email, password);
       router.replace('/(tabs)/home');
     } catch (error) {
@@ -51,12 +61,33 @@ export default function Login() {
     if (!email) {
       return toast('Por favor, informe seu e-mail.', 'destructive', 4000, 'top', false);
     }
-
     try {
       await forgotPasswordFirebase(email);
       toast('Confira seu e-mail para redefinir a senha.', 'success', 4000, 'top', false);
     } catch (error) {
       toast(getFirebaseErrorMessage(error), 'destructive', 4000, 'top', false);
+    }
+  }
+
+  async function handleGoogleLogin() {
+    try {
+      await logInWithGoogle();
+      router.replace('/(tabs)/home');
+    } catch (error: any) {
+      if (!error?.message?.includes('cancelado')) {
+        toast(getFirebaseErrorMessage(error), 'destructive', 4000, 'top', false);
+      }
+    }
+  }
+
+  async function handleAppleLogin() {
+    try {
+      await logInWithApple();
+      router.replace('/(tabs)/home');
+    } catch (error: any) {
+      if (!error?.message?.includes('cancelado')) {
+        toast(getFirebaseErrorMessage(error), 'destructive', 4000, 'top', false);
+      }
     }
   }
 
@@ -98,6 +129,20 @@ export default function Login() {
           <LogButton style={styles.logBtn} onPress={handleLogIn}>
             <LogText>Login</LogText>
           </LogButton>
+
+          <SocialBox>
+            <SocialLabel>ou entre com</SocialLabel>
+            <SocialButtonsBox>
+              <SocialButton onPress={handleGoogleLogin}>
+                <FontAwesome name="google" size={23} color="red" />
+              </SocialButton>
+              {appleAvailable && (
+                <SocialButton onPress={handleAppleLogin}>
+                  <FontAwesome name="apple" size={23} color="black" />
+                </SocialButton>
+              )}
+            </SocialButtonsBox>
+          </SocialBox>
 
           <Footer>
             <SignUpText>Não tem uma conta? </SignUpText>
