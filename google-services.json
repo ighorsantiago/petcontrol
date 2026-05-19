@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "967896711448",
+    "project_id": "mypet-ad4f7",
+    "storage_bucket": "mypet-ad4f7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:967896711448:android:ff2f36fef605442cff5e6d",
+        "android_client_info": {
+          "package_name": "com.ighorsantiago.petcontrol"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "967896711448-sipu6kjcdkf3ujhknusqpjfv245lo0dh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ighorsantiago.petcontrol",
+            "certificate_hash": "2ab5ea1d2d51475c20e881712a08f5c519c7e50f"
+          }
+        },
+        {
+          "client_id": "967896711448-mfav5qflj356vfbesdkl370s32ahqbuc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKxMofGMFuXb2-IRq3LSiL1DCdz9ngwTQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "967896711448-mfav5qflj356vfbesdkl370s32ahqbuc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "967896711448-qu4ea5haisl6snnnbt7i6kgj1tqmo6vf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ighorsantiago.petcontrol"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -32,8 +32,7 @@ yarn-error.*
 # local env files
 .env*.local
 
-# Firebase credentials (não commitar)
-google-services.json
+# Firebase iOS credentials (não commitar — contém chave privada)
 GoogleService-Info.plist
 
 # typescript
