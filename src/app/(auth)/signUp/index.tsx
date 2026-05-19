@@ -56,6 +56,7 @@ export default function SignUp() {
 
     try {
       await signInFirebase(name, email, password);
+      router.replace('/(tabs)/home');
     } catch (error) {
       toast(getFirebaseErrorMessage(error), 'destructive', 4000, 'top', false);
     }

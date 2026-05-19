@@ -65,6 +65,7 @@ export default function Login() {
       }
 
       await logInFirebase(email, password);
+      router.replace('/(tabs)/home');
     } catch (error) {
       // Alert.alert('E-mail ou senha incorretos.');
       // if (error.message.includes('wrong-password')) {
