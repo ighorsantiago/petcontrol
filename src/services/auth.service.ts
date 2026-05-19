@@ -16,12 +16,6 @@ import { auth } from '@/config/firebase';
 import type { User } from '@/types';
 import { saveUserLocally, saveUserInFirestore, getUserFromFirestore } from './user.service';
 
-// ─── Configuração ─────────────────────────────────────────────────────────────
-
-GoogleSignin.configure({
-    webClientId: '967896711448-mfav5qflj356vfbesdkl370s32ahqbuc.apps.googleusercontent.com',
-});
-
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 async function resolveUserFromFirebase(firebaseUser: {
@@ -125,6 +119,9 @@ export async function changePassword(newPassword: string): Promise<void> {
 
 export async function signInWithGoogle(): Promise<User> {
     try {
+        GoogleSignin.configure({
+            webClientId: '967896711448-mfav5qflj356vfbesdkl370s32ahqbuc.apps.googleusercontent.com',
+        });
         await GoogleSignin.hasPlayServices();
         const { idToken } = await GoogleSignin.signIn();
 
