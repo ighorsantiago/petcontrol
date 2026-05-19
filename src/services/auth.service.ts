@@ -10,7 +10,7 @@ import { auth } from '@/config/firebase';
 import type { User } from '@/types';
 import { saveUserLocally, saveUserInFirestore, getUserFromFirestore } from './user.service';
 
-export async function signUp(user: User, password: string): Promise<void> {
+export async function signUp(user: User, password: string): Promise<User> {
     try {
         const { user: firebaseUser } = await createUserWithEmailAndPassword(
             auth,
@@ -24,25 +24,36 @@ export async function signUp(user: User, password: string): Promise<void> {
             });
         }
 
-        await saveUserInFirestore({ ...user, id: firebaseUser.uid });
-        await saveUserLocally({ ...user, id: firebaseUser.uid });
+        const newUser: User = { ...user, id: firebaseUser.uid };
+        await saveUserInFirestore(newUser);
+        await saveUserLocally(newUser);
+        return newUser;
     } catch (error) {
         console.error('auth.service / signUp =>', error);
         throw error;
     }
 }
 
-export async function signIn(email: string, password: string): Promise<void> {
+export async function signIn(email: string, password: string): Promise<User> {
     try {
         const { user: firebaseUser } = await signInWithEmailAndPassword(auth, email, password);
 
-        if (!firebaseUser.email) return;
-
-        const userData = await getUserFromFirestore(firebaseUser.email);
-
-        if (userData) {
-            await saveUserLocally(userData);
+        // Tenta buscar dados completos do Firestore
+        let userData: User | null = null;
+        try {
+            userData = await getUserFromFirestore(firebaseUser.email!);
+        } catch {
+            // Firestore falhou — usa dados básicos do Firebase Auth como fallback
         }
+
+        const user: User = userData ?? {
+            id: firebaseUser.uid,
+            name: firebaseUser.displayName ?? '',
+            email: firebaseUser.email!,
+        };
+
+        await saveUserLocally(user);
+        return user;
     } catch (error) {
         console.error('auth.service / signIn =>', error);
         throw error;
