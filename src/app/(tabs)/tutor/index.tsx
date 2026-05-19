@@ -1,99 +1,46 @@
-import { useEffect, useState } from 'react';
-import { Alert, Keyboard, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { useState } from 'react';
+import { Alert, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { router } from 'expo-router';
-
-import DropDownPicker from 'react-native-dropdown-picker';
-import { useTranslation } from 'react-i18next';
 import { MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 
 import { useAuth } from '@/hooks';
+import { AddHeader } from '@/components/AddHeader';
+import { InputForm } from '@/components/InputForm';
+import { useToast } from '@/components/Toast';
+import { getFirebaseErrorMessage } from '@/utils/firebaseErrors';
 
 import {
   Container,
   UserAvatar,
   Avatar,
   ChangePhotoBtn,
-  Password,
   Form,
-  Text,
-  LngBox,
-  LngIcon,
-  // LngBtn,
-  LngBtnLabel,
   LogoutBtnLabel,
   LogoutBtn,
 } from './styles';
 
-import { AddHeader } from '@/components/AddHeader';
-import { InputForm } from '@/components/InputForm';
-import { PasswordInput } from '@/components/PasswordInput';
-import { useToast } from '@/components/Toast';
-
-import { getFirebaseErrorMessage } from '@/utils/firebaseErrors';
-
-import flagBR from '@/assets/flag-br.png';
-import flagUS from '@/assets/flag-us.png';
-import flagES from '@/assets/flag-es.png';
-import flagFR from '@/assets/flag-fr.png';
-
 export default function Tutor() {
   const { user, updateUser, changePasswordFirebase, logOut } = useAuth();
-
   const { toast } = useToast();
 
-  // const { t, i18n } = useTranslation();
-  // const lng = i18n.language;
-  // const [selectedLanguage, setSelectedLanguage] = useState("Português");
-
-  // const [languageOpen, setLanguageOpen] = useState(false);
   const [photoIsLoading, setPhotoIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
-
   const [name, setName] = useState('');
   const [newPassword, setNewPassword] = useState('');
-
-  const Brazil = flagBR;
-  const USA = flagUS;
-  const Spain = flagES;
-  const France = flagFR;
-
-  const languages = [
-    {
-      label: 'Português',
-      value: 'pt',
-      icon: () => <LngIcon source={Brazil} />,
-    },
-    {
-      label: 'English',
-      value: 'en',
-      icon: () => <LngIcon source={USA} />,
-    },
-    {
-      label: 'Espanhol',
-      value: 'es',
-      icon: () => <LngIcon source={Spain} />,
-    },
-    {
-      label: 'Francês',
-      value: 'fr',
-      icon: () => <LngIcon source={France} />,
-    },
-  ];
 
   async function handleSave() {
     try {
       if (newPassword === '') {
         const updatedUser = {
           ...user,
-          email: user?.email ? user.email : '',
+          email: user?.email ?? '',
           name,
         };
 
         updateUser(updatedUser);
-
-        toast('Seu nome foi alterada com sucesso.', 'success', 4000, 'bottom', false);
+        toast('Seu nome foi alterado com sucesso.', 'success', 4000, 'bottom', false);
       } else {
         await changePasswordFirebase(newPassword);
         toast('Sua senha foi alterada com sucesso.', 'success', 4000, 'bottom', false);
@@ -115,84 +62,34 @@ export default function Tutor() {
         allowsEditing: true,
       });
 
-      if (photoSelected.canceled) {
-        return;
-      }
+      if (photoSelected.canceled) return;
 
       if (photoSelected.assets[0].uri) {
         const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri);
 
         if (photoInfo.exists && photoInfo.size / 1024 / 1024 > 5) {
-          toast(
-            'Ocorreu um problema, por favor tente novamente.',
-            'destructive',
-            4000,
-            'bottom',
-            false,
-          );
-
+          toast('Imagem muito grande. Escolha uma de até 5MB.', 'destructive', 4000, 'bottom', false);
           setOpen(!open);
+          return;
         }
 
         if (user) {
-          const updatedUser = {
-            ...user,
-            avatar: photoSelected.assets[0].uri,
-          };
-
-          updateUser(updatedUser);
+          updateUser({ ...user, avatar: photoSelected.assets[0].uri });
         }
 
         toast('Sua foto foi alterada com sucesso.', 'success', 4000, 'bottom', false);
       }
-    } catch (error) {
-      toast(
-        'Ocorreu um problema, por favor tente novamente.',
-        'destructive',
-        4000,
-        'bottom',
-        false,
-      );
+    } catch {
+      toast('Ocorreu um problema, por favor tente novamente.', 'destructive', 4000, 'bottom', false);
+    } finally {
+      setPhotoIsLoading(false);
     }
   }
 
-  function handleLanguage() {
-    // switch (selectedLanguage) {
-    //       case 'pt':
-    //             setSelectedLanguage("pt");
-    //             i18n.changeLanguage("pt")
-    //             break;
-    //       case 'en':
-    //             setSelectedLanguage("en");
-    //             i18n.changeLanguage("en")
-    //             break;
-    //       case 'es':
-    //             setSelectedLanguage("es");
-    //             i18n.changeLanguage("es")
-    //             break;
-    //       case 'fr':
-    //             setSelectedLanguage("fr");
-    //             i18n.changeLanguage("fr")
-    //             break;
-    //       default:
-    //             break;
-    // }
-  }
-
-  // useEffect(() => {
-  //       handleLanguage();
-  // }, [selectedLanguage]);
-
   function handleSignOut() {
-    Alert.alert('Tem certeza?', `${user?.name} se você sair irá apagar todos os seus dados.`, [
-      {
-        text: 'Cancelar',
-        onPress: () => { },
-      },
-      {
-        text: 'Sair',
-        onPress: logOut,
-      },
+    Alert.alert('Tem certeza?', `${user?.name}, se você sair precisará fazer login novamente.`, [
+      { text: 'Cancelar' },
+      { text: 'Sair', onPress: logOut },
     ]);
   }
 
@@ -221,11 +118,10 @@ export default function Tutor() {
           <InputForm
             placeholder={user?.name}
             placeholderTextColor="darkgray"
-            // value={user?.name}
             onChangeText={setName}
           />
           <InputForm
-            placeholder={user?.email ? user.email : ''}
+            placeholder={user?.email ?? ''}
             placeholderTextColor="darkgray"
           />
           <InputForm
@@ -237,18 +133,6 @@ export default function Tutor() {
             autoCapitalize="none"
             secureTextEntry={true}
           />
-          {/* <DropDownPicker
-                                    style={style.dropdownContainer}
-                                    dropDownContainerStyle={style.dropdown}
-                                    placeholder={selectedLanguage}
-                                    placeholderStyle={{ color: '#787878' }}
-                                    open={languageOpen}
-                                    value={selectedLanguage}
-                                    items={languages}
-                                    setOpen={setLanguageOpen}
-                                    setValue={setSelectedLanguage}
-                                    zIndex={2}
-                              /> */}
         </Form>
 
         <LogoutBtn onPress={handleSignOut}>
@@ -258,22 +142,3 @@ export default function Tutor() {
     </TouchableWithoutFeedback>
   );
 }
-
-const style = StyleSheet.create({
-  dropdownContainer: {
-    width: '100%',
-    minHeight: 65,
-    flexDirection: 'row',
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: '#BDBBBB',
-    borderRadius: 6,
-    backgroundColor: 'transparent',
-    zIndex: 10,
-  },
-  dropdown: {
-    borderRadius: 0,
-    borderColor: '#BDBBBB',
-    backgroundColor: 'transparent',
-  },
-});

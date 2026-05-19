@@ -2,42 +2,33 @@ import { useState } from 'react';
 import { router } from 'expo-router';
 import { TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-// import { useTranslation } from 'react-i18next';
 import { FontAwesome } from '@expo/vector-icons';
+
+import { useAuth } from '@/hooks';
+import { Input } from '@/components/Input';
+import { PasswordInput } from '@/components/PasswordInput';
+import { getFirebaseErrorMessage } from '@/utils/firebaseErrors';
+import { useToast } from '@/components/Toast';
 
 import {
   Container,
   Header,
-  LogoImg,
   RegisterBox,
   RigisterLabel,
   RegisterButton,
   RegisterText,
   SocialBox,
-  Footer,
   SocialLabel,
   SocialButtonsBox,
   SocialButton,
-  SignUpText,
   SignUpButton,
   SignUpButtonText,
 } from './styles';
 
-import { useAuth } from '@/hooks';
-
-import { Input } from '@/components/Input';
-import { PasswordInput } from '@/components/PasswordInput';
-
-import { getFirebaseErrorMessage } from '@/utils/firebaseErrors';
-import { useToast } from '@/components/Toast';
-
 import header from '@/assets/header.png';
 
 export default function SignUp() {
-  // const { signIn } = useSession();
-
   const { signInFirebase } = useAuth();
-  // const { t } = useTranslation();
   const { toast } = useToast();
 
   const [name, setName] = useState('');
@@ -62,15 +53,6 @@ export default function SignUp() {
     }
   }
 
-  // async function handleSocial(social: string) {
-  //     // console.log("Clicou!");
-  //     try {
-  //         await signInGoogle();
-  //     } catch (error) {
-  //         console.log('Erro no login social:', error);
-  //     }
-  // }
-
   return (
     <KeyboardAwareScrollView>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -85,7 +67,6 @@ export default function SignUp() {
               value={name}
               onChangeText={setName}
               placeholder="Nome"
-              //t('signup.name')
               placeholderTextColor="gray"
             />
 
@@ -123,13 +104,13 @@ export default function SignUp() {
           <SocialBox>
             <SocialLabel>ou registre-se com</SocialLabel>
             <SocialButtonsBox>
-              <SocialButton onPress={() => { }}>
+              <SocialButton onPress={() => {}}>
                 <FontAwesome name="facebook-official" size={23} color="blue" />
               </SocialButton>
-              <SocialButton onPress={() => { }}>
+              <SocialButton onPress={() => {}}>
                 <FontAwesome name="google" size={23} color="red" />
               </SocialButton>
-              <SocialButton onPress={() => { }}>
+              <SocialButton onPress={() => {}}>
                 <FontAwesome name="apple" size={23} color="black" />
               </SocialButton>
             </SocialButtonsBox>

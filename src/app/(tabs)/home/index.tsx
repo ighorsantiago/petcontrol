@@ -1,12 +1,10 @@
-import { useEffect, useState } from 'react';
-import { FlatList, Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { FlatList } from 'react-native';
 import { router } from 'expo-router';
-// import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { useAuth } from '@/hooks';
-
-// import { AddPet } from '@/app/AddPet';
+import { ImageOptionsCard } from '@/components/ImageOptionsCard';
+import { optionsHome as options } from '@/constants/options';
 
 import {
     Container,
@@ -17,20 +15,12 @@ import {
     Content,
     AddButton,
     Text,
-    LogoutBtn,
     MessageBox,
-    // Rect,
-    ModalContainer,
     Avatar,
 } from './styles';
 
-import { ImageOptionsCard } from '@/components/ImageOptionsCard';
-
-import { optionsHome as options } from '@/constants/options';
-
 export default function Home() {
     const { user } = useAuth();
-    // const { t } = useTranslation();
 
     function handleNavigation(option: string) {
         if (
@@ -39,7 +29,6 @@ export default function Home() {
             option === 'deworming' ||
             option === 'hygiene'
         ) {
-            // router.navigate(`/${option}`, { dropdown: true });
             router.push({ pathname: `/${option}`, params: { dropdown: 'yes' } });
         }
     }
@@ -51,7 +40,6 @@ export default function Home() {
                     <Title>Olá {user?.name}!</Title>
                     <Subtitle>O que seu pet precisa hoje?</Subtitle>
                 </MessageBox>
-                {/* <LogoutBtn title='X' onPress={handleSignOut} /> */}
                 <UserIcon>
                     {user?.avatar ? (
                         <Avatar src={user.avatar} />
