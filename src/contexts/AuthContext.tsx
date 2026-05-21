@@ -25,7 +25,7 @@ type AuthContextType = {
     loading: boolean;
     signInFirebase: (name: string, email: string, password: string) => Promise<void>;
     logInFirebase: (email: string, password: string) => Promise<void>;
-    logInWithGoogle: () => Promise<void>;
+    logInWithGoogle: (accessToken: string) => Promise<void>;
     logInWithApple: () => Promise<void>;
     forgotPasswordFirebase: (email: string) => Promise<void>;
     updateUser: (updatedUser: User) => Promise<void>;
@@ -41,8 +41,6 @@ export const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 
 export function AuthProvider({ children }: { children: JSX.Element }): JSX.Element {
     const [user, setUser] = useState<User | null>(null);
-    // loading só é true durante a verificação inicial do AsyncStorage.
-    // login/logout NÃO alteram esse estado para evitar desmontar o <Slot />.
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -81,9 +79,9 @@ export function AuthProvider({ children }: { children: JSX.Element }): JSX.Eleme
         }
     }
 
-    async function logInWithGoogle() {
+    async function logInWithGoogle(accessToken: string) {
         try {
-            const googleUser = await signInWithGoogle();
+            const googleUser = await signInWithGoogle(accessToken);
             setUser(googleUser);
         } catch (error) {
             console.error('AuthContext / logInWithGoogle =>', error);

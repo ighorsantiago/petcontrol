@@ -8,7 +8,6 @@ import {
     OAuthProvider,
     signInWithCredential,
 } from 'firebase/auth';
-import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { Platform } from 'react-native';
 
@@ -115,31 +114,18 @@ export async function changePassword(newPassword: string): Promise<void> {
     }
 }
 
-// ─── Google ───────────────────────────────────────────────────────────────────
+// ─── Google (via expo-auth-session — sem módulo nativo) ───────────────────────
 
-export async function signInWithGoogle(): Promise<User> {
+// Recebe o accessToken retornado pelo hook Google.useAuthRequest nas telas
+export async function signInWithGoogle(accessToken: string): Promise<User> {
     try {
-        GoogleSignin.configure({
-            webClientId: '967896711448-mfav5qflj356vfbesdkl370s32ahqbuc.apps.googleusercontent.com',
-        });
-        await GoogleSignin.hasPlayServices();
-        const { idToken } = await GoogleSignin.signIn();
-
-        if (!idToken) throw new Error('Google Sign-In: token não recebido.');
-
-        const credential = GoogleAuthProvider.credential(idToken);
+        const credential = GoogleAuthProvider.credential(null, accessToken);
         const { user: firebaseUser } = await signInWithCredential(auth, credential);
 
         const user = await resolveUserFromFirebase(firebaseUser);
         await saveUserLocally(user);
         return user;
-    } catch (error: any) {
-        if (error?.code === statusCodes.SIGN_IN_CANCELLED) {
-            throw new Error('Login com Google cancelado.');
-        }
-        if (error?.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-            throw new Error('Google Play Services indisponível.');
-        }
+    } catch (error) {
         console.error('auth.service / signInWithGoogle =>', error);
         throw error;
     }

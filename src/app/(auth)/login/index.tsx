@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
-import { TouchableWithoutFeedback, Keyboard, StyleSheet, Platform } from 'react-native';
+import { TouchableWithoutFeedback, Keyboard, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { FontAwesome } from '@expo/vector-icons';
+import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from 'expo-web-browser';
 
 import { getFirebaseErrorMessage } from '@/utils/firebaseErrors';
 import { useToast } from '@/components/Toast';
@@ -32,6 +34,8 @@ import {
 
 import header from '@/assets/header.png';
 
+WebBrowser.maybeCompleteAuthSession();
+
 export default function Login() {
   const { logInFirebase, logInWithGoogle, logInWithApple, forgotPasswordFirebase } = useAuth();
   const { toast } = useToast();
@@ -40,9 +44,23 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [appleAvailable, setAppleAvailable] = useState(false);
 
+  const [, googleResponse, googlePromptAsync] = Google.useAuthRequest({
+    androidClientId: '967896711448-sipu6kjcdkf3ujhknusqpjfv245lo0dh.apps.googleusercontent.com',
+    webClientId: '967896711448-mfav5qflj356vfbesdkl370s32ahqbuc.apps.googleusercontent.com',
+  });
+
   useEffect(() => {
     isAppleSignInAvailable().then(setAppleAvailable);
   }, []);
+
+  useEffect(() => {
+    if (googleResponse?.type === 'success') {
+      const accessToken = googleResponse.authentication?.accessToken;
+      if (accessToken) {
+        handleGoogleSignIn(accessToken);
+      }
+    }
+  }, [googleResponse]);
 
   async function handleLogIn() {
     try {
@@ -69,14 +87,12 @@ export default function Login() {
     }
   }
 
-  async function handleGoogleLogin() {
+  async function handleGoogleSignIn(accessToken: string) {
     try {
-      await logInWithGoogle();
+      await logInWithGoogle(accessToken);
       router.replace('/(tabs)/home');
-    } catch (error: any) {
-      if (!error?.message?.includes('cancelado')) {
-        toast(getFirebaseErrorMessage(error), 'destructive', 4000, 'top', false);
-      }
+    } catch (error) {
+      toast(getFirebaseErrorMessage(error), 'destructive', 4000, 'top', false);
     }
   }
 
@@ -133,7 +149,7 @@ export default function Login() {
           <SocialBox>
             <SocialLabel>ou entre com</SocialLabel>
             <SocialButtonsBox>
-              <SocialButton onPress={handleGoogleLogin}>
+              <SocialButton onPress={() => googlePromptAsync()}>
                 <FontAwesome name="google" size={23} color="red" />
               </SocialButton>
               {appleAvailable && (
