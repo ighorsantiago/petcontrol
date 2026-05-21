@@ -11,6 +11,7 @@ type Props = RectButtonProps & {
 
 export function PetCard({ type, name, avatar, ...rest }: Props) {
     return (
+        // @ts-ignore styled-components/RNGH types conflict
         <Container {...rest}>
             <Image>
                 {avatar ? (

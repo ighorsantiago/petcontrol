@@ -38,7 +38,10 @@
         {
           "iosUrlScheme": "com.googleusercontent.apps.967896711448-mfav5qflj356vfbesdkl370s32ahqbuc"
         }
-      ]
+      ],
+      "expo-font",
+      "expo-localization",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true

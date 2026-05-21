@@ -1,3 +1,4 @@
+import React from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { router } from 'expo-router';
 
@@ -39,7 +40,7 @@ export const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 
 // ─── Provider ─────────────────────────────────────────────────────────────────
 
-export function AuthProvider({ children }: { children: JSX.Element }): JSX.Element {
+export function AuthProvider({ children }: { children: React.ReactElement }): React.ReactElement {
     const [user, setUser] = useState<User | null>(null);
     // loading só é true durante a verificação inicial do AsyncStorage.
     // login/logout NÃO alteram esse estado para evitar desmontar o <Slot />.

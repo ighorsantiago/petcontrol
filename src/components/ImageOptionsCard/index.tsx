@@ -14,6 +14,7 @@ import { ImageSourcePropType } from 'react-native';
 
 export function ImageOptionsCard({ type, name, icon, ...rest }: Props) {
     return (
+        // @ts-ignore styled-components/RNGH types conflict
         <Container {...rest}>
             <OptionView>
                 <Name>{name}</Name>

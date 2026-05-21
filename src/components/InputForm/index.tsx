@@ -30,6 +30,7 @@ export function InputForm({ value, icon = false, isFilled, errorMessage, ...rest
             {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
 
             <Container>
+                {/* @ts-ignore styled-components custom props conflict */}
                 <InputText
                     value={value}
                     onFocus={handleInputFocused}

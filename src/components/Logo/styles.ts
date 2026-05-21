@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 interface Props {
     screen: string;
-    logoColor: 'black' | 'white';
+    logoColor?: 'black' | 'white';
 }
 
 export const Container = styled.View`

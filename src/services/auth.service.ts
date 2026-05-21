@@ -8,7 +8,7 @@ import {
     OAuthProvider,
     signInWithCredential,
 } from 'firebase/auth';
-import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import { GoogleSignin, statusCodes, isSuccessResponse, isErrorWithCode } from '@react-native-google-signin/google-signin';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { Platform } from 'react-native';
 
@@ -123,8 +123,13 @@ export async function signInWithGoogle(): Promise<User> {
             webClientId: '967896711448-mfav5qflj356vfbesdkl370s32ahqbuc.apps.googleusercontent.com',
         });
         await GoogleSignin.hasPlayServices();
-        const { idToken } = await GoogleSignin.signIn();
+        const response = await GoogleSignin.signIn();
 
+        if (!isSuccessResponse(response)) {
+            throw new Error('Login com Google cancelado.');
+        }
+
+        const idToken = response.data.idToken;
         if (!idToken) throw new Error('Google Sign-In: token não recebido.');
 
         const credential = GoogleAuthProvider.credential(idToken);
@@ -133,12 +138,11 @@ export async function signInWithGoogle(): Promise<User> {
         const user = await resolveUserFromFirebase(firebaseUser);
         await saveUserLocally(user);
         return user;
-    } catch (error: any) {
-        if (error?.code === statusCodes.SIGN_IN_CANCELLED) {
-            throw new Error('Login com Google cancelado.');
-        }
-        if (error?.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-            throw new Error('Google Play Services indisponível.');
+    } catch (error: unknown) {
+        if (isErrorWithCode(error)) {
+            if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                throw new Error('Google Play Services indisponível.');
+            }
         }
         console.error('auth.service / signInWithGoogle =>', error);
         throw error;

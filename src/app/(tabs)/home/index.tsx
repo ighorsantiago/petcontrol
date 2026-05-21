@@ -58,7 +58,7 @@ export default function Home() {
                     numColumns={2}
                     renderItem={({ item }) => (
                         <ImageOptionsCard
-                            type={item.icon}
+                            type={item.key}
                             name={item.name}
                             icon={item.icon}
                             onPress={() => handleNavigation(item.key)}
