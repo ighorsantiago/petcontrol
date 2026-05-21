@@ -8,6 +8,8 @@ import {
     OAuthProvider,
     signInWithCredential,
 } from 'firebase/auth';
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import * as AppleAuthentication from 'expo-apple-authentication';
 import { Platform } from 'react-native';
 
 import { auth } from '@/config/firebase';
@@ -116,9 +118,6 @@ export async function changePassword(newPassword: string): Promise<void> {
 // ─── Google ───────────────────────────────────────────────────────────────────
 
 export async function signInWithGoogle(): Promise<User> {
-    // require() lazy: módulo nativo carregado apenas quando o usuário usa o botão
-    const { GoogleSignin, statusCodes } = require('@react-native-google-signin/google-signin');
-
     try {
         GoogleSignin.configure({
             webClientId: '967896711448-mfav5qflj356vfbesdkl370s32ahqbuc.apps.googleusercontent.com',
@@ -150,15 +149,10 @@ export async function signInWithGoogle(): Promise<User> {
 
 export async function isAppleSignInAvailable(): Promise<boolean> {
     if (Platform.OS !== 'ios') return false;
-    // require() lazy: módulo iOS carregado apenas quando necessário
-    const AppleAuthentication = require('expo-apple-authentication');
     return AppleAuthentication.isAvailableAsync();
 }
 
 export async function signInWithApple(): Promise<User> {
-    // require() lazy: módulo iOS carregado apenas quando o usuário usa o botão
-    const AppleAuthentication = require('expo-apple-authentication');
-
     try {
         const credential = await AppleAuthentication.signInAsync({
             requestedScopes: [
