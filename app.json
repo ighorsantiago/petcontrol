@@ -24,7 +24,8 @@
         "backgroundColor": "#3E84A8"
       },
       "package": "com.ighorsantiago.petcontrol",
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "privacyPolicyUrl": "https://sites.google.com/view/pet-control-poltica-de-privaci"
     },
     "web": {
       "bundler": "metro",
