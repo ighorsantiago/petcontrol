@@ -25,7 +25,8 @@
       },
       "package": "com.ighorsantiago.petcontrol",
       "googleServicesFile": "./google-services.json",
-      "privacyPolicyUrl": "https://sites.google.com/view/pet-control-poltica-de-privaci"
+      "privacyPolicyUrl": "https://sites.google.com/view/pet-control-poltica-de-privaci",
+      "targetSdkVersion": 35
     },
     "web": {
       "bundler": "metro",
