@@ -57,15 +57,15 @@ export default function TabLayout() {
                     tabBarIcon: ({ color }) => <FontAwesome name="male" size={25} color={color} />,
                 }}
             />
-            <Tabs.Screen name="addPet/index" options={{ tabBarButton: () => null, tabBarItemStyle: { display: 'none' } }} />
-            <Tabs.Screen name="appointments/index" options={{ tabBarButton: () => null, tabBarItemStyle: { display: 'none' } }} />
-            <Tabs.Screen name="deworming/index" options={{ tabBarButton: () => null, tabBarItemStyle: { display: 'none' } }} />
-            <Tabs.Screen name="food/index" options={{ tabBarButton: () => null, tabBarItemStyle: { display: 'none' } }} />
-            <Tabs.Screen name="hygiene/index" options={{ tabBarButton: () => null, tabBarItemStyle: { display: 'none' } }} />
-            <Tabs.Screen name="medications/index" options={{ tabBarButton: () => null, tabBarItemStyle: { display: 'none' } }} />
-            <Tabs.Screen name="petInfo/index" options={{ tabBarButton: () => null, tabBarItemStyle: { display: 'none' } }} />
-            <Tabs.Screen name="vaccines/index" options={{ tabBarButton: () => null, tabBarItemStyle: { display: 'none' } }} />
-            <Tabs.Screen name="weight/index" options={{ tabBarButton: () => null, tabBarItemStyle: { display: 'none' } }} />
+            <Tabs.Screen name="addPet/index" options={{ href: null }} />
+            <Tabs.Screen name="appointments/index" options={{ href: null }} />
+            <Tabs.Screen name="deworming/index" options={{ href: null }} />
+            <Tabs.Screen name="food/index" options={{ href: null }} />
+            <Tabs.Screen name="hygiene/index" options={{ href: null }} />
+            <Tabs.Screen name="medications/index" options={{ href: null }} />
+            <Tabs.Screen name="petInfo/index" options={{ href: null }} />
+            <Tabs.Screen name="vaccines/index" options={{ href: null }} />
+            <Tabs.Screen name="weight/index" options={{ href: null }} />
         </Tabs>
     );
 }
