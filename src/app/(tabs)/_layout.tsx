@@ -1,62 +1,83 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Tabs } from 'expo-router';
+import { Tabs, useRouter } from 'expo-router';
+import { TouchableOpacity, View, Text, StyleSheet, Platform, KeyboardAvoidingView } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-    name: React.ComponentProps<typeof FontAwesome>['name'];
-    color: string;
-}) {
-    return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
+const VISIBLE_TABS = [
+    { name: 'home/index', label: 'Home', icon: 'home' as const },
+    { name: 'pets/index', label: 'Pets', icon: 'paw' as const },
+    { name: 'tutor/index', label: 'Tutor', icon: 'male' as const },
+];
+
+function CustomTabBar({ state, descriptors, navigation }: any) {
+    const insets = useSafeAreaInsets();
+
+    return (
+        <View style={[styles.tabBar, { paddingBottom: Math.max(insets.bottom, 10) }]}>
+            {VISIBLE_TABS.map((tab) => {
+                const route = state.routes.find((r: any) => r.name === tab.name);
+                if (!route) return null;
+                const isFocused = state.routes[state.index]?.name === tab.name;
+                const color = isFocused ? '#EA763B' : '#BDBBBB';
+
+                return (
+                    <TouchableOpacity
+                        key={tab.name}
+                        style={styles.tab}
+                        onPress={() => navigation.navigate(tab.name)}
+                        activeOpacity={0.7}
+                    >
+                        <FontAwesome name={tab.icon} size={25} color={color} />
+                        <Text style={[styles.label, { color }]}>{tab.label}</Text>
+                    </TouchableOpacity>
+                );
+            })}
+        </View>
+    );
 }
+
+const styles = StyleSheet.create({
+    tabBar: {
+        flexDirection: 'row',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        borderTopWidth: 2,
+        borderLeftWidth: 2,
+        borderRightWidth: 2,
+        borderTopColor: 'lightgray',
+        borderLeftColor: 'lightgray',
+        borderRightColor: 'lightgray',
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        overflow: 'hidden',
+        backgroundColor: 'white',
+        height: 85,
+        paddingTop: 10,
+    },
+    tab: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 4,
+    },
+    label: {
+        fontSize: 10,
+    },
+});
 
 export default function TabLayout() {
     return (
         <Tabs
+            tabBar={(props) => <CustomTabBar {...props} />}
             screenOptions={{
                 headerShown: false,
-                tabBarInactiveTintColor: '#BDBBBB',
-                tabBarActiveTintColor: '#EA763B',
-                tabBarStyle: {
-                    borderTopWidth: 2,
-                    borderLeftWidth: 2,
-                    borderRightWidth: 2,
-                    borderRightColor: 'lightgray',
-                    borderLeftColor: 'lightgray',
-                    position: 'absolute',
-                    overflow: 'hidden',
-                    borderTopLeftRadius: 30,
-                    borderTopRightRadius: 30,
-                    height: 85,
-                    paddingBottom: 20,
-                    paddingTop: 20,
-                },
-                tabBarLabelStyle: { fontSize: 10 },
-                tabBarHideOnKeyboard: true,
             }}
         >
-            <Tabs.Screen
-                name="home/index"
-                options={{
-                    tabBarLabel: 'Home',
-                    tabBarIcon: ({ color }) => <FontAwesome name="home" size={25} color={color} />,
-                }}
-            />
-
-            <Tabs.Screen
-                name="pets/index"
-                options={{
-                    tabBarLabel: 'Pets',
-                    tabBarIcon: ({ color }) => <FontAwesome name="paw" size={25} color={color} />,
-                }}
-            />
-
-            <Tabs.Screen
-                name="tutor/index"
-                options={{
-                    tabBarLabel: 'Tutor',
-                    tabBarIcon: ({ color }) => <FontAwesome name="male" size={25} color={color} />,
-                }}
-            />
+            <Tabs.Screen name="home/index" />
+            <Tabs.Screen name="pets/index" />
+            <Tabs.Screen name="tutor/index" />
             <Tabs.Screen name="addPet/index" options={{ href: null }} />
             <Tabs.Screen name="appointments/index" options={{ href: null }} />
             <Tabs.Screen name="deworming/index" options={{ href: null }} />
