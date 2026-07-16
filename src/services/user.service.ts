@@ -1,7 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { ref, uploadString, getDownloadURL } from 'firebase/storage';
+import * as FileSystem from 'expo-file-system';
 
-import { db } from '@/config/firebase';
+import { db, storage } from '@/config/firebase';
 import type {
     User,
     Pet,
@@ -14,6 +16,17 @@ import type {
     Appointment,
 } from '@/types';
 import { USER_STORAGE, ONBOARDING_STORAGE, PENDING_SYNC_KEY, LAST_SYNC_KEY } from '@/services/storageConfig';
+
+// ─── Firebase Storage ─────────────────────────────────────────────────────────
+
+export async function uploadImageToStorage(localUri: string, storagePath: string): Promise<string> {
+    const base64 = await FileSystem.readAsStringAsync(localUri, {
+        encoding: FileSystem.EncodingType.Base64,
+    });
+    const storageRef = ref(storage, storagePath);
+    await uploadString(storageRef, base64, 'base64');
+    return await getDownloadURL(storageRef);
+}
 
 // ─── Helpers internos ────────────────────────────────────────────────────────
 

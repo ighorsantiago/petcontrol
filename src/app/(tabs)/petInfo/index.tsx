@@ -4,7 +4,6 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
 import * as ImagePicker from 'expo-image-picker';
-import * as FileSystem from 'expo-file-system';
 // import { useTranslation } from 'react-i18next';
 
 import { useAuth } from '@/hooks';
@@ -38,7 +37,7 @@ import { WeightDisplay } from '@/components/Displayers/WeightDisplay';
 import { options } from '@/constants/options';
 import { getPetAge } from '@/utils/getPetAge';
 
-import { updatePetAvatar } from '@/services/user.service';
+import { updatePetAvatar, uploadImageToStorage } from '@/services/user.service';
 
 type RouteParams = {
     petId: string;
@@ -93,11 +92,13 @@ export default function PetInfo() {
                     return;
                 }
 
-                const permanentUri = `${FileSystem.documentDirectory}pet_${pet.id}_avatar.jpg`;
-                await FileSystem.copyAsync({ from: photoSelected.assets[0].uri, to: permanentUri });
+                const downloadURL = await uploadImageToStorage(
+                    photoSelected.assets[0].uri,
+                    `photos/${user?.email}/pets/${pet.id}_${Date.now()}.jpg`,
+                );
 
                 if (user?.name) {
-                    const updatedUser = await updatePetAvatar(user, pet.id, permanentUri);
+                    const updatedUser = await updatePetAvatar(user, pet.id, downloadURL);
                     updateUser(updatedUser);
                 }
 

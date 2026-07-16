@@ -10,6 +10,7 @@ import { AddHeader } from '@/components/AddHeader';
 import { InputForm } from '@/components/InputForm';
 import { useToast } from '@/components/Toast';
 import { getFirebaseErrorMessage } from '@/utils/firebaseErrors';
+import { uploadImageToStorage } from '@/services/user.service';
 
 import {
   Container,
@@ -67,16 +68,18 @@ export default function Tutor() {
       if (photoSelected.assets[0].uri) {
         const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri);
 
-        if (photoInfo.exists && photoInfo.size / 1024 / 1024 > 5) {
+        if (photoInfo.exists && (photoInfo as any).size / 1024 / 1024 > 5) {
           toast('Imagem muito grande. Escolha uma de até 5MB.', 'destructive', 4000, 'top', false);
           return;
         }
 
-        const permanentUri = `${FileSystem.documentDirectory}user_avatar_${Date.now()}.jpg`;
-        await FileSystem.copyAsync({ from: photoSelected.assets[0].uri, to: permanentUri });
+        const downloadURL = await uploadImageToStorage(
+          photoSelected.assets[0].uri,
+          `photos/${user?.email}/avatar_${Date.now()}.jpg`,
+        );
 
         if (user) {
-          updateUser({ ...user, avatar: permanentUri });
+          updateUser({ ...user, avatar: downloadURL });
         }
 
         toast('Sua foto foi alterada com sucesso.', 'success', 4000, 'top', false);
