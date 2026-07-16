@@ -84,7 +84,7 @@ export default function Appointments() {
 
     return (
         <Container>
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss(); setPetOpen(false); }}>
                 <Content>
                     <AddHeader
                         style={{ borderRadius: 30 }}

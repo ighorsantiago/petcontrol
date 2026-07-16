@@ -42,7 +42,7 @@ export default function Home() {
                 </MessageBox>
                 <UserIcon>
                     {user?.avatar ? (
-                        <Avatar src={user.avatar} />
+                        <Avatar source={{ uri: user.avatar }} />
                     ) : (
                         <MaterialCommunityIcons name="account" size={60} color="#3E84A8" />
                     )}

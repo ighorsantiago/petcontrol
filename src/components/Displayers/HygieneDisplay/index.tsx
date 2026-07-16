@@ -1,6 +1,14 @@
 import { FlatList } from 'react-native';
 import { router } from 'expo-router';
 
+const HYGIENE_PT: Record<string, string> = {
+    bath: 'Banho',
+    shave: 'Tosa',
+    Banho: 'Banho',
+    Tosa: 'Tosa',
+    'Banho e tosa': 'Banho e tosa',
+};
+
 import {
     Container,
     Content,
@@ -38,7 +46,7 @@ export function HygieneDisplay({ petId }: Props) {
                 onPress={() =>
                     router.navigate({
                         pathname: '/hygiene',
-                        params: { dropdown: 'yes', petId: pet[0].id },
+                        params: { petId: pet[0].id },
                     })
                 }
             >
@@ -56,7 +64,7 @@ export function HygieneDisplay({ petId }: Props) {
                                 <BoxContent>
                                     <InfoBox>
                                         <Label>Tipo: </Label>
-                                        <Text>{item.category}</Text>
+                                        <Text>{HYGIENE_PT[item.category] ?? item.category}</Text>
                                     </InfoBox>
                                     <InfoBox>
                                         <Label>Data: </Label>

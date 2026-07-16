@@ -89,33 +89,19 @@ export default function PetInfo() {
                 const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri);
 
                 if (photoInfo.exists && photoInfo.size / 1024 / 1024 > 5) {
-                    setOpen(!open);
-
-                    toast(
-                        'Essa imagem é muito grande, escolha uma de até 5MB.',
-                        'destructive',
-                        4000,
-                        'bottom',
-                        false,
-                    );
+                    toast('Essa imagem é muito grande, escolha uma de até 5MB.', 'destructive', 4000, 'top', false);
+                    return;
                 }
 
+                const permanentUri = `${FileSystem.documentDirectory}pet_${pet.id}_avatar.jpg`;
+                await FileSystem.copyAsync({ from: photoSelected.assets[0].uri, to: permanentUri });
+
                 if (user?.name) {
-                    const updatedUser = await updatePetAvatar(
-                        user,
-                        pet.id,
-                        photoSelected.assets[0].uri,
-                    );
+                    const updatedUser = await updatePetAvatar(user, pet.id, permanentUri);
                     updateUser(updatedUser);
                 }
 
-                toast(
-                    'A foto do seu pet foi alterada com sucesso.',
-                    'success',
-                    4000,
-                    'bottom',
-                    false,
-                );
+                toast('A foto do seu pet foi alterada com sucesso.', 'success', 4000, 'top', false);
             }
         } catch (error) {
             toast(
@@ -149,7 +135,7 @@ export default function PetInfo() {
             <PetInfoBox>
                 <PetIcon>
                     {pet.avatar ? (
-                        <Avatar src={pet.avatar} />
+                        <Avatar source={{ uri: pet.avatar }} />
                     ) : (
                         <MaterialCommunityIcons name={pet.icon} size={80} color="#3E84A8" />
                     )}

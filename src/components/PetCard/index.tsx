@@ -14,7 +14,7 @@ export function PetCard({ type, name, avatar, ...rest }: Props) {
         <Container {...rest}>
             <Image>
                 {avatar ? (
-                    <Avatar src={avatar} />
+                    <Avatar source={{ uri: avatar }} />
                 ) : (
                     <MaterialCommunityIcons name={type} size={70} color="#E27E08" />
                 )}

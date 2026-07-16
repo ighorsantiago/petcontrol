@@ -38,7 +38,7 @@ export function MedicationsDisplay({ petId }: Props) {
                 onPress={() =>
                     router.navigate({
                         pathname: '/medications',
-                        params: { dropdown: 'yes', petId: pet[0].id },
+                        params: { petId: pet[0].id },
                     })
                 }
             >

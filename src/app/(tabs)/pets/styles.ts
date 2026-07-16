@@ -67,6 +67,8 @@ export const PetList = styled.View`
     border-radius: 30px;
     border-width: 1px;
     border-color: lightgray;
+
+    padding-top: 10px;
 `;
 
 export const AddButton = styled(TouchableOpacity)`

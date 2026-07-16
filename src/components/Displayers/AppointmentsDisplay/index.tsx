@@ -35,7 +35,7 @@ export function AppointmentsDisplay({ petId }: Props) {
                 onPress={() =>
                     router.navigate({
                         pathname: '/appointments',
-                        params: { dropdown: 'yes', petId: pet[0].id },
+                        params: { petId: pet[0].id },
                     })
                 }
             >
@@ -49,7 +49,7 @@ export function AppointmentsDisplay({ petId }: Props) {
                         showsVerticalScrollIndicator={false}
                         renderItem={({ item }) => (
                             <Box>
-                                <Title>Consultas</Title>
+                                <Title>Compromisso</Title>
                                 <BoxContent>
                                     <InfoBox>
                                         <Label>Nome: </Label>

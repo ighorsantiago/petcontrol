@@ -38,7 +38,7 @@ export function WeightDisplay({ petId }: Props) {
                 onPress={() =>
                     router.navigate({
                         pathname: '/weight',
-                        params: { dropdown: 'yes', petId: pet[0].id },
+                        params: { petId: pet[0].id },
                     })
                 }
             >

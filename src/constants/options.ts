@@ -10,7 +10,7 @@ const options = [
     { key: 'deworming', name: 'Vermífugos', icon: 'content-cut' },
     { key: 'weight', name: 'Peso', icon: 'weight-kilogram' },
     { key: 'hygiene', name: 'Higiene', icon: 'food-steak' },
-    { key: 'appointments', name: 'Consultas', icon: 'shower-head' },
+    { key: 'appointments', name: 'Compromissos', icon: 'calendar-clock' },
 ];
 
 const optionsHome = [

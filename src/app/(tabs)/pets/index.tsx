@@ -56,7 +56,7 @@ export default function Pets() {
                     </MessageBox>
                     <UserIcon>
                         {user?.avatar ? (
-                            <Avatar src={user?.avatar} />
+                            <Avatar source={{ uri: user?.avatar }} />
                         ) : (
                             <MaterialIcons name="person" size={50} color="#3E84A8" />
                         )}

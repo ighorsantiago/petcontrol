@@ -90,7 +90,7 @@ export default function Hygiene() {
 
     return (
         <Container>
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss(); setPetOpen(false); setCategoriesOpen(false); }}>
                 <Content>
                     <AddHeader
                         style={{ borderRadius: 30 }}

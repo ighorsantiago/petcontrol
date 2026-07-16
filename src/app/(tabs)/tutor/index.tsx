@@ -68,16 +68,18 @@ export default function Tutor() {
         const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri);
 
         if (photoInfo.exists && photoInfo.size / 1024 / 1024 > 5) {
-          toast('Imagem muito grande. Escolha uma de até 5MB.', 'destructive', 4000, 'bottom', false);
-          setOpen(!open);
+          toast('Imagem muito grande. Escolha uma de até 5MB.', 'destructive', 4000, 'top', false);
           return;
         }
 
+        const permanentUri = `${FileSystem.documentDirectory}user_avatar_${Date.now()}.jpg`;
+        await FileSystem.copyAsync({ from: photoSelected.assets[0].uri, to: permanentUri });
+
         if (user) {
-          updateUser({ ...user, avatar: photoSelected.assets[0].uri });
+          updateUser({ ...user, avatar: permanentUri });
         }
 
-        toast('Sua foto foi alterada com sucesso.', 'success', 4000, 'bottom', false);
+        toast('Sua foto foi alterada com sucesso.', 'success', 4000, 'top', false);
       }
     } catch {
       toast('Ocorreu um problema, por favor tente novamente.', 'destructive', 4000, 'bottom', false);
@@ -105,7 +107,7 @@ export default function Tutor() {
 
         <UserAvatar>
           {user?.avatar ? (
-            <Avatar src={user.avatar} />
+            <Avatar source={{ uri: user.avatar }} />
           ) : (
             <MaterialIcons name="person" size={100} color="#3E84A8" />
           )}
