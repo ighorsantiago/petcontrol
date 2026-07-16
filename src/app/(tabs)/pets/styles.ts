@@ -12,19 +12,18 @@ export const Container = styled.SafeAreaView`
 export const Header = styled.View`
     width: 100%;
     height: 20%;
-    /* height: 25%; */
 
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
 
-    padding: 29px;
-
-    /* background-color: red; */
+    padding: 20px 24px;
 `;
 
 export const MessageBox = styled.View`
+    flex: 1;
     flex-direction: column;
+    margin-right: 12px;
 `;
 
 export const Title = styled.Text`
@@ -35,24 +34,23 @@ export const Title = styled.Text`
 `;
 
 export const UserIcon = styled.View`
-    width: 110px;
-    height: 110px;
+    width: 90px;
+    height: 90px;
 
+    flex-shrink: 0;
     justify-content: center;
     align-items: center;
 
-    border-radius: 55px;
+    border-radius: 45px;
     border-width: 4px;
     border-color: #3e84a8;
-
-    /* margin-right: 20px; */
 `;
 
 export const Avatar = styled.Image`
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
 
-    border-radius: 50px;
+    border-radius: 40px;
 `;
 
 export const Search = styled.View`
@@ -60,9 +58,8 @@ export const Search = styled.View`
 `;
 
 export const PetList = styled.View`
-    width: 80%;
-    max-height: 55%;
-    /* max-height: 65%; */
+    width: 92%;
+    max-height: 58%;
 
     justify-content: center;
     align-items: center;

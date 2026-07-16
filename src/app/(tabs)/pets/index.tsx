@@ -58,7 +58,7 @@ export default function Pets() {
                         {user?.avatar ? (
                             <Avatar src={user?.avatar} />
                         ) : (
-                            <MaterialIcons name="person" size={60} color="#3E84A8" />
+                            <MaterialIcons name="person" size={50} color="#3E84A8" />
                         )}
                     </UserIcon>
                 </Header>

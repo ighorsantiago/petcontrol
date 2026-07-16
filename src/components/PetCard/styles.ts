@@ -8,9 +8,7 @@ export const Container = styled(TouchableOpacity)`
     justify-content: center;
     align-items: center;
 
-    margin: 30px 20px;
-
-    /* background-color: #EBEBEB; */
+    margin: 20px 14px;
 `;
 
 export const Image = styled.View`
