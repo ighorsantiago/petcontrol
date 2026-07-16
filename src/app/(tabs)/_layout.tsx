@@ -1,7 +1,8 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Tabs, useRouter } from 'expo-router';
+import { Tabs, useRouter, Redirect } from 'expo-router';
 import { TouchableOpacity, View, Text, StyleSheet, Platform, KeyboardAvoidingView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useAuth } from '@/hooks';
 
 const VISIBLE_TABS = [
     { name: 'home/index', label: 'Home', icon: 'home' as const },
@@ -68,6 +69,12 @@ const styles = StyleSheet.create({
 });
 
 export default function TabLayout() {
+    const { user } = useAuth();
+
+    if (!user) {
+        return <Redirect href="/onboardingScreen" />;
+    }
+
     return (
         <Tabs
             tabBar={(props) => <CustomTabBar {...props} />}

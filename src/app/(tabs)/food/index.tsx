@@ -1,12 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { TouchableWithoutFeedback, Keyboard, StyleSheet } from 'react-native';
-import { router, useLocalSearchParams } from 'expo-router';
-import { v4 as uuidv4 } from 'uuid';
+import { router, useLocalSearchParams, useFocusEffect } from 'expo-router';
 
 import { Container, Content, Form } from './styles';
 
 import { useAuth } from '@/hooks';
-import { maskDate } from '@/utils/masks';
 import { AddHeader } from '@/components/AddHeader';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { InputForm } from '@/components/InputForm';
@@ -30,35 +28,33 @@ export default function Food() {
     const { dropdown, petId } = route as RouteParams;
 
     const { toast } = useToast();
-
     const { user, updateUser } = useAuth();
 
     const [name, setName] = useState('');
     const [amount, setAmount] = useState('');
     const [times, setTimes] = useState('');
     const [amountPerMeal, setAmountPerMeal] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const pets = user?.pets ? user.pets : [];
     const [organizedPets, setOrganizedPets] = useState<PetsProps[]>([]);
     const [petID, setPetID] = useState('');
     const [petOpen, setPetOpen] = useState(false);
 
-    function petsOrgonizer() {
-        const organizingPets = [];
+    useFocusEffect(
+        useCallback(() => {
+            const organized = pets.map((pet) => ({ label: pet.name, value: pet.id }));
+            setOrganizedPets(organized);
+            setName('');
+            setAmount('');
+            setTimes('');
+            setAmountPerMeal('');
+            setPetID('');
+        }, []),
+    );
 
-        for (let i = 0; i < pets.length; i++) {
-            const pet = pets[i];
-
-            organizingPets.push({
-                label: pet.name,
-                value: pet.id,
-            });
-        }
-
-        setOrganizedPets(organizingPets);
-    }
-
-    async function handleUpdateWeight() {
+    async function handleUpdateFood() {
+        setIsLoading(true);
         try {
             const id = String(new Date().getTime());
             const pet_id = dropdown ? petID : petId;
@@ -74,22 +70,11 @@ export default function Food() {
                 updateUser(updatedUser);
             }
 
-            toast(
-                'A comida do seu pet foi adicionada com sucesso.',
-                'success',
-                4000,
-                'bottom',
-                false,
-            );
+            toast('A comida do seu pet foi adicionada com sucesso.', 'success', 4000, 'top', false);
         } catch (error) {
-            toast(
-                getFirebaseErrorMessage(error),
-                'destructive',
-                4000,
-                'bottom',
-                false,
-            );
+            toast(getFirebaseErrorMessage(error), 'destructive', 4000, 'top', false);
         } finally {
+            setIsLoading(false);
             router.back();
         }
     }
@@ -97,11 +82,6 @@ export default function Food() {
     function cancel() {
         router.back();
     }
-
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-    useEffect(() => {
-        petsOrgonizer();
-    }, []);
 
     return (
         <Container>
@@ -111,7 +91,8 @@ export default function Food() {
                         style={{ borderRadius: 30 }}
                         title="Comida"
                         handleCancel={cancel}
-                        handleSave={() => handleUpdateWeight}
+                        handleSave={handleUpdateFood}
+                        isLoading={isLoading}
                     />
                     <Form>
                         {!!dropdown && (

@@ -13,7 +13,7 @@ import type {
     Deworming,
     Appointment,
 } from '@/types';
-import { USER_STORAGE, ONBOARDING_STORAGE } from '@/services/storageConfig';
+import { USER_STORAGE, ONBOARDING_STORAGE, PENDING_SYNC_KEY, LAST_SYNC_KEY } from '@/services/storageConfig';
 
 // ─── Helpers internos ────────────────────────────────────────────────────────
 
@@ -34,6 +34,27 @@ export async function getUserLocally(): Promise<User | null> {
 
 export async function removeUserLocally(): Promise<void> {
     await AsyncStorage.multiRemove([USER_STORAGE, ONBOARDING_STORAGE]);
+}
+
+// ─── Sync control ────────────────────────────────────────────────────────────
+
+export async function markPendingSync(): Promise<void> {
+    await AsyncStorage.setItem(PENDING_SYNC_KEY, 'true');
+}
+
+export async function clearPendingSync(): Promise<void> {
+    await AsyncStorage.removeItem(PENDING_SYNC_KEY);
+    await AsyncStorage.setItem(LAST_SYNC_KEY, String(Date.now()));
+}
+
+export async function hasPendingSync(): Promise<boolean> {
+    const val = await AsyncStorage.getItem(PENDING_SYNC_KEY);
+    return val === 'true';
+}
+
+export async function getLastSyncTime(): Promise<number> {
+    const val = await AsyncStorage.getItem(LAST_SYNC_KEY);
+    return val ? Number(val) : 0;
 }
 
 // ─── Onboarding ──────────────────────────────────────────────────────────────
@@ -135,9 +156,7 @@ export async function addPetHygiene(user: User, petId: string, entry: Hygiene): 
         ...pet,
         hygiene: [...(pet.hygiene ?? []), entry],
     }));
-    const userUpdated = { ...user, pets };
-    await saveUserInFirestore(userUpdated);
-    return userUpdated;
+    return { ...user, pets };
 }
 
 export async function addPetDeworming(user: User, petId: string, entry: Deworming): Promise<User> {

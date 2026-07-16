@@ -1,14 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { TouchableWithoutFeedback, Keyboard, StyleSheet, Text } from 'react-native';
-import { router, useLocalSearchParams } from 'expo-router';
-import { useTranslation } from 'react-i18next';
-import { v4 as uuidv4 } from 'uuid';
+import { router, useLocalSearchParams, useFocusEffect } from 'expo-router';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 import { Container, Content, Form } from './styles';
 
 import { useAuth } from '@/hooks';
-import { maskDate } from '@/utils/masks';
+import { maskDate, maskTime } from '@/utils/masks';
 import { AddHeader } from '@/components/AddHeader';
 import { InputForm } from '@/components/InputForm';
 import { useToast } from '@/components/Toast';
@@ -31,13 +29,12 @@ export default function Appointments() {
     const { dropdown, petId } = route as RouteParams;
 
     const { user, updateUser } = useAuth();
-    const { t } = useTranslation();
-
     const { toast } = useToast();
 
     const [name, setName] = useState('');
     const [date, setDate] = useState('');
     const [hour, setHour] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const pets = user?.pets ? user.pets : [];
 
@@ -45,22 +42,19 @@ export default function Appointments() {
     const [petID, setPetID] = useState('');
     const [petOpen, setPetOpen] = useState(false);
 
-    function petsOrganizer() {
-        const organizingPets = [];
-
-        for (let i = 0; i < pets.length; i++) {
-            const pet = pets[i];
-
-            organizingPets.push({
-                label: pet.name,
-                value: pet.id,
-            });
-        }
-
-        setOrganizedPets(organizingPets);
-    }
+    useFocusEffect(
+        useCallback(() => {
+            const organized = pets.map((pet) => ({ label: pet.name, value: pet.id }));
+            setOrganizedPets(organized);
+            setName('');
+            setDate('');
+            setHour('');
+            setPetID('');
+        }, []),
+    );
 
     async function handleUpdateAppointments() {
+        setIsLoading(true);
         try {
             const id = String(new Date().getTime());
             const pet_id = dropdown ? petID : petId;
@@ -75,22 +69,11 @@ export default function Appointments() {
                 updateUser(updatedUser);
             }
 
-            toast(
-                'A consulta do seu pet foi adicionada com sucesso.',
-                'success',
-                4000,
-                'bottom',
-                false,
-            );
+            toast('O compromisso foi adicionado com sucesso.', 'success', 4000, 'top', false);
         } catch (error) {
-            toast(
-                getFirebaseErrorMessage(error),
-                'destructive',
-                4000,
-                'bottom',
-                false,
-            );
+            toast(getFirebaseErrorMessage(error), 'destructive', 4000, 'top', false);
         } finally {
+            setIsLoading(false);
             router.back();
         }
     }
@@ -99,21 +82,16 @@ export default function Appointments() {
         router.back();
     }
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-    useEffect(() => {
-        petsOrganizer();
-    }, []);
-
     return (
         <Container>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <Content>
-                    {/* <AddHeader title={t('medications.medication')} handleCancel={cancel} handleSave={() => handleUpdateMedication} /> */}
                     <AddHeader
                         style={{ borderRadius: 30 }}
-                        title="Consultas"
+                        title="Compromisso"
                         handleCancel={cancel}
                         handleSave={handleUpdateAppointments}
+                        isLoading={isLoading}
                     />
                     <Form>
                         {!!dropdown && (
@@ -124,7 +102,7 @@ export default function Appointments() {
                                 placeholderStyle={{ color: '#4A4A4A' }}
                                 ListEmptyComponent={() => (
                                     <Text style={{ backgroundColor: '#fff' }}>
-                                        {t('medications.empty')}
+                                        Nenhum pet adicionado
                                     </Text>
                                 )}
                                 open={petOpen}
@@ -135,7 +113,7 @@ export default function Appointments() {
                                 zIndex={2}
                             />
                         )}
-                        <InputForm placeholder="Médico" value={name} onChangeText={setName} />
+                        <InputForm placeholder="Profissional" value={name} onChangeText={setName} />
                         <InputForm
                             style={{ backgroundColor: '#FFF' }}
                             placeholder="Data"
@@ -144,7 +122,13 @@ export default function Appointments() {
                             maxLength={10}
                             keyboardType="numeric"
                         />
-                        <InputForm placeholder="Hora" value={hour} onChangeText={setHour} />
+                        <InputForm
+                            placeholder="Hora"
+                            value={hour}
+                            onChangeText={(e) => setHour(maskTime(e))}
+                            maxLength={5}
+                            keyboardType="numeric"
+                        />
                     </Form>
                 </Content>
             </TouchableWithoutFeedback>

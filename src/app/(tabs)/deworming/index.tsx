@@ -1,9 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { TouchableWithoutFeedback, Keyboard, StyleSheet, Text } from 'react-native';
-import { router, useLocalSearchParams } from 'expo-router';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { useTranslation } from 'react-i18next';
-import { v4 as uuidv4 } from 'uuid';
+import { router, useLocalSearchParams, useFocusEffect } from 'expo-router';
 
 import { Container, Content, Form } from './styles';
 
@@ -32,12 +29,11 @@ export default function Deworming() {
     const { dropdown, petId } = route as RouteParams;
 
     const { user, updateUser } = useAuth();
-    const { t } = useTranslation();
-
     const { toast } = useToast();
 
     const [name, setName] = useState('');
     const [date, setDate] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const pets = user?.pets ? user.pets : [];
 
@@ -45,28 +41,24 @@ export default function Deworming() {
     const [petID, setPetID] = useState('');
     const [petOpen, setPetOpen] = useState(false);
 
-    function petsOrgonizer() {
-        const organizingPets = [];
-
-        for (let i = 0; i < pets.length; i++) {
-            const pet = pets[i];
-
-            organizingPets.push({
-                label: pet.name,
-                value: pet.id,
-            });
-        }
-
-        setOrganizedPets(organizingPets);
-    }
+    useFocusEffect(
+        useCallback(() => {
+            const organized = pets.map((pet) => ({ label: pet.name, value: pet.id }));
+            setOrganizedPets(organized);
+            setName('');
+            setDate('');
+            setPetID('');
+        }, []),
+    );
 
     async function handleUpdateDeworming() {
+        setIsLoading(true);
         try {
             const id = String(new Date().getTime());
             const pet_id = dropdown ? petID : petId;
 
             if (user?.name) {
-                const updatedUser = await addPetDeworming(user, petId, {
+                const updatedUser = await addPetDeworming(user, pet_id, {
                     id,
                     name,
                     date,
@@ -74,22 +66,11 @@ export default function Deworming() {
                 updateUser(updatedUser);
             }
 
-            toast(
-                'O vermífugo do seu pet foi adicionado com sucesso.',
-                'success',
-                4000,
-                'bottom',
-                false,
-            );
+            toast('O vermífugo do seu pet foi adicionado com sucesso.', 'success', 4000, 'top', false);
         } catch (error) {
-            toast(
-                getFirebaseErrorMessage(error),
-                'destructive',
-                4000,
-                'bottom',
-                false,
-            );
+            toast(getFirebaseErrorMessage(error), 'destructive', 4000, 'top', false);
         } finally {
+            setIsLoading(false);
             router.back();
         }
     }
@@ -98,21 +79,16 @@ export default function Deworming() {
         router.back();
     }
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-    useEffect(() => {
-        petsOrgonizer();
-    }, []);
-
     return (
         <Container>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <Content>
-                    {/* <AddHeader title={t('deworming.deworming')} handleCancel={cancel} handleSave={() => handleUpdateDeworming} /> */}
                     <AddHeader
                         style={{ borderRadius: 30 }}
                         title="Vermífugo"
                         handleCancel={cancel}
                         handleSave={handleUpdateDeworming}
+                        isLoading={isLoading}
                     />
                     <Form>
                         {!!dropdown && (
@@ -122,7 +98,6 @@ export default function Deworming() {
                                 placeholder="Escolha o pet"
                                 placeholderStyle={{ color: '#4A4A4A' }}
                                 ListEmptyComponent={() => (
-                                    // <></>
                                     <Text style={{ backgroundColor: '#fff' }}>
                                         Nenhum pet adicionado
                                     </Text>

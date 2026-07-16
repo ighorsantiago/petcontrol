@@ -1,14 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { TouchableWithoutFeedback, Keyboard, StyleSheet, Text } from 'react-native';
-import { router, useLocalSearchParams } from 'expo-router';
-import { useTranslation } from 'react-i18next';
-// import { v4 as uuidv4 } from 'uuid';
+import { router, useLocalSearchParams, useFocusEffect } from 'expo-router';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 import { Container, Content, Form } from './styles';
 
 import { useAuth } from '@/hooks';
-import { maskDate } from '@/utils/masks';
+import { maskDate, maskTime } from '@/utils/masks';
 import { AddHeader } from '@/components/AddHeader';
 import { InputForm } from '@/components/InputForm';
 import { useToast } from '@/components/Toast';
@@ -31,12 +29,12 @@ export default function Medications() {
     const { dropdown, petId } = route as RouteParams;
 
     const { user, updateUser } = useAuth();
-    const { t } = useTranslation();
     const { toast } = useToast();
 
     const [name, setName] = useState('');
     const [date, setDate] = useState('');
     const [hour, setHour] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const pets = user?.pets ? user.pets : [];
 
@@ -44,22 +42,19 @@ export default function Medications() {
     const [petID, setPetID] = useState('');
     const [petOpen, setPetOpen] = useState(false);
 
-    function petsOrganizer() {
-        const organizingPets = [];
-
-        for (let i = 0; i < pets.length; i++) {
-            const pet = pets[i];
-
-            organizingPets.push({
-                label: pet.name,
-                value: pet.id,
-            });
-        }
-
-        setOrganizedPets(organizingPets);
-    }
+    useFocusEffect(
+        useCallback(() => {
+            const organized = pets.map((pet) => ({ label: pet.name, value: pet.id }));
+            setOrganizedPets(organized);
+            setName('');
+            setDate('');
+            setHour('');
+            setPetID('');
+        }, []),
+    );
 
     async function handleUpdateMedication() {
+        setIsLoading(true);
         try {
             const id = String(new Date().getTime());
             const pet_id = dropdown ? petID : petId;
@@ -74,16 +69,11 @@ export default function Medications() {
                 updateUser(updatedUser);
             }
 
-            toast('Seu pet foi adicionado com sucesso.', 'success', 4000, 'bottom', false);
+            toast('A medicação do seu pet foi adicionada com sucesso.', 'success', 4000, 'top', false);
         } catch (error) {
-            toast(
-                getFirebaseErrorMessage(error),
-                'destructive',
-                4000,
-                'bottom',
-                false,
-            );
+            toast(getFirebaseErrorMessage(error), 'destructive', 4000, 'top', false);
         } finally {
+            setIsLoading(false);
             router.back();
         }
     }
@@ -91,11 +81,6 @@ export default function Medications() {
     function cancel() {
         router.back();
     }
-
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-    useEffect(() => {
-        petsOrganizer();
-    }, []);
 
     return (
         <Container>
@@ -106,6 +91,7 @@ export default function Medications() {
                         title="Medicações"
                         handleCancel={cancel}
                         handleSave={handleUpdateMedication}
+                        isLoading={isLoading}
                     />
                     <Form>
                         {!!dropdown && (
@@ -116,7 +102,7 @@ export default function Medications() {
                                 placeholderStyle={{ color: '#4A4A4A' }}
                                 ListEmptyComponent={() => (
                                     <Text style={{ backgroundColor: '#fff' }}>
-                                        {t('medications.empty')}
+                                        Nenhum pet adicionado
                                     </Text>
                                 )}
                                 open={petOpen}
@@ -136,7 +122,13 @@ export default function Medications() {
                             maxLength={10}
                             keyboardType="numeric"
                         />
-                        <InputForm placeholder="Hora" value={hour} onChangeText={setHour} />
+                        <InputForm
+                            placeholder="Hora"
+                            value={hour}
+                            onChangeText={(e) => setHour(maskTime(e))}
+                            maxLength={5}
+                            keyboardType="numeric"
+                        />
                     </Form>
                 </Content>
             </TouchableWithoutFeedback>

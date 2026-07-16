@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { TouchableWithoutFeedback, Keyboard, StyleSheet } from 'react-native';
-import { router, useLocalSearchParams } from 'expo-router';
-import { v4 as uuidv4 } from 'uuid';
+import { router, useLocalSearchParams, useFocusEffect } from 'expo-router';
 
 import { Container, Content, Form } from './styles';
 
 import { useAuth } from '@/hooks';
+import { maskDate } from '@/utils/masks';
 import { AddHeader } from '@/components/AddHeader';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { InputForm } from '@/components/InputForm';
@@ -33,28 +33,25 @@ export default function Weight() {
 
     const [amount, setAmount] = useState('');
     const [weighingDate, setWeighingDate] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const pets = user?.pets ? user.pets : [];
     const [organizedPets, setOrganizedPets] = useState<PetsProps[]>([]);
     const [petID, setPetID] = useState('');
     const [petOpen, setPetOpen] = useState(false);
 
-    function petsOrgonizer() {
-        const organizingPets = [];
-
-        for (let i = 0; i < pets.length; i++) {
-            const pet = pets[i];
-
-            organizingPets.push({
-                label: pet.name,
-                value: pet.id,
-            });
-        }
-
-        setOrganizedPets(organizingPets);
-    }
+    useFocusEffect(
+        useCallback(() => {
+            const organized = pets.map((pet) => ({ label: pet.name, value: pet.id }));
+            setOrganizedPets(organized);
+            setAmount('');
+            setWeighingDate('');
+            setPetID('');
+        }, []),
+    );
 
     async function handleUpdateWeight() {
+        setIsLoading(true);
         try {
             const id = String(new Date().getTime());
             const pet_id = dropdown ? petID : petId;
@@ -68,22 +65,11 @@ export default function Weight() {
                 updateUser(updatedUser);
             }
 
-            toast(
-                'O peso do seu pet foi adicionado com sucesso.',
-                'success',
-                4000,
-                'bottom',
-                false,
-            );
+            toast('O peso do seu pet foi adicionado com sucesso.', 'success', 4000, 'top', false);
         } catch (error) {
-            toast(
-                getFirebaseErrorMessage(error),
-                'destructive',
-                4000,
-                'bottom',
-                false,
-            );
+            toast(getFirebaseErrorMessage(error), 'destructive', 4000, 'top', false);
         } finally {
+            setIsLoading(false);
             router.back();
         }
     }
@@ -91,11 +77,6 @@ export default function Weight() {
     function cancel() {
         router.back();
     }
-
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-    useEffect(() => {
-        petsOrgonizer();
-    }, []);
 
     return (
         <Container>
@@ -105,7 +86,8 @@ export default function Weight() {
                         style={{ borderRadius: 30 }}
                         title="Peso"
                         handleCancel={cancel}
-                        handleSave={() => handleUpdateWeight}
+                        handleSave={handleUpdateWeight}
+                        isLoading={isLoading}
                     />
                     <Form>
                         {!!dropdown && (
@@ -124,9 +106,12 @@ export default function Weight() {
                         )}
                         <InputForm placeholder="Peso" value={amount} onChangeText={setAmount} />
                         <InputForm
+                            style={{ backgroundColor: '#FFF' }}
                             placeholder="Data"
                             value={weighingDate}
-                            onChangeText={setWeighingDate}
+                            onChangeText={(e) => setWeighingDate(maskDate(e))}
+                            maxLength={10}
+                            keyboardType="numeric"
                         />
                     </Form>
                 </Content>

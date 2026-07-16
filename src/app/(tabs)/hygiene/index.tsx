@@ -1,9 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { TouchableWithoutFeedback, Keyboard, StyleSheet, Text } from 'react-native';
-import { router, useLocalSearchParams } from 'expo-router';
-import { useTranslation } from 'react-i18next';
+import { router, useLocalSearchParams, useFocusEffect } from 'expo-router';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { v4 as uuidv4 } from 'uuid';
 
 import { Container, Content, Form } from './styles';
 
@@ -26,16 +24,21 @@ interface PetsProps {
     value: string;
 }
 
+const HYGIENE_CATEGORIES = [
+    { label: 'Banho', value: 'Banho' },
+    { label: 'Tosa', value: 'Tosa' },
+    { label: 'Banho e tosa', value: 'Banho e tosa' },
+];
+
 export default function Hygiene() {
     const route = useLocalSearchParams();
     const { dropdown, petId } = route as RouteParams;
 
     const { user, updateUser } = useAuth();
-    const { t } = useTranslation();
     const { toast } = useToast();
 
     const [date, setDate] = useState('');
-    const [schedule, setSchedule] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const pets = user?.pets ? user.pets : [];
 
@@ -45,35 +48,20 @@ export default function Hygiene() {
 
     const [category, setCategory] = useState('');
     const [categoriesOpen, setCategoriesOpen] = useState(false);
-    const [categories, setCategories] = useState([
-        { label: 'Banho', value: 'bath' },
-        { label: 'Tosa', value: 'shave' },
-    ]);
+    const [categories] = useState(HYGIENE_CATEGORIES);
 
-    const onPetOpen = useCallback(() => {
-        setCategoriesOpen(false);
-    }, []);
-
-    const onCategoriesOpen = useCallback(() => {
-        setPetOpen(false);
-    }, []);
-
-    function petsOrgonizer() {
-        const organizingPets = [];
-
-        for (let i = 0; i < pets.length; i++) {
-            const pet = pets[i];
-
-            organizingPets.push({
-                label: pet.name,
-                value: pet.id,
-            });
-        }
-
-        setOrganizedPets(organizingPets);
-    }
+    useFocusEffect(
+        useCallback(() => {
+            const organized = pets.map((pet) => ({ label: pet.name, value: pet.id }));
+            setOrganizedPets(organized);
+            setDate('');
+            setCategory('');
+            setPetID('');
+        }, []),
+    );
 
     async function handleUpdateHygiene() {
+        setIsLoading(true);
         try {
             const id = String(new Date().getTime());
             const pet_id = dropdown ? petID : petId;
@@ -87,22 +75,11 @@ export default function Hygiene() {
                 updateUser(updatedUser);
             }
 
-            toast(
-                'A higiene do seu pet foi adicionado com sucesso.',
-                'success',
-                4000,
-                'bottom',
-                false,
-            );
+            toast('A higiene do seu pet foi adicionada com sucesso.', 'success', 4000, 'top', false);
         } catch (error) {
-            toast(
-                getFirebaseErrorMessage(error),
-                'destructive',
-                4000,
-                'bottom',
-                false,
-            );
+            toast(getFirebaseErrorMessage(error), 'destructive', 4000, 'top', false);
         } finally {
+            setIsLoading(false);
             router.back();
         }
     }
@@ -111,21 +88,16 @@ export default function Hygiene() {
         router.back();
     }
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-    useEffect(() => {
-        petsOrgonizer();
-    }, []);
-
     return (
         <Container>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <Content>
-                    {/* <AddHeader title="Higiene" handleCancel={cancel} handleSave={() => handleUpdateHygiene} /> */}
                     <AddHeader
                         style={{ borderRadius: 30 }}
-                        title="Higiêne"
+                        title="Higiene"
                         handleCancel={cancel}
                         handleSave={handleUpdateHygiene}
+                        isLoading={isLoading}
                     />
                     <Form>
                         {!!dropdown && (
@@ -135,7 +107,6 @@ export default function Hygiene() {
                                 placeholder="Escolha o pet..."
                                 placeholderStyle={{ color: '#4A4A4A' }}
                                 ListEmptyComponent={() => (
-                                    // <></>
                                     <Text style={{ backgroundColor: '#fff' }}>
                                         Nenhum pet adicionado
                                     </Text>
@@ -144,7 +115,7 @@ export default function Hygiene() {
                                 value={petID}
                                 items={organizedPets}
                                 setOpen={setPetOpen}
-                                onOpen={onPetOpen}
+                                onOpen={() => setCategoriesOpen(false)}
                                 setValue={setPetID}
                                 zIndex={100}
                             />
@@ -158,7 +129,7 @@ export default function Hygiene() {
                             value={category}
                             items={categories}
                             setOpen={setCategoriesOpen}
-                            onOpen={onCategoriesOpen}
+                            onOpen={() => setPetOpen(false)}
                             setValue={setCategory}
                             zIndex={1}
                         />

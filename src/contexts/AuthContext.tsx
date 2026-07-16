@@ -16,6 +16,10 @@ import {
     removeUserLocally,
     saveUserLocally,
     saveUserInFirestore,
+    markPendingSync,
+    clearPendingSync,
+    hasPendingSync,
+    getLastSyncTime,
 } from '@/services/user.service';
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
@@ -48,6 +52,16 @@ export function AuthProvider({ children }: { children: JSX.Element }): JSX.Eleme
             try {
                 const storedUser = await getUserLocally();
                 setUser(storedUser ?? null);
+
+                if (storedUser) {
+                    const pending = await hasPendingSync();
+                    const lastSync = await getLastSyncTime();
+                    const oneDayMs = 24 * 60 * 60 * 1000;
+                    if (pending && Date.now() - lastSync > oneDayMs) {
+                        await saveUserInFirestore(storedUser);
+                        await clearPendingSync();
+                    }
+                }
             } catch (error) {
                 console.error('AuthContext / loadStoredUser =>', error);
                 setUser(null);
@@ -121,7 +135,7 @@ export function AuthProvider({ children }: { children: JSX.Element }): JSX.Eleme
         try {
             setUser(updatedUser);
             await saveUserLocally(updatedUser);
-            await saveUserInFirestore(updatedUser);
+            await markPendingSync();
         } catch (error) {
             console.error('AuthContext / updateUser =>', error);
             throw error;
@@ -130,9 +144,16 @@ export function AuthProvider({ children }: { children: JSX.Element }): JSX.Eleme
 
     async function logOut() {
         try {
+            const currentUser = await getUserLocally();
+            if (currentUser) {
+                const pending = await hasPendingSync();
+                if (pending) {
+                    await saveUserInFirestore(currentUser);
+                    await clearPendingSync();
+                }
+            }
             await removeUserLocally();
             setUser(null);
-            router.replace('/onboardingScreen');
         } catch (error) {
             console.error('AuthContext / logOut =>', error);
             throw error;
