@@ -5,6 +5,7 @@ import { Slot, SplashScreen } from 'expo-router';
 import { AuthProvider } from '@/contexts';
 import { useAuth } from '@/hooks';
 import { ToastProvider } from '@/components/Toast';
+import { requestNotificationPermissions } from '@/utils/notifications';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -22,6 +23,7 @@ function RootLayoutNav() {
         if (!loading) {
             setIsNavigationReady(true);
             SplashScreen.hideAsync();
+            requestNotificationPermissions();
         }
     }, [loading]);
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { FlatList } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -33,6 +33,7 @@ import { DewormingDisplay } from '@/components/Displayers/DewormingDisplay';
 import { HygieneDisplay } from '@/components/Displayers/HygieneDisplay';
 import { AppointmentsDisplay } from '@/components/Displayers/AppointmentsDisplay';
 import { WeightDisplay } from '@/components/Displayers/WeightDisplay';
+import { FutureEventsDisplay } from '@/components/Displayers/FutureEventsDisplay';
 
 import { options } from '@/constants/options';
 import { getPetAge } from '@/utils/getPetAge';
@@ -65,6 +66,7 @@ export default function PetInfo() {
     const [modalOpen, setModalOpen] = useState(false);
     const [photoIsLoading, setPhotoIsLoading] = useState(false);
     const [open, setOpen] = useState(false);
+    const [avatarError, setAvatarError] = useState(false);
 
     const [screenSelected, setScreenSelected] = useState('info');
 
@@ -135,8 +137,8 @@ export default function PetInfo() {
 
             <PetInfoBox>
                 <PetIcon>
-                    {pet.avatar ? (
-                        <Avatar source={{ uri: pet.avatar }} />
+                    {pet.avatar && !avatarError ? (
+                        <Avatar source={{ uri: pet.avatar }} onError={() => setAvatarError(true)} />
                     ) : (
                         <MaterialCommunityIcons name={pet.icon} size={80} color="#3E84A8" />
                     )}
@@ -176,6 +178,7 @@ export default function PetInfo() {
                 {screenSelected === 'hygiene' && <HygieneDisplay petId={pet.id} />}
                 {screenSelected === 'weight' && <WeightDisplay petId={pet.id} />}
                 {screenSelected === 'appointments' && <AppointmentsDisplay petId={pet.id} />}
+                {screenSelected === 'futureEvents' && <FutureEventsDisplay petId={pet.id} />}
             </Subscreen>
         </Container>
     );

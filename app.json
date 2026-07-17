@@ -36,6 +36,14 @@
     },
     "plugins": [
       "expo-router",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/icon.png",
+          "color": "#3E84A8",
+          "sounds": []
+        }
+      ],
       ["expo-build-properties", {
         "android": {
           "targetSdkVersion": 35,

@@ -9,9 +9,10 @@ import { useAuth } from '@/hooks';
 import { maskDate } from '@/utils/masks';
 import { AddHeader } from '@/components/AddHeader';
 import { InputForm } from '@/components/InputForm';
+import { NotificationToggle } from '@/components/NotificationToggle';
 import { useToast } from '@/components/Toast';
 import { getFirebaseErrorMessage } from '@/utils/firebaseErrors';
-
+import { scheduleNotification } from '@/utils/notifications';
 import { addPetHygiene } from '@/services/user.service';
 
 type RouteParams = {
@@ -38,10 +39,11 @@ export default function Hygiene() {
     const { toast } = useToast();
 
     const [date, setDate] = useState('');
+    const [scheduledDate, setScheduledDate] = useState('');
+    const [scheduledHour, setScheduledHour] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const pets = user?.pets ? user.pets : [];
-
+    const pets = user?.pets ?? [];
     const [organizedPets, setOrganizedPets] = useState<PetsProps[]>([]);
     const [petID, setPetID] = useState('');
     const [petOpen, setPetOpen] = useState(false);
@@ -52,10 +54,11 @@ export default function Hygiene() {
 
     useFocusEffect(
         useCallback(() => {
-            const organized = pets.map((pet) => ({ label: pet.name, value: pet.id }));
-            setOrganizedPets(organized);
+            setOrganizedPets(pets.map((p) => ({ label: p.name, value: p.id })));
             setDate('');
             setCategory('');
+            setScheduledDate('');
+            setScheduledHour('');
             setPetID('');
         }, []),
     );
@@ -65,14 +68,22 @@ export default function Hygiene() {
         try {
             const id = String(new Date().getTime());
             const pet_id = dropdown ? petID : petId;
+            const petName = pets.find((p) => p.id === pet_id)?.name ?? 'Pet';
+
+            let notificationId: string | undefined;
+            if (scheduledDate.length === 10) {
+                const nid = await scheduleNotification(petName, `Higiene: ${category}`, scheduledDate, scheduledHour || undefined);
+                if (nid) notificationId = nid;
+            }
 
             if (user?.name) {
                 const updatedUser = await addPetHygiene(user, pet_id, {
                     id,
                     category,
                     date,
+                    ...(scheduledDate && { scheduledDate, scheduledHour, notificationId }),
                 });
-                updateUser(updatedUser);
+                await updateUser(updatedUser);
             }
 
             toast('A higiene do seu pet foi adicionada com sucesso.', 'success', 4000, 'top', false);
@@ -84,10 +95,6 @@ export default function Hygiene() {
         }
     }
 
-    function cancel() {
-        router.back();
-    }
-
     return (
         <Container>
             <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss(); setPetOpen(false); setCategoriesOpen(false); }}>
@@ -95,7 +102,7 @@ export default function Hygiene() {
                     <AddHeader
                         style={{ borderRadius: 30 }}
                         title="Higiene"
-                        handleCancel={cancel}
+                        handleCancel={() => router.back()}
                         handleSave={handleUpdateHygiene}
                         isLoading={isLoading}
                     />
@@ -107,9 +114,7 @@ export default function Hygiene() {
                                 placeholder="Escolha o pet..."
                                 placeholderStyle={{ color: '#4A4A4A' }}
                                 ListEmptyComponent={() => (
-                                    <Text style={{ backgroundColor: '#fff' }}>
-                                        Nenhum pet adicionado
-                                    </Text>
+                                    <Text style={{ backgroundColor: '#fff' }}>Nenhum pet adicionado</Text>
                                 )}
                                 open={petOpen}
                                 value={petID}
@@ -140,6 +145,12 @@ export default function Hygiene() {
                             onChangeText={(e) => setDate(maskDate(e))}
                             maxLength={10}
                             keyboardType="numeric"
+                        />
+                        <NotificationToggle
+                            scheduledDate={scheduledDate}
+                            scheduledHour={scheduledHour}
+                            onChangeDate={setScheduledDate}
+                            onChangeHour={setScheduledHour}
                         />
                     </Form>
                 </Content>

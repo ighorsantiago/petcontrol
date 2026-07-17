@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { RectButtonProps } from 'react-native-gesture-handler';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -10,11 +11,13 @@ type Props = RectButtonProps & {
 };
 
 export function PetCard({ type, name, avatar, ...rest }: Props) {
+    const [imgError, setImgError] = useState(false);
+
     return (
         <Container {...rest}>
             <Image>
-                {avatar ? (
-                    <Avatar source={{ uri: avatar }} />
+                {avatar && !imgError ? (
+                    <Avatar source={{ uri: avatar }} onError={() => setImgError(true)} />
                 ) : (
                     <MaterialCommunityIcons name={type} size={70} color="#E27E08" />
                 )}

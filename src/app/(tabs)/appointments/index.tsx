@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { TouchableWithoutFeedback, Keyboard, StyleSheet, Text } from 'react-native';
+import { TouchableWithoutFeedback, Keyboard, StyleSheet, Text, View, Switch } from 'react-native';
 import { router, useLocalSearchParams, useFocusEffect } from 'expo-router';
 import DropDownPicker from 'react-native-dropdown-picker';
 
@@ -11,7 +11,7 @@ import { AddHeader } from '@/components/AddHeader';
 import { InputForm } from '@/components/InputForm';
 import { useToast } from '@/components/Toast';
 import { getFirebaseErrorMessage } from '@/utils/firebaseErrors';
-
+import { scheduleNotification } from '@/utils/notifications';
 import { addPetAppointment } from '@/services/user.service';
 
 type RouteParams = {
@@ -34,21 +34,21 @@ export default function Appointments() {
     const [name, setName] = useState('');
     const [date, setDate] = useState('');
     const [hour, setHour] = useState('');
+    const [reminderEnabled, setReminderEnabled] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-    const pets = user?.pets ? user.pets : [];
-
+    const pets = user?.pets ?? [];
     const [organizedPets, setOrganizedPets] = useState<PetsProps[]>([]);
     const [petID, setPetID] = useState('');
     const [petOpen, setPetOpen] = useState(false);
 
     useFocusEffect(
         useCallback(() => {
-            const organized = pets.map((pet) => ({ label: pet.name, value: pet.id }));
-            setOrganizedPets(organized);
+            setOrganizedPets(pets.map((p) => ({ label: p.name, value: p.id })));
             setName('');
             setDate('');
             setHour('');
+            setReminderEnabled(false);
             setPetID('');
         }, []),
     );
@@ -58,6 +58,13 @@ export default function Appointments() {
         try {
             const id = String(new Date().getTime());
             const pet_id = dropdown ? petID : petId;
+            const petName = pets.find((p) => p.id === pet_id)?.name ?? 'Pet';
+
+            let notificationId: string | undefined;
+            if (reminderEnabled && date.length === 10) {
+                const nid = await scheduleNotification(petName, `Compromisso: ${name}`, date, hour || undefined);
+                if (nid) notificationId = nid;
+            }
 
             if (user?.name) {
                 const updatedUser = await addPetAppointment(user, pet_id, {
@@ -65,8 +72,9 @@ export default function Appointments() {
                     name,
                     date,
                     hour,
+                    ...(reminderEnabled && date && { scheduledDate: date, scheduledHour: hour, notificationId }),
                 });
-                updateUser(updatedUser);
+                await updateUser(updatedUser);
             }
 
             toast('O compromisso foi adicionado com sucesso.', 'success', 4000, 'top', false);
@@ -78,10 +86,6 @@ export default function Appointments() {
         }
     }
 
-    function cancel() {
-        router.back();
-    }
-
     return (
         <Container>
             <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss(); setPetOpen(false); }}>
@@ -89,7 +93,7 @@ export default function Appointments() {
                     <AddHeader
                         style={{ borderRadius: 30 }}
                         title="Compromisso"
-                        handleCancel={cancel}
+                        handleCancel={() => router.back()}
                         handleSave={handleUpdateAppointments}
                         isLoading={isLoading}
                     />
@@ -101,9 +105,7 @@ export default function Appointments() {
                                 placeholder="Escolha o pet"
                                 placeholderStyle={{ color: '#4A4A4A' }}
                                 ListEmptyComponent={() => (
-                                    <Text style={{ backgroundColor: '#fff' }}>
-                                        Nenhum pet adicionado
-                                    </Text>
+                                    <Text style={{ backgroundColor: '#fff' }}>Nenhum pet adicionado</Text>
                                 )}
                                 open={petOpen}
                                 value={petID}
@@ -129,6 +131,15 @@ export default function Appointments() {
                             maxLength={5}
                             keyboardType="numeric"
                         />
+                        <View style={style.toggleRow}>
+                            <Text style={style.toggleLabel}>Agendar lembrete</Text>
+                            <Switch
+                                value={reminderEnabled}
+                                onValueChange={setReminderEnabled}
+                                trackColor={{ false: '#BDBBBB', true: '#3E84A8' }}
+                                thumbColor="#fff"
+                            />
+                        </View>
                     </Form>
                 </Content>
             </TouchableWithoutFeedback>
@@ -151,5 +162,16 @@ const style = StyleSheet.create({
     dropdown: {
         borderRadius: 0,
         borderColor: '#BDBBBB',
+    },
+    toggleRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 4,
+        marginTop: 8,
+    },
+    toggleLabel: {
+        fontSize: 15,
+        color: '#4A4A4A',
     },
 });

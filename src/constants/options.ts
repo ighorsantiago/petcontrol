@@ -11,6 +11,7 @@ const options = [
     { key: 'weight', name: 'Peso', icon: 'weight-kilogram' },
     { key: 'hygiene', name: 'Higiene', icon: 'food-steak' },
     { key: 'appointments', name: 'Compromissos', icon: 'calendar-clock' },
+    { key: 'futureEvents', name: 'Lembretes', icon: 'bell-outline' },
 ];
 
 const optionsHome = [

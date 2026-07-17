@@ -27,6 +27,7 @@ export default function Pets() {
     const { user } = useAuth();
 
     const [search, setSearch] = useState('');
+    const [avatarError, setAvatarError] = useState(false);
 
     let pets = [];
 
@@ -55,8 +56,8 @@ export default function Pets() {
                         <Title>{user?.name}, encontre seus pets aqui:</Title>
                     </MessageBox>
                     <UserIcon>
-                        {user?.avatar ? (
-                            <Avatar source={{ uri: user?.avatar }} />
+                        {user?.avatar && !avatarError ? (
+                            <Avatar source={{ uri: user.avatar }} onError={() => setAvatarError(true)} />
                         ) : (
                             <MaterialIcons name="person" size={50} color="#3E84A8" />
                         )}

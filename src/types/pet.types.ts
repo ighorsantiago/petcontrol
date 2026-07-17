@@ -19,6 +19,9 @@ export interface Vaccine {
     name: string;
     date: string;
     next?: string;
+    scheduledDate?: string;
+    scheduledHour?: string;
+    notificationId?: string;
 }
 
 export interface Medication {
@@ -26,6 +29,9 @@ export interface Medication {
     name: string;
     date: string;
     hour: string;
+    scheduledDate?: string;
+    scheduledHour?: string;
+    notificationId?: string;
 }
 
 export interface Hygiene {
@@ -34,12 +40,18 @@ export interface Hygiene {
     date: string;
     next?: string;
     where?: string;
+    scheduledDate?: string;
+    scheduledHour?: string;
+    notificationId?: string;
 }
 
 export interface Deworming {
     id: string;
     name: string;
     date: string;
+    scheduledDate?: string;
+    scheduledHour?: string;
+    notificationId?: string;
 }
 
 export interface Appointment {
@@ -47,6 +59,9 @@ export interface Appointment {
     name: string;
     date: string;
     hour?: string;
+    scheduledDate?: string;
+    scheduledHour?: string;
+    notificationId?: string;
 }
 
 export interface Pet {

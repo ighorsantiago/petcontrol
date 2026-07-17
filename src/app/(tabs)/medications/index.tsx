@@ -9,9 +9,10 @@ import { useAuth } from '@/hooks';
 import { maskDate, maskTime } from '@/utils/masks';
 import { AddHeader } from '@/components/AddHeader';
 import { InputForm } from '@/components/InputForm';
+import { NotificationToggle } from '@/components/NotificationToggle';
 import { useToast } from '@/components/Toast';
 import { getFirebaseErrorMessage } from '@/utils/firebaseErrors';
-
+import { scheduleNotification } from '@/utils/notifications';
 import { addPetMedication } from '@/services/user.service';
 
 type RouteParams = {
@@ -34,21 +35,23 @@ export default function Medications() {
     const [name, setName] = useState('');
     const [date, setDate] = useState('');
     const [hour, setHour] = useState('');
+    const [scheduledDate, setScheduledDate] = useState('');
+    const [scheduledHour, setScheduledHour] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const pets = user?.pets ? user.pets : [];
-
+    const pets = user?.pets ?? [];
     const [organizedPets, setOrganizedPets] = useState<PetsProps[]>([]);
     const [petID, setPetID] = useState('');
     const [petOpen, setPetOpen] = useState(false);
 
     useFocusEffect(
         useCallback(() => {
-            const organized = pets.map((pet) => ({ label: pet.name, value: pet.id }));
-            setOrganizedPets(organized);
+            setOrganizedPets(pets.map((p) => ({ label: p.name, value: p.id })));
             setName('');
             setDate('');
             setHour('');
+            setScheduledDate('');
+            setScheduledHour('');
             setPetID('');
         }, []),
     );
@@ -58,6 +61,13 @@ export default function Medications() {
         try {
             const id = String(new Date().getTime());
             const pet_id = dropdown ? petID : petId;
+            const petName = pets.find((p) => p.id === pet_id)?.name ?? 'Pet';
+
+            let notificationId: string | undefined;
+            if (scheduledDate.length === 10) {
+                const nid = await scheduleNotification(petName, `Medicação: ${name}`, scheduledDate, scheduledHour || undefined);
+                if (nid) notificationId = nid;
+            }
 
             if (user?.name) {
                 const updatedUser = await addPetMedication(user, pet_id, {
@@ -65,8 +75,9 @@ export default function Medications() {
                     name,
                     date,
                     hour,
+                    ...(scheduledDate && { scheduledDate, scheduledHour, notificationId }),
                 });
-                updateUser(updatedUser);
+                await updateUser(updatedUser);
             }
 
             toast('A medicação do seu pet foi adicionada com sucesso.', 'success', 4000, 'top', false);
@@ -78,10 +89,6 @@ export default function Medications() {
         }
     }
 
-    function cancel() {
-        router.back();
-    }
-
     return (
         <Container>
             <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss(); setPetOpen(false); }}>
@@ -89,7 +96,7 @@ export default function Medications() {
                     <AddHeader
                         style={{ borderRadius: 30 }}
                         title="Medicações"
-                        handleCancel={cancel}
+                        handleCancel={() => router.back()}
                         handleSave={handleUpdateMedication}
                         isLoading={isLoading}
                     />
@@ -101,9 +108,7 @@ export default function Medications() {
                                 placeholder="Escolha o pet"
                                 placeholderStyle={{ color: '#4A4A4A' }}
                                 ListEmptyComponent={() => (
-                                    <Text style={{ backgroundColor: '#fff' }}>
-                                        Nenhum pet adicionado
-                                    </Text>
+                                    <Text style={{ backgroundColor: '#fff' }}>Nenhum pet adicionado</Text>
                                 )}
                                 open={petOpen}
                                 value={petID}
@@ -128,6 +133,12 @@ export default function Medications() {
                             onChangeText={(e) => setHour(maskTime(e))}
                             maxLength={5}
                             keyboardType="numeric"
+                        />
+                        <NotificationToggle
+                            scheduledDate={scheduledDate}
+                            scheduledHour={scheduledHour}
+                            onChangeDate={setScheduledDate}
+                            onChangeHour={setScheduledHour}
                         />
                     </Form>
                 </Content>

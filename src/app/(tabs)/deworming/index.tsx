@@ -1,17 +1,18 @@
 import { useCallback, useState } from 'react';
 import { TouchableWithoutFeedback, Keyboard, StyleSheet, Text } from 'react-native';
 import { router, useLocalSearchParams, useFocusEffect } from 'expo-router';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 import { Container, Content, Form } from './styles';
 
 import { useAuth } from '@/hooks';
 import { maskDate } from '@/utils/masks';
 import { AddHeader } from '@/components/AddHeader';
-import DropDownPicker from 'react-native-dropdown-picker';
 import { InputForm } from '@/components/InputForm';
+import { NotificationToggle } from '@/components/NotificationToggle';
 import { useToast } from '@/components/Toast';
 import { getFirebaseErrorMessage } from '@/utils/firebaseErrors';
-
+import { scheduleNotification } from '@/utils/notifications';
 import { addPetDeworming } from '@/services/user.service';
 
 type RouteParams = {
@@ -33,20 +34,22 @@ export default function Deworming() {
 
     const [name, setName] = useState('');
     const [date, setDate] = useState('');
+    const [scheduledDate, setScheduledDate] = useState('');
+    const [scheduledHour, setScheduledHour] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const pets = user?.pets ? user.pets : [];
-
+    const pets = user?.pets ?? [];
     const [organizedPets, setOrganizedPets] = useState<PetsProps[]>([]);
     const [petID, setPetID] = useState('');
     const [petOpen, setPetOpen] = useState(false);
 
     useFocusEffect(
         useCallback(() => {
-            const organized = pets.map((pet) => ({ label: pet.name, value: pet.id }));
-            setOrganizedPets(organized);
+            setOrganizedPets(pets.map((p) => ({ label: p.name, value: p.id })));
             setName('');
             setDate('');
+            setScheduledDate('');
+            setScheduledHour('');
             setPetID('');
         }, []),
     );
@@ -56,14 +59,22 @@ export default function Deworming() {
         try {
             const id = String(new Date().getTime());
             const pet_id = dropdown ? petID : petId;
+            const petName = pets.find((p) => p.id === pet_id)?.name ?? 'Pet';
+
+            let notificationId: string | undefined;
+            if (scheduledDate.length === 10) {
+                const nid = await scheduleNotification(petName, `Vermífugo: ${name}`, scheduledDate, scheduledHour || undefined);
+                if (nid) notificationId = nid;
+            }
 
             if (user?.name) {
                 const updatedUser = await addPetDeworming(user, pet_id, {
                     id,
                     name,
                     date,
+                    ...(scheduledDate && { scheduledDate, scheduledHour, notificationId }),
                 });
-                updateUser(updatedUser);
+                await updateUser(updatedUser);
             }
 
             toast('O vermífugo do seu pet foi adicionado com sucesso.', 'success', 4000, 'top', false);
@@ -75,10 +86,6 @@ export default function Deworming() {
         }
     }
 
-    function cancel() {
-        router.back();
-    }
-
     return (
         <Container>
             <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss(); setPetOpen(false); }}>
@@ -86,7 +93,7 @@ export default function Deworming() {
                     <AddHeader
                         style={{ borderRadius: 30 }}
                         title="Vermífugo"
-                        handleCancel={cancel}
+                        handleCancel={() => router.back()}
                         handleSave={handleUpdateDeworming}
                         isLoading={isLoading}
                     />
@@ -98,9 +105,7 @@ export default function Deworming() {
                                 placeholder="Escolha o pet"
                                 placeholderStyle={{ color: '#4A4A4A' }}
                                 ListEmptyComponent={() => (
-                                    <Text style={{ backgroundColor: '#fff' }}>
-                                        Nenhum pet adicionado
-                                    </Text>
+                                    <Text style={{ backgroundColor: '#fff' }}>Nenhum pet adicionado</Text>
                                 )}
                                 open={petOpen}
                                 value={petID}
@@ -118,6 +123,12 @@ export default function Deworming() {
                             onChangeText={(e) => setDate(maskDate(e))}
                             maxLength={10}
                             keyboardType="numeric"
+                        />
+                        <NotificationToggle
+                            scheduledDate={scheduledDate}
+                            scheduledHour={scheduledHour}
+                            onChangeDate={setScheduledDate}
+                            onChangeHour={setScheduledHour}
                         />
                     </Form>
                 </Content>

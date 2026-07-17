@@ -62,7 +62,7 @@ export default function Weight() {
                     amount,
                     weighingDate,
                 });
-                updateUser(updatedUser);
+                await updateUser(updatedUser);
             }
 
             toast('O peso do seu pet foi adicionado com sucesso.', 'success', 4000, 'top', false);
