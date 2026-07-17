@@ -1,33 +1,34 @@
 # 🐾 PetControl
 
-Aplicativo mobile para gerenciamento de informações dos seus pets. Acompanhe vacinas, medicações, consultas, higiene, peso e muito mais em um só lugar.
+A mobile app to manage your pets' health information. Track vaccines, medications, appointments, hygiene, weight, and more — all in one place.
 
 ---
 
 ## 📱 Screenshots
 
-> _Screenshots serão adicionados em breve._
+> _Screenshots coming soon._
 
 ---
 
-## ✨ Funcionalidades
+## ✨ Features
 
-- 🔐 Cadastro e login de tutor
-- 🐶 Cadastro de múltiplos pets (cão e gato)
-- 💉 Registro de vacinas
-- 💊 Controle de medicações
-- 🪱 Registro de vermífugos
-- 🛁 Controle de higiene (banho e tosa)
-- 📅 Agendamento de consultas veterinárias
-- ⚖️ Histórico de peso
-- 🍖 Controle de alimentação
-- 🌐 Suporte a múltiplos idiomas (PT-BR, EN, ES, FR)
+- 🔐 Owner registration and login
+- 🐶 Multiple pet profiles (dog and cat)
+- 💉 Vaccine tracking
+- 💊 Medication management
+- 🪱 Deworming records
+- 🛁 Hygiene control (bath and grooming)
+- 📅 Veterinary appointment scheduling
+- 🔔 Local reminders for future events
+- ⚖️ Weight history
+- 🍖 Feeding control
+- 🌐 Multi-language support (PT-BR, EN, ES, FR)
 
 ---
 
 ## 🛠 Stack
 
-| Tecnologia | Versão |
+| Technology | Version |
 |---|---|
 | React Native | 0.76 |
 | Expo | SDK 52 |
@@ -40,32 +41,32 @@ Aplicativo mobile para gerenciamento de informações dos seus pets. Acompanhe v
 
 ---
 
-## 🚀 Como rodar localmente
+## 🚀 Running locally
 
-### Pré-requisitos
+### Prerequisites
 
 - Node.js 18+
-- npm ou yarn
-- Expo Go no celular **ou** emulador Android/iOS configurado
+- npm or yarn
+- Expo Go on your phone **or** a configured Android/iOS emulator
 
-### Instalação
+### Installation
 
 ```bash
-# Clone o repositório
+# Clone the repository
 git clone https://github.com/ighorsantiago/petcontrol.git
 cd petcontrol
 
-# Instale as dependências
+# Install dependencies
 npm install
 
-# Configure as variáveis de ambiente
+# Set up environment variables
 cp .env.example .env
-# Edite o .env com suas credenciais do Firebase
+# Edit .env with your Firebase credentials
 ```
 
-### Variáveis de ambiente
+### Environment variables
 
-Crie um arquivo `.env` na raiz do projeto com base no `.env.example`:
+Create a `.env` file at the project root based on `.env.example`:
 
 ```
 EXPO_PUBLIC_FIREBASE_API_KEY=
@@ -77,63 +78,63 @@ EXPO_PUBLIC_FIREBASE_APP_ID=
 EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID=
 ```
 
-### Rodando o projeto
+### Running the project
 
 ```bash
 npx expo start
 ```
 
-- Pressione `a` para abrir no emulador Android
-- Pressione `i` para abrir no simulador iOS
-- Escaneie o QR Code com o Expo Go no celular
+- Press `a` to open on the Android emulator
+- Press `i` to open on the iOS simulator
+- Scan the QR Code with Expo Go on your phone
 
 ---
 
-## 📁 Estrutura do projeto
+## 📁 Project structure
 
 ```
 petcontrol/
 ├── src/
-│   ├── app/                  # Rotas (Expo Router)
-│   │   ├── (auth)/           # Telas de autenticação
-│   │   └── (tabs)/           # Telas principais
-│   ├── components/           # Componentes reutilizáveis
-│   ├── config/               # Configuração do Firebase
-│   ├── constants/            # Dados estáticos (espécies, raças, opções)
+│   ├── app/                  # Routes (Expo Router)
+│   │   ├── (auth)/           # Authentication screens
+│   │   └── (tabs)/           # Main screens
+│   ├── components/           # Reusable components
+│   ├── config/               # Firebase configuration
+│   ├── constants/            # Static data (species, breeds, options)
 │   ├── contexts/             # Context API (AuthContext)
 │   ├── hooks/                # Custom hooks (useAuth)
-│   ├── services/             # Camada de serviços (Firebase)
-│   ├── storage/              # Configuração do AsyncStorage
-│   ├── types/                # Tipos TypeScript
-│   └── utils/                # Funções utilitárias e i18n
-├── assets/                   # Imagens e ícones
-├── .env.example              # Exemplo de variáveis de ambiente
-└── eas.json                  # Configuração do EAS Build
+│   ├── services/             # Service layer (Firebase)
+│   ├── storage/              # AsyncStorage configuration
+│   ├── types/                # TypeScript types
+│   └── utils/                # Utility functions and i18n
+├── assets/                   # Images and icons
+├── .env.example              # Environment variables example
+└── eas.json                  # EAS Build configuration
 ```
 
 ---
 
-## 🔨 Build para produção
+## 🔨 Production build
 
-O projeto usa [EAS Build](https://docs.expo.dev/build/introduction/) para gerar os builds.
+This project uses [EAS Build](https://docs.expo.dev/build/introduction/) to generate builds.
 
 ```bash
-# Build de preview (APK para testes)
+# Preview build (APK for testing)
 eas build --platform android --profile preview
 
-# Build de produção (AAB para Play Store)
+# Production build (AAB for Play Store)
 eas build --platform android --profile production
 ```
 
 ---
 
-## 📝 Licença
+## 📝 License
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 👨‍💻 Autor
+## 👨‍💻 Author
 
 **Ighor Santiago**
 - GitHub: [@ighorsantiago](https://github.com/ighorsantiago)
