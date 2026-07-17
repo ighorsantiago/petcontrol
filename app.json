@@ -27,7 +27,7 @@
       "googleServicesFile": "./google-services.json",
       "privacyPolicyUrl": "https://sites.google.com/view/pet-control-poltica-de-privaci",
       "targetSdkVersion": 35,
-      "versionCode": 5
+      "versionCode": 6
     },
     "web": {
       "bundler": "metro",
