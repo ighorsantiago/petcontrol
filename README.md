@@ -4,12 +4,6 @@ A mobile app to manage your pets' health information. Track vaccines, medication
 
 ---
 
-## 📱 Screenshots
-
-> _Screenshots coming soon._
-
----
-
 ## ✨ Features
 
 - 🔐 Owner registration and login
@@ -128,14 +122,23 @@ eas build --platform android --profile production
 
 ---
 
-## 📝 License
+## 📲 Availability
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+Currently available on the **Google Play Store** (open testing phase).
+
+> iOS version planned for a future release.
 
 ---
 
-## 👨‍💻 Author
+## 📝 License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+---
+
+## 👤 Author
 
 **Ighor Santiago**
-- GitHub: [@ighorsantiago](https://github.com/ighorsantiago)
-- LinkedIn: [linkedin.com/in/ighorsantiago](https://linkedin.com/in/ighorsantiago)
+
+[![LinkedIn](https://img.shields.io/badge/-LinkedIn-blue?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/ighor-santiago/)
+[![GitHub](https://img.shields.io/badge/-GitHub-black?style=flat-square&logo=github)](https://github.com/ighorsantiago)
