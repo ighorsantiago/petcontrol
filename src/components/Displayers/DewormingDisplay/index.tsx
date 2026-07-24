@@ -39,7 +39,7 @@ export function DewormingDisplay({ petId }: Props) {
         <Container>
             <AddButton
                 onPress={() =>
-                    router.navigate({
+                    router.push({
                         pathname: '/deworming',
                         params: { petId: pet[0].id },
                     })

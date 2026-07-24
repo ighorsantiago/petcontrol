@@ -33,7 +33,7 @@ export function AppointmentsDisplay({ petId }: Props) {
         <Container>
             <AddButton
                 onPress={() =>
-                    router.navigate({
+                    router.push({
                         pathname: '/appointments',
                         params: { petId: pet[0].id },
                     })

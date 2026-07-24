@@ -36,7 +36,7 @@ export function MedicationsDisplay({ petId }: Props) {
         <Container>
             <AddButton
                 onPress={() =>
-                    router.navigate({
+                    router.push({
                         pathname: '/medications',
                         params: { petId: pet[0].id },
                     })

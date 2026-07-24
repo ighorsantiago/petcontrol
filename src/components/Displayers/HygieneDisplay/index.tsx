@@ -44,7 +44,7 @@ export function HygieneDisplay({ petId }: Props) {
         <Container>
             <AddButton
                 onPress={() =>
-                    router.navigate({
+                    router.push({
                         pathname: '/hygiene',
                         params: { petId: pet[0].id },
                     })

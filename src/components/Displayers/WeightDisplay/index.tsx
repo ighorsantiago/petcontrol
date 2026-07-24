@@ -36,7 +36,7 @@ export function WeightDisplay({ petId }: Props) {
         <Container>
             <AddButton
                 onPress={() =>
-                    router.navigate({
+                    router.push({
                         pathname: '/weight',
                         params: { petId: pet[0].id },
                     })
