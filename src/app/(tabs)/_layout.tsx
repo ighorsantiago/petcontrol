@@ -85,15 +85,6 @@ export default function TabLayout() {
             <Tabs.Screen name="home/index" />
             <Tabs.Screen name="pets/index" />
             <Tabs.Screen name="tutor/index" />
-            <Tabs.Screen name="addPet/index" options={{ href: null }} />
-            <Tabs.Screen name="appointments/index" options={{ href: null }} />
-            <Tabs.Screen name="deworming/index" options={{ href: null }} />
-            <Tabs.Screen name="food/index" options={{ href: null }} />
-            <Tabs.Screen name="hygiene/index" options={{ href: null }} />
-            <Tabs.Screen name="medications/index" options={{ href: null }} />
-            <Tabs.Screen name="petInfo/index" options={{ href: null }} />
-            <Tabs.Screen name="vaccines/index" options={{ href: null }} />
-            <Tabs.Screen name="weight/index" options={{ href: null }} />
         </Tabs>
     );
 }

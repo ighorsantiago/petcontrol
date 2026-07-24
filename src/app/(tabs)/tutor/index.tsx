@@ -10,7 +10,6 @@ import { AddHeader } from '@/components/AddHeader';
 import { InputForm } from '@/components/InputForm';
 import { useToast } from '@/components/Toast';
 import { getFirebaseErrorMessage } from '@/utils/firebaseErrors';
-import { uploadImageToStorage } from '@/services/user.service';
 
 import {
   Container,
@@ -73,13 +72,8 @@ export default function Tutor() {
           return;
         }
 
-        const downloadURL = await uploadImageToStorage(
-          photoSelected.assets[0].uri,
-          `photos/${user?.email}/avatar_${Date.now()}.jpg`,
-        );
-
         if (user) {
-          updateUser({ ...user, avatar: downloadURL });
+          updateUser({ ...user, avatar: photoSelected.assets[0].uri });
         }
 
         toast('Sua foto foi alterada com sucesso.', 'success', 4000, 'top', false);

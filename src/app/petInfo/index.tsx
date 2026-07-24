@@ -38,7 +38,7 @@ import { FutureEventsDisplay } from '@/components/Displayers/FutureEventsDisplay
 import { options } from '@/constants/options';
 import { getPetAge } from '@/utils/getPetAge';
 
-import { updatePetAvatar, uploadImageToStorage } from '@/services/user.service';
+import { updatePetAvatar } from '@/services/user.service';
 
 type RouteParams = {
     petId: string;
@@ -94,14 +94,9 @@ export default function PetInfo() {
                     return;
                 }
 
-                const downloadURL = await uploadImageToStorage(
-                    photoSelected.assets[0].uri,
-                    `photos/${user?.email}/pets/${pet.id}_${Date.now()}.jpg`,
-                );
-
                 if (user?.name) {
-                    const updatedUser = await updatePetAvatar(user, pet.id, downloadURL);
-                    updateUser(updatedUser);
+                    const updatedUser = await updatePetAvatar(user, pet.id, photoSelected.assets[0].uri);
+                    await updateUser(updatedUser);
                 }
 
                 toast('A foto do seu pet foi alterada com sucesso.', 'success', 4000, 'top', false);

@@ -2,13 +2,11 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { Animated, Text, View } from 'react-native';
 
-import { cn } from '@/lib/utils';
-
 const toastVariants = {
-    default: 'bg-gray-300',
-    destructive: 'bg-red-500',
-    success: 'bg-green-500',
-    info: 'bg-blue-500',
+    default: '#9CA3AF',
+    destructive: '#EF4444',
+    success: '#22C55E',
+    info: '#3B82F6',
 };
 
 interface ToastProps {
@@ -54,11 +52,12 @@ function Toast({
 
     return (
         <Animated.View
-            className={`
-        ${toastVariants[variant]}
-        m-2 mb-1 p-4 rounded-lg transform transition-all
-      `}
             style={{
+                backgroundColor: toastVariants[variant],
+                margin: 8,
+                marginBottom: 4,
+                padding: 16,
+                borderRadius: 10,
                 opacity,
                 transform: [
                     {
@@ -70,12 +69,14 @@ function Toast({
                 ],
             }}
         >
-            <Text className="font-semibold text-left text-background">{message}</Text>
+            <Text style={{ color: '#fff', fontWeight: '600', fontSize: 14 }}>{message}</Text>
             {showProgress && (
-                <View className="mt-2 rounded">
+                <View style={{ marginTop: 8, borderRadius: 4, overflow: 'hidden' }}>
                     <Animated.View
-                        className="bg-white dark:bg-black h-2 opacity-30 rounded"
                         style={{
+                            backgroundColor: 'rgba(255,255,255,0.4)',
+                            height: 4,
+                            borderRadius: 4,
                             width: progress.interpolate({
                                 inputRange: [0, 1],
                                 outputRange: ['0%', '100%'],
@@ -154,6 +155,7 @@ function ToastProvider({
                     right: 0,
                     ...(position === 'top' ? { top: 60 } : { bottom: 0 }),
                     zIndex: 9999,
+                    elevation: 9999,
                 }}
             >
                 {messages.map((message) => (

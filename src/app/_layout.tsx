@@ -1,7 +1,7 @@
 import '@/utils/i18n';
 import '@/styles/global.css';
 import { useEffect, useState } from 'react';
-import { Slot, SplashScreen } from 'expo-router';
+import { Stack, SplashScreen } from 'expo-router';
 import { AuthProvider } from '@/contexts';
 import { useAuth } from '@/hooks';
 import { ToastProvider } from '@/components/Toast';
@@ -31,7 +31,20 @@ function RootLayoutNav() {
         return null;
     }
 
-    return <Slot />;
+    return (
+        <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="petInfo/index" />
+            <Stack.Screen name="vaccines/index" />
+            <Stack.Screen name="medications/index" />
+            <Stack.Screen name="deworming/index" />
+            <Stack.Screen name="hygiene/index" />
+            <Stack.Screen name="appointments/index" />
+            <Stack.Screen name="weight/index" />
+            <Stack.Screen name="addPet/index" />
+            <Stack.Screen name="food/index" />
+        </Stack>
+    );
 }
 
 export default function RootLayout() {
