@@ -37,7 +37,7 @@ export default function Tutor() {
         const updatedUser = {
           ...user,
           email: user?.email ?? '',
-          name,
+          name: name.trim() || user?.name || '',
         };
 
         updateUser(updatedUser);

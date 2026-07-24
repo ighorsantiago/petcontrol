@@ -148,10 +148,13 @@ function ToastProvider({
         <ToastContext.Provider value={{ toast, removeToast }}>
             {children}
             <View
-                className={cn('absolute left-0 right-0', {
-                    'top-[45px]': position === 'top',
-                    'bottom-0': position === 'bottom',
-                })}
+                style={{
+                    position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    ...(position === 'top' ? { top: 60 } : { bottom: 0 }),
+                    zIndex: 9999,
+                }}
             >
                 {messages.map((message) => (
                     <Toast
