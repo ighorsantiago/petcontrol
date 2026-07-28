@@ -55,6 +55,10 @@ export default function Deworming() {
     );
 
     async function handleUpdateDeworming() {
+        if (!name.trim() || date.length < 10) {
+            toast('Preencha o nome e a data antes de salvar.', 'destructive', 3000, 'top', false);
+            return;
+        }
         setIsLoading(true);
         try {
             const id = String(new Date().getTime());

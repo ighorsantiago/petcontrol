@@ -64,6 +64,10 @@ export default function Hygiene() {
     );
 
     async function handleUpdateHygiene() {
+        if (date.length < 10) {
+            toast('Preencha a data antes de salvar.', 'destructive', 3000, 'top', false);
+            return;
+        }
         setIsLoading(true);
         try {
             const id = String(new Date().getTime());

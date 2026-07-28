@@ -37,19 +37,15 @@ export const Title = styled.Text`
 `;
 
 export const BoxContent = styled.View`
-    flex-direction: row;
-
-    align-items: center;
+    flex-direction: column;
 `;
 
 export const InfoBox = styled.View`
     flex-direction: row;
 
-    align-items: center;
+    align-items: flex-start;
 
-    margin-bottom: 10px;
-
-    /* background-color: gray; */
+    margin-bottom: 6px;
 `;
 
 export const Label = styled.Text`
@@ -61,9 +57,8 @@ export const Label = styled.Text`
 
 export const Text = styled.Text`
     font-size: 14px;
-    align-self: flex-end;
-
-    margin-right: 50px;
+    flex: 1;
+    flex-wrap: wrap;
 
     color: black;
 `;
