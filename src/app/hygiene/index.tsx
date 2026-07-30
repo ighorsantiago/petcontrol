@@ -64,8 +64,9 @@ export default function Hygiene() {
     );
 
     async function handleUpdateHygiene() {
-        if (date.length < 10) {
-            toast('Preencha a data antes de salvar.', 'destructive', 3000, 'top', false);
+        const effectiveDate = date || scheduledDate;
+        if (!effectiveDate) {
+            toast('Preencha ao menos uma data antes de salvar.', 'destructive', 3000, 'top', false);
             return;
         }
         setIsLoading(true);
@@ -84,7 +85,7 @@ export default function Hygiene() {
                 const updatedUser = await addPetHygiene(user, pet_id, {
                     id,
                     category,
-                    date,
+                    date: effectiveDate,
                     ...(scheduledDate && { scheduledDate, scheduledHour, notificationId }),
                 });
                 await updateUser(updatedUser);

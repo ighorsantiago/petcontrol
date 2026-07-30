@@ -54,7 +54,7 @@ export default function Appointments() {
     );
 
     async function handleUpdateAppointments() {
-        if (!name.trim() || date.length < 10) {
+        if (!name.trim() || !date) {
             toast('Preencha o profissional e a data antes de salvar.', 'destructive', 3000, 'top', false);
             return;
         }

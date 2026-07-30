@@ -55,8 +55,9 @@ export default function Deworming() {
     );
 
     async function handleUpdateDeworming() {
-        if (!name.trim() || date.length < 10) {
-            toast('Preencha o nome e a data antes de salvar.', 'destructive', 3000, 'top', false);
+        const effectiveDate = date || scheduledDate;
+        if (!name.trim() || !effectiveDate) {
+            toast('Preencha o nome e ao menos uma data antes de salvar.', 'destructive', 3000, 'top', false);
             return;
         }
         setIsLoading(true);
@@ -75,7 +76,7 @@ export default function Deworming() {
                 const updatedUser = await addPetDeworming(user, pet_id, {
                     id,
                     name,
-                    date,
+                    date: effectiveDate,
                     ...(scheduledDate && { scheduledDate, scheduledHour, notificationId }),
                 });
                 await updateUser(updatedUser);
