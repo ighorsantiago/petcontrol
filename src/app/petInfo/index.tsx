@@ -4,6 +4,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
 import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
 // import { useTranslation } from 'react-i18next';
 
 import { useAuth } from '@/hooks';
